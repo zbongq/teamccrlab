@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Sans+KR:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background: oklch(24% 0.03 235); overflow-x:clip; }
+  html { overflow-x:clip; }
+  * { box-sizing: border-box; }
+  body, #phone-col, #phone-col * { -webkit-user-select: none; user-select: none; }
+  #phone-col input, #phone-col textarea { -webkit-user-select: text; user-select: text; }
+  ::-webkit-scrollbar { width:0; height:0; }
+  @media (max-width: 900px) { .side-panel { display:none !important; } }
+  [data-screen-mode="dark"] { filter: invert(1) hue-rotate(180deg); }
+  [data-screen-mode="dark"] img,
+  [data-screen-mode="dark"] image-slot,
+  [data-screen-mode="dark"] iframe { filter: invert(1) hue-rotate(180deg); }
+  #teamccr-lab-logo-wrap image-slot::part(frame) { background: transparent; }
+  image-slot.brand-logo-slot::part(frame) { background: transparent; }
+  #phone-col img, #phone-col image-slot { -webkit-user-drag: none; user-drag: none; }
+</style>
+</helmet>
+
+<div data-screen-mode="{{ effectiveScreenMode }}" style="{{ rootStyle }}">
+
+  <div class="side-panel" style="flex:1; min-width:0; position:sticky; top:0; height:100vh; height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; background: oklch(24% 0.03 235); color: oklch(96% 0.01 235); padding:24px;">
+    <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:23px; font-weight:700; letter-spacing:0.02em;">TEAMCCR Lab</div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:oklch(70% 0.03 235); text-align:center; max-width:220px;">Keep silent without bubble.</div>
+    <div style="width:104px; height:104px; background:repeating-linear-gradient(135deg, oklch(32% 0.03 235), oklch(32% 0.03 235) 8px, oklch(38% 0.03 235) 8px, oklch(38% 0.03 235) 16px); border-radius:var(--r-lg); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:oklch(75% 0.02 235); text-align:center; padding:6px;">QR CODE<br>placeholder</div>
+    <div style="font-size:13px; color:oklch(65% 0.02 235); text-align:center; max-width:200px;">모바일 앱으로 이용하기</div>
+  </div>
+
+  <div id="phone-col" style="width:100%; max-width:430px; min-width:0; flex-shrink:1; background:oklch(98% 0.004 240); box-shadow:0 0 60px rgba(0,0,0,0.35); min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; position:relative;">
+
+    <div style="position:sticky; top:0; z-index:20; background:oklch(98% 0.004 240); border-bottom:1px solid oklch(89% 0.01 240); padding-top:env(safe-area-inset-top);">
+      <div style="display:flex; align-items:center; justify-content:flex-start; gap:16px; padding:14px var(--pad-x) 10px 8px;">
+<div onClick="{{ reloadPage }}" id="teamccr-lab-logo-wrap" style="height:22.44px; cursor:pointer; margin-right:auto; margin-left:8px;">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="teamccr-lab-logo" shape="rect" fit="contain" placeholder="로고" hint-size="80px,17px" style="width:100%; height:100%;"></x-import>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; font-size:14px; color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace;">
+          <div onClick="{{ goSettings }}" style="cursor:pointer; display:flex;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><ellipse cx="12" cy="12" rx="4" ry="9"></ellipse><path d="M3 12h18"></path></svg></div>
+          <div onClick="{{ openSearchEntry }}" style="cursor:pointer; display:flex;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg></div>
+          <div onClick="{{ toggleCart }}" style="cursor:pointer; font-size:18px; position:relative;">🛒
+            <sc-if value="{{ cartCount }}">
+              <span style="position:absolute; top:-6px; right:-8px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); font-size:9px; font-weight:700; border-radius:50%; min-width:14px; height:14px; display:flex; align-items:center; justify-content:center; padding:0 2px;">{{ cartCount }}</span>
+            </sc-if>
+          </div>
+          <div onClick="{{ goMypage }}" style="cursor:pointer; display:flex;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.5"></circle><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"></path></svg></div>
+        </div>
+      </div>
+      <div style="display:flex; padding:0 6px;">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+          <div onClick="{{ item.onClick }}" style="{{ item.style }}">{{ item.label }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:1; overflow:hidden; position:relative;">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div onMouseEnter="{{ pauseHero }}" onMouseLeave="{{ resumeHero }}" onPointerDown="{{ heroPointerDown }}" onClick="{{ heroContainerClick }}" style="margin:14px 0 0; aspect-ratio:16/9; position:relative; overflow:hidden; background:oklch(30% 0.03 235); touch-action:pan-y;">
+            <div style="{{ heroTrackStyle }}" onTransitionEnd="{{ heroTransitionEnd }}">
+              <sc-for list="{{ heroSlides }}" as="hs" hint-placeholder-count="5">
+                <div style="width:20%; height:100%; flex-shrink:0;">
+                  <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ hs.slotId }}" shape="rect" fit="cover" placeholder="배너 이미지 (16:9)" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
+                </div>
+              </sc-for>
+            </div>
+            <div style="position:absolute; bottom:14px; right:16px; display:flex; flex-direction:column; align-items:center; gap:6px; pointer-events:none;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:oklch(96% 0.01 235); background:oklch(20% 0.02 240 / 0.45); padding:2px 8px; border-radius:var(--r-sm);">{{ heroIndicator }}</div>
+              <div style="display:flex; gap:4px;">
+                <sc-for list="{{ heroDots }}" as="d" hint-placeholder-count="3">
+                  <div style="{{ d.style }}"></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:var(--pad-x);">
+            <sc-for list="{{ quickIcons }}" as="qi" hint-placeholder-count="6">
+              <div onClick="{{ qi.onClick }}" style="display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer;">
+                <div style="width:46px; height:46px; border-radius:var(--r-lg); background:oklch(93% 0.03 var(--accent-h)); display:flex; align-items:center; justify-content:center; font-size:19px; color:oklch(40% 0.06 var(--accent-h));">{{ qi.icon }}</div>
+                <div style="font-size:11px; color:oklch(30% 0.02 240); text-align:center; line-height:1.3;">{{ qi.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:0 var(--pad-x) 8px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:600; color:oklch(18% 0.02 240);">{{ tSectionBrand }}</div>
+            <div onClick="{{ goSearch }}" style="font-size:13px; color:oklch(50% 0.02 240); cursor:pointer;">{{ tSeeAll }}</div>
+          </div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:10px; overflow-x:auto; padding:2px var(--pad-x) 20px; cursor:grab;">
+            <div onClick="{{ goAllBrands }}" style="flex-shrink:0; width:64px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;">
+              <div style="width:64px; height:64px; border-radius:var(--r-lg); background:oklch(94% 0.01 240); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:oklch(30% 0.02 240);">전체</div>
+            </div>
+            <sc-for list="{{ brandLogos }}" as="b" hint-placeholder-count="6">
+              <div style="flex-shrink:0; width:64px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div onClick="{{ b.onClick }}" style="width:64px; height:64px; cursor:pointer; background:{{ b.tileBg }}; border-radius:12px; padding:{{ b.tilePad }}; box-sizing:border-box; border:1px solid oklch(92% 0.005 240);">
+                  <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ b.slotId }}" shape="rounded" radius="8" fit="contain" placeholder="{{ b.label }}" hint-size="64px,64px" style="width:100%; height:100%;" class="brand-logo-slot"></x-import>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:0 var(--pad-x) 8px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:600; color:oklch(18% 0.02 240);">{{ tSectionNew }}</div>
+            <div style="font-size:13px; color:oklch(50% 0.02 240); cursor:pointer;" onClick="{{ goSearch }}">{{ tMore }}</div>
+          </div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:12px; overflow-x:auto; padding:2px var(--pad-x) 26px; cursor:grab;">
+            <sc-for list="{{ homeProducts }}" as="p" hint-placeholder-count="4">
+              <div onClick="{{ p.onOpen }}" style="flex-shrink:0; width:150px; cursor:pointer;">
+                <div style="height:120px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(45% 0.02 240); text-align:center; padding:6px; position:relative;">
+                  {{ p.brand }}<br>{{ p.model }}
+                  <div style="position:absolute; top:6px; left:6px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); font-size:11px; font-weight:600; padding:2px 6px; border-radius:var(--r-sm); font-family:'IBM Plex Sans KR',sans-serif;">{{ p.badge }}</div>
+                </div>
+                <div style="font-size:14.5px; font-weight:600; color:oklch(18% 0.02 240); margin-top:6px;"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:10.5px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ p.brand }}</span>{{ p.model }}</div>
+                <div style="font-size:14.5px; color:oklch(45% 0.02 240); margin-top:2px;">{{ p.priceLabel }}</div>
+                <div style="display:flex; gap:6px; margin-top:5px;">
+                  <div style="{{ p.gradeStyleMd }}">{{ p.grade }}등급</div>
+                  <div style="font-size:10.5px; color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:0 var(--pad-x) 8px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:600; color:oklch(18% 0.02 240);">{{ tSectionDrop }}</div>
+            <div style="font-size:13px; color:oklch(50% 0.02 240); cursor:pointer;" onClick="{{ goSearch }}">{{ tMore }}</div>
+          </div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:12px; overflow-x:auto; padding:2px var(--pad-x) 26px; cursor:grab;">
+            <sc-for list="{{ priceDropProducts }}" as="p" hint-placeholder-count="3">
+              <div onClick="{{ p.onOpen }}" style="flex-shrink:0; width:150px; cursor:pointer;">
+                <div style="height:120px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(45% 0.02 240); text-align:center; padding:6px; position:relative;">
+                  {{ p.brand }}<br>{{ p.model }}
+                  <div style="position:absolute; top:6px; left:6px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); font-size:11px; font-weight:600; padding:2px 6px; border-radius:var(--r-sm); font-family:'IBM Plex Sans KR',sans-serif;">{{ p.badge }}</div>
+                </div>
+                <div style="font-size:14.5px; font-weight:600; color:oklch(18% 0.02 240); margin-top:6px;"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:10.5px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ p.brand }}</span>{{ p.model }}</div>
+                <div style="display:flex; align-items:baseline; gap:6px; margin-top:2px;">
+                  <sc-if value="{{ p.hasOldPrice }}">
+                    <span style="font-size:12px; color:oklch(60% 0.02 240); text-decoration:line-through;">{{ p.oldPriceLabel }}</span>
+                  </sc-if>
+                  <span style="font-size:14.5px; color:oklch(18% 0.02 240); font-weight:600;">{{ p.priceLabel }}</span>
+                </div>
+                <div style="display:flex; gap:6px; margin-top:5px;">
+                  <div style="{{ p.gradeStyleMd }}">{{ p.grade }}등급</div>
+                  <div style="font-size:10.5px; color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:0 var(--pad-x) 8px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:600; color:oklch(18% 0.02 240);">{{ tSectionTrend }}</div>
+            <div style="font-size:13px; color:oklch(50% 0.02 240); cursor:pointer;" onClick="{{ goSearch }}">{{ tMore }}</div>
+          </div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:12px; overflow-x:auto; padding:2px var(--pad-x) 26px; cursor:grab;">
+            <sc-for list="{{ trendingProducts }}" as="p" hint-placeholder-count="4">
+              <div onClick="{{ p.onOpen }}" style="flex-shrink:0; width:150px; cursor:pointer;">
+                <div style="height:120px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(45% 0.02 240); text-align:center; padding:6px; position:relative;">
+                  {{ p.brand }}<br>{{ p.model }}
+                  <div style="position:absolute; top:6px; left:6px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); font-size:11px; font-weight:600; padding:2px 6px; border-radius:var(--r-sm); font-family:'IBM Plex Sans KR',sans-serif;">{{ p.badge }}</div>
+                </div>
+                <div style="font-size:14.5px; font-weight:600; color:oklch(18% 0.02 240); margin-top:6px;"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:10.5px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ p.brand }}</span>{{ p.model }}</div>
+                <div style="font-size:14.5px; color:oklch(45% 0.02 240); margin-top:2px;">{{ p.priceLabel }}</div>
+                <div style="display:flex; gap:6px; margin-top:5px;">
+                  <div style="{{ p.gradeStyleMd }}">{{ p.grade }}등급</div>
+                  <div style="font-size:10.5px; color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:0 var(--pad-x) 8px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:600; color:oklch(18% 0.02 240);">{{ tSectionBudget }}</div>
+            <div style="font-size:13px; color:oklch(50% 0.02 240); cursor:pointer;" onClick="{{ goSearch }}">{{ tMore }}</div>
+          </div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:12px; overflow-x:auto; padding:2px var(--pad-x) 26px; cursor:grab;">
+            <sc-for list="{{ budgetProducts }}" as="p" hint-placeholder-count="2">
+              <div onClick="{{ p.onOpen }}" style="flex-shrink:0; width:150px; cursor:pointer;">
+                <div style="height:120px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(45% 0.02 240); text-align:center; padding:6px; position:relative;">
+                  {{ p.brand }}<br>{{ p.model }}
+                  <div style="position:absolute; top:6px; left:6px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); font-size:11px; font-weight:600; padding:2px 6px; border-radius:var(--r-sm); font-family:'IBM Plex Sans KR',sans-serif;">{{ p.badge }}</div>
+                </div>
+                <div style="font-size:14.5px; font-weight:600; color:oklch(18% 0.02 240); margin-top:6px;"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:10.5px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ p.brand }}</span>{{ p.model }}</div>
+                <div style="font-size:14.5px; color:oklch(45% 0.02 240); margin-top:2px;">{{ p.priceLabel }}</div>
+                <div style="display:flex; gap:6px; margin-top:5px;">
+                  <div style="{{ p.gradeStyleMd }}">{{ p.grade }}등급</div>
+                  <div style="font-size:10.5px; color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSearchEntry }}">
+        <div style="padding:var(--pad-x); display:flex; flex-direction:column; height:100%;">
+          <div style="display:flex; align-items:center; gap:10px; padding:14px 0 10px;">
+            <div onClick="{{ closeSearchEntry }}" style="cursor:pointer; font-size:18px; color:oklch(20% 0.02 240); flex-shrink:0;">‹</div>
+            <div style="flex:1; position:relative;">
+              <input value="{{ searchQuery }}" onChange="{{ setSearchQuery }}" placeholder="{{ tSearchPlaceholder }}" style="width:100%; box-sizing:border-box; padding:11px 36px 11px 14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); font-size:14px; font-family:'IBM Plex Sans KR',sans-serif; outline:none; background:oklch(97% 0.004 240);">
+              <sc-if value="{{ searchQueryEntered }}">
+                <div onClick="{{ clearSearchQuery }}" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:oklch(60% 0.02 240); font-size:15px;">✕</div>
+              </sc-if>
+            </div>
+          </div>
+
+          <sc-if value="{{ !searchQueryEntered }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-top:14px;">{{ tRecentSearch }}</div>
+              <div style="font-size:13px; color:oklch(60% 0.02 240); margin-top:10px;">{{ tNoSearchHistory }}</div>
+
+              <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-top:26px;">{{ tRecommendedKw }}</div>
+              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">
+                <sc-for list="{{ recommendedKeywords }}" as="k" hint-placeholder-count="7">
+                  <div onClick="{{ k.onClick }}" style="padding:9px 15px; border-radius:var(--r-lg); background:oklch(95% 0.005 240); font-size:13px; color:oklch(28% 0.02 240); cursor:pointer;">{{ k.label }}</div>
+                </sc-for>
+              </div>
+
+              <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-top:26px;">{{ tFaqTitle }}</div>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+                <sc-for list="{{ faqItems }}" as="q" hint-placeholder-count="4">
+                  <div style="border-radius:var(--r-lg); background:oklch(95% 0.005 240); overflow:hidden;">
+                    <div onClick="{{ q.onClick }}" style="padding:14px; display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:13px; color:oklch(30% 0.02 240); cursor:pointer;">
+                      <span>{{ q.q }}</span>
+                      <span style="{{ q.chevronStyle }}">⌄</span>
+                    </div>
+                    <sc-if value="{{ q.isOpen }}">
+                      <div style="padding:0 14px 16px; font-size:12.5px; color:oklch(45% 0.02 240); line-height:1.6;">{{ q.a }}</div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ searchQueryEntered }}">
+            <div style="overflow-y:auto; flex:1; margin:0 calc(-1 * var(--pad-x)); padding:0 var(--pad-x);">
+              <div style="display:flex; flex-wrap:wrap; gap:8px; padding:4px 0 8px;">
+                <sc-for list="{{ searchBrandChips }}" as="b" hint-placeholder-count="5">
+                  <div onClick="{{ b.onClick }}" style="{{ b.style }}">{{ b.label }}</div>
+                </sc-for>
+              </div>
+
+              <div style="display:flex; gap:22px; padding:6px 0 10px; border-bottom:1px solid oklch(89% 0.01 240);">
+                <div onClick="{{ setTabProduct }}" style="{{ productTabStyle }}">{{ tProductTab }} {{ productCount }}</div>
+                <div onClick="{{ setTabModel }}" style="{{ modelTabStyle }}">{{ tModelTab }} {{ modelCount }}</div>
+              </div>
+
+              <sc-if value="{{ searchTabIsProduct }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column; gap:14px; padding:14px 0 24px;">
+                  <sc-for list="{{ filteredProducts }}" as="p" hint-placeholder-count="4">
+                    <div onClick="{{ p.onOpen }}" style="display:flex; gap:12px; cursor:pointer; padding-bottom:14px; border-bottom:1px solid oklch(92% 0.01 240);">
+                      <div style="width:96px; height:96px; flex-shrink:0; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:oklch(45% 0.02 240); text-align:center; padding:4px; position:relative;">
+                        {{ p.brand }}<br>{{ p.model }}
+                        <div style="position:absolute; top:5px; left:5px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); font-size:8px; font-weight:600; padding:2px 5px; border-radius:var(--r-sm); font-family:'IBM Plex Sans KR',sans-serif;">{{ p.badge }}</div>
+                      </div>
+                      <div style="flex:1; min-width:0;">
+                        <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240);"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:10px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ p.brand }}</span>{{ p.model }}</div>
+                        <div style="font-size:12px; color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace; margin-top:3px;">{{ p.specLine }}</div>
+                        <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-top:6px;">{{ p.priceLabel }}</div>
+                        <div style="display:flex; gap:6px; margin-top:5px;">
+                          <div style="{{ p.gradeStyleSm }}">{{ p.grade }}등급</div>
+                          <div style="font-size:10px; color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ searchTabIsModel }}">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:14px 0 24px;">
+                  <sc-for list="{{ modelList }}" as="m" hint-placeholder-count="6">
+                    <div style="border:1px solid oklch(89% 0.01 240); border-radius:var(--r-lg); padding:10px;">
+                      <div style="height:70px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:oklch(45% 0.02 240);">{{ m.brand }}</div>
+                      <div style="font-size:13px; font-weight:600; margin-top:6px; color:oklch(18% 0.02 240);"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:9.5px; font-weight:700; padding:2px 5px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ m.brand }}</span>{{ m.model }}</div>
+                      <div style="font-size:11px; color:oklch(50% 0.02 240); margin-top:2px;">{{ m.count }}건</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSearch }}">
+        <div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; padding:14px var(--pad-x) 8px;">
+            <sc-for list="{{ searchBrandChips }}" as="b" hint-placeholder-count="5">
+              <div onClick="{{ b.onClick }}" style="{{ b.style }}">{{ b.label }}</div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex; gap:22px; padding:6px var(--pad-x) 10px; border-bottom:1px solid oklch(89% 0.01 240);">
+            <div onClick="{{ setTabProduct }}" style="{{ productTabStyle }}">{{ tProductTab }} {{ productCount }}</div>
+            <div onClick="{{ setTabModel }}" style="{{ modelTabStyle }}">{{ tModelTab }} {{ modelCount }}</div>
+          </div>
+
+          <sc-if value="{{ searchTabIsProduct }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="display:flex; gap:8px; align-items:center; padding:12px var(--pad-x); overflow-x:auto;">
+                <sc-for list="{{ filterChips }}" as="c" hint-placeholder-count="4">
+                  <div onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</div>
+                </sc-for>
+                <div onClick="{{ openFilterModal }}" style="flex-shrink:0; font-size:12px; padding:7px 12px; border-radius:var(--r-lg); border:1px dashed oklch(70% 0.02 240); color:oklch(45% 0.02 240); cursor:pointer; font-family:'IBM Plex Mono',monospace;">필터 ⚙</div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:14px; padding:0 var(--pad-x) 24px;">
+                <sc-for list="{{ filteredProducts }}" as="p" hint-placeholder-count="4">
+                  <div onClick="{{ p.onOpen }}" style="display:flex; gap:12px; cursor:pointer; padding-bottom:14px; border-bottom:1px solid oklch(92% 0.01 240);">
+                    <div style="width:96px; height:96px; flex-shrink:0; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:oklch(45% 0.02 240); text-align:center; padding:4px; position:relative;">
+                      {{ p.brand }}<br>{{ p.model }}
+                      <div style="position:absolute; top:5px; left:5px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); font-size:8px; font-weight:600; padding:2px 5px; border-radius:var(--r-sm); font-family:'IBM Plex Sans KR',sans-serif;">{{ p.badge }}</div>
+                    </div>
+                    <div style="flex:1; min-width:0;">
+                      <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240);"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:10px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ p.brand }}</span>{{ p.model }}</div>
+                      <div style="font-size:12px; color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace; margin-top:3px;">{{ p.specLine }}</div>
+                      <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-top:6px;">{{ p.priceLabel }}</div>
+                      <div style="display:flex; gap:6px; margin-top:5px;">
+                        <div style="{{ p.gradeStyleSm }}">{{ p.grade }}등급</div>
+                        <div style="font-size:10px; color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ searchTabIsModel }}">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:14px var(--pad-x) 24px;">
+              <sc-for list="{{ modelList }}" as="m" hint-placeholder-count="6">
+                <div style="border:1px solid oklch(89% 0.01 240); border-radius:var(--r-lg); padding:10px;">
+                  <div style="height:70px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 10px, oklch(96% 0.01 240) 10px, oklch(96% 0.01 240) 20px); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:oklch(45% 0.02 240);">{{ m.brand }}</div>
+                  <div style="font-size:13px; font-weight:600; margin-top:6px; color:oklch(18% 0.02 240);"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:9.5px; font-weight:700; padding:2px 5px; border-radius:var(--r-sm); margin-right:5px; vertical-align:middle;">{{ m.brand }}</span>{{ m.model }}</div>
+                  <div style="font-size:11px; color:oklch(50% 0.02 240); margin-top:2px; font-family:'IBM Plex Mono',monospace;">매물 {{ m.count }}건 · 평균 {{ m.avgPrice }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDetail }}">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; padding:12px var(--pad-x) 6px;">
+            <div onClick="{{ closeDetail }}" style="cursor:pointer; font-size:17px; color:oklch(30% 0.02 240);">←</div>
+            <div style="font-size:13px; color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace;">상품 상세</div>
+          </div>
+
+          <div style="margin:6px var(--pad-x) 0; height:220px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 12px, oklch(96% 0.01 240) 12px, oklch(96% 0.01 240) 24px); position:relative; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(45% 0.02 240); text-align:center;">
+            {{ product.brand }} {{ product.model }} — 제품 이미지
+            <div style="position:absolute; bottom:10px; right:12px; font-size:11px; color:oklch(35% 0.02 240); background:oklch(100% 0 0 / 0.8); padding:3px 8px; border-radius:var(--r-lg);">1 / 6 · 360°</div>
+          </div>
+
+          <div style="display:flex; gap:8px; padding:12px var(--pad-x) 0; flex-wrap:wrap;">
+            <div style="font-size:11px; padding:4px 8px; border-radius:var(--r-sm); background:oklch(92% 0.005 240); color:oklch(40% 0.01 240);">{{ product.badgeTr }}</div>
+            <div style="{{ product.gradeStyleLg }}">{{ product.grade }}등급</div>
+          </div>
+
+          <div style="padding:12px var(--pad-x) 0;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:20px; font-weight:700; color:oklch(18% 0.02 240);"><span style="display:inline-block; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:12px; font-weight:700; padding:3px 8px; border-radius:var(--r-sm); margin-right:7px; vertical-align:middle;">{{ product.brand }}</span>{{ product.model }}</div>
+            <div style="font-size:13px; color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace; margin-top:4px;">{{ product.specLine }}</div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:14px var(--pad-x);">
+            <sc-for list="{{ detailSpecIcons }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div style="font-size:17px;">{{ s.icon }}</div>
+                <div style="font-size:10px; color:oklch(45% 0.02 240); text-align:center;">{{ s.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:10px var(--pad-x) var(--pad-x); display:flex; align-items:center; justify-content:space-between; border-top:1px solid oklch(92% 0.01 240); border-bottom:1px solid oklch(92% 0.01 240);">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:21px; font-weight:700; color:oklch(18% 0.02 240);">{{ product.priceLabel }}</div>
+            <div onClick="{{ showBuyToast }}" style="background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); padding:10px 22px; border-radius:var(--r-lg); font-size:14px; font-weight:600; cursor:pointer;">구매하기</div>
+          </div>
+
+          <sc-if value="{{ buyToastOpen }}">
+            <div style="margin:12px var(--pad-x) 0; padding:10px 14px; border-radius:var(--r-lg); background:oklch(93% 0.03 var(--accent-h)); color:oklch(30% 0.06 var(--accent-h)); font-size:12px;">데모 프로토타입에서는 결제가 비활성화되어 있습니다.</div>
+          </sc-if>
+
+          <div style="margin:16px var(--pad-x); padding:14px; border-radius:var(--r-lg); background:linear-gradient(135deg, oklch(93% 0.03 var(--accent-h)), oklch(96% 0.02 var(--accent-h))); display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="font-size:13px; font-weight:700; color:oklch(30% 0.08 var(--accent-h));">TEAMCCR CARE 멤버십</div>
+              <div style="font-size:11px; color:oklch(40% 0.05 var(--accent-h)); margin-top:3px;">구매와 함께 가입 시 무상 정기점검 제공</div>
+            </div>
+            <div style="font-size:11px; font-weight:600; color:oklch(30% 0.08 var(--accent-h)); flex-shrink:0;">가입하기 →</div>
+          </div>
+
+          <div style="padding:0 var(--pad-x) 6px; display:flex; flex-direction:column; gap:10px; font-size:13px; color:oklch(35% 0.02 240);">
+            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">배송정보</span><span>빠른 배송(1~2일) · 센터 픽업 가능</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">판매정보</span><span>{{ product.saleType }}</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">상품번호</span><span style="font-family:'IBM Plex Mono',monospace;">{{ product.id }}</span></div>
+          </div>
+
+          <div onClick="{{ goTeam }}" style="margin:16px var(--pad-x); padding:12px 14px; border:1px solid oklch(89% 0.01 240); border-radius:var(--r-lg); font-size:13px; color:oklch(30% 0.02 240); cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+            <span>센터에서 실물 확인 가능한 상품입니다</span><span>방문 예약 →</span>
+          </div>
+
+          <div style="padding:8px var(--pad-x) 4px; font-family:'IBM Plex Sans KR',sans-serif; font-size:16px; font-weight:600; color:oklch(18% 0.02 240);">TEAMCCR 인증 결과</div>
+          <div style="display:flex; gap:18px; padding:0 var(--pad-x) 10px; border-bottom:1px solid oklch(89% 0.01 240);">
+            <sc-for list="{{ detailTabs }}" as="t" hint-placeholder-count="3">
+              <div onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</div>
+            </sc-for>
+          </div>
+          <div style="padding:14px var(--pad-x) 20px;">
+            <sc-if value="{{ detailTabIsReport }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size:13px; color:oklch(35% 0.02 240); line-height:1.7;">전 항목 검수 통과 · 호흡회로/전자계통 정상 작동 확인 · 판정기준 문서 <span style="color:oklch(45% 0.10 var(--accent-h)); text-decoration:underline; cursor:pointer;">보기</span></div>
+            </sc-if>
+            <sc-if value="{{ detailTabIsImages }}">
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+                <sc-for list="{{ inspectionParts }}" as="part" hint-placeholder-count="6">
+                  <div style="aspect-ratio:1; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 8px, oklch(96% 0.01 240) 8px, oklch(96% 0.01 240) 16px); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:10px; color:oklch(45% 0.02 240); text-align:center; gap:4px;">
+                    <span>{{ part.label }}</span>
+                    <span style="width:6px; height:6px; border-radius:50%; background:oklch(65% 0.13 145);"></span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ detailTabIsSpec }}">
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:oklch(35% 0.02 240);">
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">출시년도</span><span>{{ product.year }}</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">마운트타입</span><span>{{ product.mount }}</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">제어방식</span><span>{{ product.control }}</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">사용시간</span><span>{{ product.hours }}시간</span></div>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="padding:8px var(--pad-x) 4px; font-family:'IBM Plex Sans KR',sans-serif; font-size:16px; font-weight:600; color:oklch(18% 0.02 240);">TEAMCCR 실거래가</div>
+          <div style="padding:8px var(--pad-x) 20px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; font-size:11px; color:oklch(50% 0.02 240); padding-bottom:6px; border-bottom:1px solid oklch(89% 0.01 240);">
+              <span>거래일</span><span>오버홀이력</span><span style="text-align:right;">거래가</span>
+            </div>
+            <sc-for list="{{ recentDeals }}" as="d" hint-placeholder-count="3">
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; font-size:12px; color:oklch(30% 0.02 240); padding:7px 0; border-bottom:1px solid oklch(94% 0.01 240);">
+                <span>{{ d.date }}</span><span>{{ d.overhaul }}</span><span style="text-align:right;">{{ d.price }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:0 var(--pad-x) 20px; display:flex; flex-direction:column; gap:8px;">
+            <sc-for list="{{ policyAccordion }}" as="pa" hint-placeholder-count="4">
+              <div>
+                <div onClick="{{ pa.onClick }}" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid oklch(92% 0.01 240); cursor:pointer;">
+                  <span style="font-size:13px; color:oklch(30% 0.02 240);">{{ pa.title }}</span><span style="font-size:13px; color:oklch(55% 0.02 240);">{{ pa.chevron }}</span>
+                </div>
+                <sc-if value="{{ pa.open }}">
+                  <div style="font-size:12px; color:oklch(45% 0.02 240); padding:8px 0 4px; line-height:1.6;">{{ pa.body }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div onClick="{{ goSell }}" style="margin:0 var(--pad-x) 24px; padding:14px; border-radius:var(--r-lg); background:oklch(94% 0.01 240); text-align:center; font-size:13px; color:oklch(30% 0.02 240); cursor:pointer;">해당 모델을 보유하고 계신가요? <span style="font-weight:600;">판매 등록하기 →</span></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSell }}">
+        <div style="padding:var(--pad-x);">
+          <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:19px; font-weight:700; color:oklch(18% 0.02 240);">{{ tSellTitle }}</div>
+          <div style="font-size:12px; color:oklch(45% 0.02 240); margin-top:4px; line-height:1.6;">{{ tSellSubtitle }}</div>
+
+          <div style="display:flex; flex-direction:column; gap:12px; margin-top:16px;">
+            <div onClick="{{ selectConsign }}" style="{{ consignCardStyle }}">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:16px; font-weight:600;">{{ tConsignLabel }}</div>
+                <div style="font-size:10px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); padding:3px 8px; border-radius:var(--r-sm); font-weight:600;">{{ tConsignBadge }}</div>
+              </div>
+              <div style="font-size:12px; margin-top:6px; opacity:0.85;">{{ tConsignDesc }}</div>
+            </div>
+            <div onClick="{{ selectBuyout }}" style="{{ buyoutCardStyle }}">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:16px; font-weight:600;">{{ tBuyoutLabel }}</div>
+                <div style="font-size:10px; background:oklch(76% 0.14 70); color:oklch(20% 0.02 240); padding:3px 8px; border-radius:var(--r-sm); font-weight:600;">{{ tBuyoutBadge }}</div>
+              </div>
+              <div style="font-size:12px; margin-top:6px; opacity:0.85;">{{ tBuyoutDesc }}</div>
+            </div>
+          </div>
+
+
+
+          <sc-if value="{{ sellTypeIsConsign }}">
+            <div style="margin-top:20px;">
+              <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:10px;">{{ tProcessTitle }}</div>
+              <sc-for list="{{ consignSteps }}" as="st" hint-placeholder-count="4">
+                <div style="display:flex; gap:10px; padding:8px 0;">
+                  <div style="width:22px; height:22px; border-radius:50%; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">{{ $index }}</div>
+                  <div style="font-size:13px; color:oklch(30% 0.02 240); padding-top:2px;">{{ st }}</div>
+                </div>
+              </sc-for>
+              <div style="font-size:12px; color:oklch(45% 0.02 240); margin-top:8px; line-height:1.6;">{{ tConsignFee }}</div>
+              <div onClick="{{ showApplyToast }}" style="margin-top:14px; background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); text-align:center; padding:12px; border-radius:var(--r-lg); font-size:14px; font-weight:600; cursor:pointer;">{{ tConsignApply }}</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sellTypeIsBuyout }}">
+            <div style="margin-top:20px;">
+              <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:10px;">{{ tProcessTitle }}</div>
+              <sc-for list="{{ buyoutSteps }}" as="st" hint-placeholder-count="5">
+                <div style="display:flex; gap:10px; padding:8px 0;">
+                  <div style="width:22px; height:22px; border-radius:50%; background:oklch(92% 0.005 240); color:oklch(40% 0.01 240); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">{{ $index }}</div>
+                  <div style="font-size:13px; color:oklch(30% 0.02 240); padding-top:2px;">{{ st }}</div>
+                </div>
+              </sc-for>
+              <div style="font-size:12px; color:oklch(45% 0.02 240); margin-top:8px; line-height:1.6;">{{ tBuyoutFee }}</div>
+              <div onClick="{{ showApplyToast }}" style="margin-top:14px; background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); text-align:center; padding:12px; border-radius:var(--r-lg); font-size:14px; font-weight:600; cursor:pointer;">{{ tBuyoutApply }}</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ applyToastOpen }}">
+            <div style="margin-top:12px; padding:10px 14px; border-radius:var(--r-lg); background:oklch(93% 0.03 var(--accent-h)); color:oklch(30% 0.06 var(--accent-h)); font-size:12px;">데모 프로토타입입니다. 실제 신청 폼은 다음 단계에서 제작됩니다.</div>
+          </sc-if>
+
+          <div style="margin-top:22px; padding-top:16px; border-top:1px solid oklch(89% 0.01 240);">
+            <div style="font-size:13px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:6px;">검수 단독 서비스</div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:oklch(35% 0.02 240); padding:6px 0;"><span>일반 검수 (외관·정품·기본 작동)</span><span>10~15만원</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:oklch(35% 0.02 240); padding:6px 0;"><span>정밀 검수 (호흡회로·전자계통 내부)</span><span>20~25만원</span></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMypage }}">
+        <div style="padding:var(--pad-x);">
+          <sc-if value="{{ !loggedIn }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div onClick="{{ openLoginScreen }}" style="cursor:pointer; display:flex; align-items:center; gap:6px;">
+                  <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:19px; font-weight:700; color:oklch(18% 0.02 240);">{{ tLoginSignup }}</div>
+                  <div style="font-size:16px; color:oklch(55% 0.02 240);">›</div>
+                </div>
+                <div onClick="{{ goAppSettings }}" style="cursor:pointer; color:oklch(40% 0.02 240); display:flex;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.6 1z"></path></svg>
+                </div>
+              </div>
+              <div style="font-size:13px; color:oklch(50% 0.02 240); margin-top:8px;">지금 회원 가입하고 모든 서비스를 경험하세요.</div>
+              <div style="height:1px; background:oklch(92% 0.01 240); margin:16px 0 2px;"></div>
+              <div style="display:flex; flex-direction:column; gap:2px; margin-top:16px;">
+                <sc-for list="{{ policyMenu }}" as="m" hint-placeholder-count="5">
+                  <div onClick="{{ m.onClick }}" style="display:flex; justify-content:space-between; padding:13px 2px; border-bottom:1px solid oklch(92% 0.01 240); font-size:14px; color:oklch(25% 0.02 240); cursor:pointer;"><span>{{ m.label }}</span><span style="color:oklch(60% 0.02 240);">→</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ loggedIn }}">
+            <div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:48px; height:48px; border-radius:50%; background:oklch(93% 0.03 var(--accent-h)); display:flex; align-items:center; justify-content:center; font-size:17px; color:oklch(38% 0.08 var(--accent-h));">⛛</div>
+                <div>
+                  <div style="font-size:15px; font-weight:600; color:oklch(18% 0.02 240);">다이버 회원님</div>
+                  <div onClick="{{ toggleLogin }}" style="font-size:11px; color:oklch(50% 0.02 240); cursor:pointer; margin-top:2px;">로그아웃</div>
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px;">
+                <sc-for list="{{ myMenu }}" as="m" hint-placeholder-count="6">
+                  <div onClick="{{ m.onClick }}" style="border:1px solid oklch(89% 0.01 240); border-radius:var(--r-lg); padding:12px; font-size:13px; color:oklch(28% 0.02 240); cursor:pointer;">{{ m.label }}<div style="font-size:11px; color:oklch(50% 0.02 240); margin-top:4px;">{{ m.count }}</div></div>
+                </sc-for>
+              </div>
+              <div style="height:1px; background:oklch(92% 0.01 240); margin:22px 0 2px;"></div>
+              <div style="display:flex; flex-direction:column; gap:2px; margin-top:16px;">
+                <sc-for list="{{ policyMenu }}" as="m" hint-placeholder-count="5">
+                  <div onClick="{{ m.onClick }}" style="display:flex; justify-content:space-between; padding:13px 2px; border-bottom:1px solid oklch(92% 0.01 240); font-size:14px; color:oklch(25% 0.02 240); cursor:pointer;"><span>{{ m.label }}</span><span style="color:oklch(60% 0.02 240);">→</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSettings }}">
+        <div style="padding:var(--pad-x); display:flex; flex-direction:column; min-height:100%;">
+          <div style="display:flex; align-items:center; gap:10px; padding:14px 0;">
+            <div onClick="{{ goAppSettings }}" style="cursor:pointer; font-size:18px; color:oklch(20% 0.02 240);">←</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:700; color:oklch(18% 0.02 240);">{{ tLangSettingsTitle }}</div>
+          </div>
+          <div style="margin-top:14px;">
+            <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:8px;">{{ tRegion }}</div>
+            <div onClick="{{ openRegionPicker }}" style="border:1px solid oklch(85% 0.01 240); border-radius:var(--r-lg); padding:14px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:14px; color:oklch(25% 0.02 240);">
+              <sc-if value="{{ settingsLoading }}"><span style="margin:0 auto; color:oklch(55% 0.02 240);">⟳</span></sc-if>
+              <sc-if value="{{ !settingsLoading }}"><span>{{ settingsRegionLabel }}</span><span style="color:oklch(60% 0.02 240);">⌄</span></sc-if>
+            </div>
+          </div>
+          <div style="margin-top:22px;">
+            <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:8px;">{{ tLanguage }}</div>
+            <div onClick="{{ openLanguagePicker }}" style="border:1px solid oklch(85% 0.01 240); border-radius:var(--r-lg); padding:14px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:14px; color:oklch(25% 0.02 240);">
+              <sc-if value="{{ settingsLoading }}"><span style="margin:0 auto; color:oklch(55% 0.02 240);">⟳</span></sc-if>
+              <sc-if value="{{ !settingsLoading }}"><span>{{ settingsLanguageLabel }}</span><span style="color:oklch(60% 0.02 240);">⌄</span></sc-if>
+            </div>
+          </div>
+          <div style="margin-top:22px;">
+            <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:8px;">{{ tCurrency }}</div>
+            <div style="border:1px solid oklch(90% 0.005 240); border-radius:var(--r-lg); padding:14px; display:flex; justify-content:space-between; align-items:center; background:oklch(96% 0.004 240); font-size:14px; color:oklch(62% 0.02 240); cursor:not-allowed;">
+              <span>{{ settingsCurrency }}</span><span style="color:oklch(75% 0.01 240);">⌄</span>
+            </div>
+          </div>
+          <div style="flex:1; min-height:24px;"></div>
+          <div onClick="{{ applySettings }}" style="{{ settingsApplyBtnStyle }}">{{ tChangeBtn }}</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ settingsPickerIsRegion }}">
+        <div onClick="{{ closeSettingsPicker }}" style="{{ settingsOverlayStyle }}">
+          <div onClick="{{ stopClick }}" style="width:100%; background:oklch(98% 0.004 240); border-radius:var(--r-lg) var(--r-lg) 0 0; padding:20px var(--pad-x) calc(28px + env(safe-area-inset-bottom));">
+            <div style="font-size:15px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:14px;">{{ tRegion }}</div>
+            <sc-for list="{{ regionOptionItems }}" as="o" hint-placeholder-count="2">
+              <div onClick="{{ o.onClick }}" style="padding:13px 2px; font-size:14px; color:oklch(28% 0.02 240); cursor:pointer;">{{ o.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ settingsPickerIsLanguage }}">
+        <div onClick="{{ closeSettingsPicker }}" style="{{ settingsOverlayStyle }}">
+          <div onClick="{{ stopClick }}" style="width:100%; background:oklch(98% 0.004 240); border-radius:var(--r-lg) var(--r-lg) 0 0; padding:20px var(--pad-x) calc(28px + env(safe-area-inset-bottom));">
+            <div style="font-size:15px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:14px;">Language</div>
+            <sc-for list="{{ languageOptionItems }}" as="o" hint-placeholder-count="4">
+              <div onClick="{{ o.onClick }}" style="padding:13px 2px; font-size:14px; color:oklch(28% 0.02 240); cursor:pointer; display:flex; align-items:center; gap:8px;">{{ o.label }}<span style="font-size:10px; color:oklch(55% 0.02 240); background:oklch(93% 0.01 240); padding:1px 6px; border-radius:4px;">{{ o.code }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ settingsPickerIsScreenMode }}">
+        <div onClick="{{ closeSettingsPicker }}" style="{{ settingsOverlayStyle }}">
+          <div onClick="{{ stopClick }}" style="width:100%; background:oklch(98% 0.004 240); border-radius:var(--r-lg) var(--r-lg) 0 0; padding:20px var(--pad-x) calc(28px + env(safe-area-inset-bottom));">
+            <div style="font-size:15px; font-weight:600; color:oklch(18% 0.02 240); margin-bottom:14px;">화면 모드</div>
+            <sc-for list="{{ screenModeOptionItems }}" as="o" hint-placeholder-count="2">
+              <div onClick="{{ o.onClick }}" style="padding:13px 2px; font-size:14px; color:oklch(28% 0.02 240); cursor:pointer; display:flex; align-items:center; justify-content:space-between;">{{ o.label }}<sc-if value="{{ o.active }}"><span style="color:oklch(24% 0.03 235); font-weight:700;">✓</span></sc-if></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showLoginScreen }}">
+        <div style="{{ loginOverlayStyle }}">
+          <div style="padding:20px var(--pad-x) 40px;">
+            <div onClick="{{ closeLoginScreen }}" style="cursor:pointer; font-size:20px; color:oklch(20% 0.02 240);">✕</div>
+            <div style="text-align:center; margin-top:20px;"><img src="assets/teamccr-emblem.png" style="width:176px; height:176px; object-fit:contain;" alt="TEAMCCR"></div>
+
+            <div style="margin-top:32px; display:flex; flex-direction:column; gap:10px;">
+              <input type="text" placeholder="이메일 주소" style="width:100%; box-sizing:border-box; padding:14px; border:1px solid oklch(85% 0.01 240); border-radius:var(--r-lg); font-size:14px; color:oklch(25% 0.02 240); background:oklch(99% 0.002 240);">
+              <div style="position:relative;">
+                <input type="{{ loginPwType }}" placeholder="비밀번호" style="width:100%; box-sizing:border-box; padding:14px; border:1px solid oklch(85% 0.01 240); border-radius:var(--r-lg); font-size:14px; color:oklch(25% 0.02 240); background:oklch(99% 0.002 240);">
+                <div onClick="{{ toggleLoginPw }}" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); cursor:pointer; color:oklch(55% 0.02 240); display:flex;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </div>
+              </div>
+            </div>
+
+            <div onClick="{{ mockLogin }}" style="margin-top:16px; padding:15px; border-radius:var(--r-lg); background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); font-size:14px; font-weight:600; text-align:center; cursor:pointer;">로그인하기</div>
+
+            <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-top:16px; font-size:12px; color:oklch(50% 0.02 240);">
+              <span style="cursor:pointer;">이메일 가입</span><span style="color:oklch(85% 0.01 240);">|</span>
+              <span style="cursor:pointer;">이메일 찾기</span><span style="color:oklch(85% 0.01 240);">|</span>
+              <span style="cursor:pointer;">비밀번호 찾기</span>
+            </div>
+
+            <div style="height:1px; background:oklch(92% 0.005 240); margin:24px 0;"></div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div onClick="{{ mockLogin }}" style="display:flex; align-items:center; gap:10px; padding:14px; border-radius:var(--r-lg); background:#FEE500; cursor:pointer;">
+                <div style="width:22px; height:22px; border-radius:50%; background:oklch(20% 0.02 240); color:#FEE500; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">K</div>
+                <div style="flex:1; text-align:center; font-size:14px; font-weight:600; color:oklch(20% 0.02 240); margin-right:22px;">카카오로 시작하기</div>
+              </div>
+              <div onClick="{{ mockLogin }}" style="display:flex; align-items:center; gap:10px; padding:14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); cursor:pointer;">
+                <div style="width:22px; height:22px; border-radius:50%; background:oklch(20% 0.02 240); color:oklch(98% 0.004 240); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">A</div>
+                <div style="flex:1; text-align:center; font-size:14px; font-weight:600; color:oklch(25% 0.02 240); margin-right:22px;">Apple로 시작하기</div>
+              </div>
+              <div onClick="{{ mockLogin }}" style="display:flex; align-items:center; gap:10px; padding:14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); cursor:pointer;">
+                <div style="width:22px; height:22px; border-radius:50%; background:oklch(94% 0.01 240); color:oklch(40% 0.15 30); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">G</div>
+                <div style="flex:1; text-align:center; font-size:14px; font-weight:600; color:oklch(25% 0.02 240); margin-right:22px;">Google로 시작하기</div>
+              </div>
+              <div onClick="{{ openForeignerSheet }}" style="display:flex; align-items:center; gap:10px; padding:14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); cursor:pointer;">
+                <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center; color:oklch(35% 0.02 240); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><ellipse cx="12" cy="12" rx="4" ry="9"></ellipse><path d="M3 12h18"></path></svg></div>
+                <div style="flex:1; text-align:center; font-size:14px; font-weight:600; color:oklch(25% 0.02 240); margin-right:22px;">Join as a FOREIGNER</div>
+              </div>
+            </div>
+          </div>
+
+          <sc-if value="{{ showForeignerSheet }}">
+            <div onClick="{{ closeForeignerSheet }}" style="{{ foreignerOverlayStyle }}">
+              <div onClick="{{ stopClick }}" style="width:100%; background:oklch(98% 0.004 240); border-radius:var(--r-lg) var(--r-lg) 0 0; padding:24px var(--pad-x) 32px;">
+                <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:700; color:oklch(18% 0.02 240);">Join as a FOREIGNER</div>
+                <div style="font-size:12.5px; color:oklch(45% 0.02 240); line-height:1.6; margin-top:8px;">Korean mobile identity verification isn't required here — sign up with your email or a social account below.</div>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-top:18px;">
+                  <div onClick="{{ mockLogin }}" style="display:flex; align-items:center; gap:10px; padding:14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); cursor:pointer;">
+                    <div style="width:20px; display:flex; justify-content:center; color:oklch(45% 0.02 240); flex-shrink:0;">✉</div>
+                    <div style="flex:1; text-align:center; font-size:14px; font-weight:600; color:oklch(25% 0.02 240); margin-right:20px;">Email Sign-up</div>
+                  </div>
+                  <div onClick="{{ mockLogin }}" style="display:flex; align-items:center; gap:10px; padding:14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); cursor:pointer;">
+                    <div style="width:20px; height:20px; border-radius:50%; background:oklch(94% 0.01 240); color:oklch(40% 0.15 30); font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">G</div>
+                    <div style="flex:1; text-align:center; font-size:14px; font-weight:600; color:oklch(25% 0.02 240); margin-right:20px;">Start with Google</div>
+                  </div>
+                  <div onClick="{{ mockLogin }}" style="display:flex; align-items:center; gap:10px; padding:14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); cursor:pointer;">
+                    <div style="width:20px; height:20px; border-radius:50%; background:oklch(20% 0.02 240); color:oklch(98% 0.004 240); font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">A</div>
+                    <div style="flex:1; text-align:center; font-size:14px; font-weight:600; color:oklch(25% 0.02 240); margin-right:20px;">Start with Apple</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAppSettings }}">
+        <div style="padding:var(--pad-x);">
+          <div style="display:flex; align-items:center; gap:10px; padding:14px 0;">
+            <div onClick="{{ goMypage }}" style="cursor:pointer; font-size:18px; color:oklch(20% 0.02 240);">←</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:700; color:oklch(18% 0.02 240);">설정</div>
+          </div>
+          <div style="font-size:13px; font-weight:600; color:oklch(45% 0.02 240); margin-top:10px;">계정 관리</div>
+          <div onClick="{{ openLoginScreen }}" style="display:flex; justify-content:space-between; padding:13px 2px; border-bottom:1px solid oklch(92% 0.01 240); font-size:14px; color:oklch(25% 0.02 240); cursor:pointer; margin-top:6px;"><span>로그인 / 회원가입</span><span style="color:oklch(60% 0.02 240);">›</span></div>
+          <div style="height:16px;"></div>
+          <sc-for list="{{ appSettingsMenu }}" as="m" hint-placeholder-count="7">
+            <div onClick="{{ m.onClick }}" style="display:flex; justify-content:space-between; align-items:center; padding:13px 2px; border-bottom:1px solid oklch(92% 0.01 240); font-size:14px; color:oklch(25% 0.02 240); cursor:{{ m.cursor }};"><span>{{ m.label }}</span><span style="color:oklch(60% 0.02 240); font-size:12px;">{{ m.value }}</span></div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPolicyEvent }}">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; padding:14px var(--pad-x) 10px;">
+            <div onClick="{{ goMypage }}" style="cursor:pointer; font-size:18px; color:oklch(20% 0.02 240);">←</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:700; color:oklch(18% 0.02 240);">{{ tEventsTitle }}</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px; padding:4px var(--pad-x) 24px;">
+            <sc-for list="{{ policyEvents }}" as="e" hint-placeholder-count="4">
+              <div style="border-radius:var(--r-lg); padding:20px; background:{{ e.bg }}; color:oklch(97% 0.01 235); cursor:pointer;">
+                <div style="font-size:15px; font-weight:700;">{{ e.title }}</div>
+                <div style="font-size:12px; margin-top:6px; opacity:0.85;">{{ e.desc }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPolicyNotice }}">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; padding:14px var(--pad-x) 10px;">
+            <div onClick="{{ goMypage }}" style="cursor:pointer; font-size:18px; color:oklch(20% 0.02 240);">←</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:700; color:oklch(18% 0.02 240);">{{ tNoticeTitle }}</div>
+          </div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:8px; overflow-x:auto; padding:4px var(--pad-x) 12px; cursor:grab;">
+            <sc-for list="{{ noticeTabs }}" as="t" hint-placeholder-count="4">
+              <div onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</div>
+            </sc-for>
+          </div>
+          <div style="display:flex; flex-direction:column; padding:0 var(--pad-x) 24px;">
+            <sc-for list="{{ policyNotices }}" as="n" hint-placeholder-count="5">
+              <div style="padding:14px 2px; border-bottom:1px solid oklch(92% 0.01 240); cursor:pointer;">
+                <div style="font-size:14px; color:oklch(25% 0.02 240); line-height:1.5;">{{ n.title }}</div>
+                <div style="font-size:11px; color:oklch(55% 0.02 240); margin-top:6px;">{{ n.date }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPolicyDoc }}">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; padding:14px var(--pad-x) 10px;">
+            <div onClick="{{ goMypage }}" style="cursor:pointer; font-size:18px; color:oklch(20% 0.02 240);">←</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:700; color:oklch(18% 0.02 240);">{{ tPolicyTitle }}</div>
+          </div>
+          <div style="padding:4px var(--pad-x) 8px;">
+            <sc-for list="{{ policyDocSections }}" as="sec" hint-placeholder-count="10">
+              <div style="display:flex; gap:8px; padding:8px 0; font-size:13px; color:oklch(35% 0.02 240);"><span>{{ $index }}.</span><span style="text-decoration:underline; text-underline-offset:2px;">{{ sec }}</span></div>
+            </sc-for>
+          </div>
+          <div style="padding:20px var(--pad-x) 40px;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:17px; font-weight:700; color:oklch(18% 0.02 240);">1. 구매/판매 프로세스 및 관련 정책</div>
+            <div style="font-size:14px; font-weight:700; color:oklch(20% 0.02 240); margin-top:16px;">[구매 정책]</div>
+            <div style="font-size:13px; color:oklch(35% 0.02 240); line-height:1.8; margin-top:6px;">TEAMCCR Lab의 '스토어'와 '검색'을 통해 장비 정보를 확인하고 구매를 진행할 수 있습니다. 위탁 판매 상품은 센터의 진단을 통과한 이후에만 노출됩니다.</div>
+            <div style="font-size:14px; font-weight:700; color:oklch(20% 0.02 240); margin-top:18px;">[판매 정책]</div>
+            <div style="font-size:13px; color:oklch(35% 0.02 240); line-height:1.8; margin-top:6px;">위탁형과 매입형 중 원하는 방식을 선택해 판매를 신청할 수 있으며, 신청 후 진단 일정은 마이페이지에서 확인할 수 있습니다.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isTeam }}">
+        <div style="padding:var(--pad-x);">
+          <img src="./assets/teamccr-logo-wordmark.png" alt="TEAMCCR" style="height:102px; width:auto; display:block; margin:0 auto;" />
+          <div style="font-size:13px; color:oklch(40% 0.02 240); margin-top:12px; line-height:1.7;">다이빙에는 다양한 종류가 있습니다. 아름다운 수중 생물과 함께 수중 세상을 탐험할 수도 있고, 미지의 동굴 또는 물속에 가라앉은 유적지나 광산을 탐험하거나 한때는 바다 위를 자유롭게 다니던 침몰선을 탐험할 수도 있습니다. 저희 TeamCCR은 재호흡기 다이빙을 비롯한 테크니컬 다이빙을 중심으로 이런 다양한 형태의 다이빙을 좀 더 안전하고 재미있게 즐기기 위해 노력할 것입니다.</div>
+
+          <div style="margin-top:18px; font-size:14px; font-weight:600; color:oklch(18% 0.02 240);">강사진</div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+            <sc-for list="{{ instructors }}" as="ins" hint-placeholder-count="3">
+              <div onClick="{{ ins.onOpen }}" style="display:flex; gap:12px; border:1px solid oklch(89% 0.01 240); border-radius:var(--r-lg); padding:12px; cursor:pointer;">
+                <div style="width:56px; height:56px; flex-shrink:0;">
+                  <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ ins.slotId }}" shape="circle" placeholder="사진" hint-size="56px,56px" style="width:100%; height:100%;"></x-import>
+                </div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:14px; font-weight:600; color:oklch(18% 0.02 240);">{{ ins.name }} <span style="font-weight:400; color:oklch(50% 0.02 240); font-size:12px;">— {{ ins.title }}</span></div>
+                  <div style="font-size:11px; color:oklch(45% 0.02 240); margin-top:4px; line-height:1.5;">{{ ins.certs }}</div>
+                  <div style="display:flex; gap:8px; margin-top:8px;">
+                    <div onClick="{{ ins.onEmailClick }}" style="flex:1; min-width:0; text-align:center; padding:7px 4px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.04 var(--accent-h)); color:oklch(40% 0.08 var(--accent-h)); font-size:10.5px; font-family:'IBM Plex Mono',monospace; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-sizing:border-box;">{{ ins.email }}</div>
+                    <div onClick="{{ ins.onPhoneClick }}" style="flex:1; min-width:0; text-align:center; padding:7px 4px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.04 var(--accent-h)); color:oklch(40% 0.08 var(--accent-h)); font-size:10.5px; font-family:'IBM Plex Mono',monospace; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-sizing:border-box;">{{ ins.phone }}</div>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:18px; font-size:14px; font-weight:600; color:oklch(18% 0.02 240);">찾아오시는 길</div>
+          <div onClick="{{ openMap }}" style="height:160px; border-radius:var(--r-lg); margin-top:8px; overflow:hidden; position:relative; cursor:pointer;">
+            <iframe src="{{ mapEmbedUrl }}" style="width:100%; height:100%; border:0; pointer-events:none;" loading="lazy"></iframe>
+            <div style="position:absolute; inset:0;"></div>
+          </div>
+          <div style="font-size:11px; color:oklch(50% 0.02 240); margin-top:6px;">경기도 오산시 수청동 청학로 607-1 286</div>
+          <sc-if value="{{ mapExpanded }}">
+            <div onClick="{{ closeMap }}" style="position:absolute; inset:0; z-index:100; background:oklch(20% 0.02 240 / 0.7); display:flex; align-items:center; justify-content:center; padding:24px;">
+              <div onClick="{{ stopClick }}" style="width:100%; height:60%; background:oklch(98% 0.004 240); border-radius:var(--r-lg); overflow:hidden; position:relative;">
+                <iframe src="{{ mapEmbedUrl }}" style="width:100%; height:100%; border:0;" loading="lazy"></iframe>
+                <div onClick="{{ closeMap }}" style="position:absolute; top:10px; right:10px; width:28px; height:28px; border-radius:50%; background:oklch(20% 0.02 240 / 0.6); color:oklch(97% 0.01 235); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px;">✕</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="margin-top:18px; font-size:14px; font-weight:600; color:oklch(18% 0.02 240);">팀 공식 스케줄</div>
+          <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:10px;">
+            <sc-for list="{{ weekdayLabels }}" as="w" hint-placeholder-count="7">
+              <div style="font-size:10px; text-align:center; color:oklch(55% 0.02 240); padding-bottom:4px;">{{ w }}</div>
+            </sc-for>
+            <sc-for list="{{ calendarDays }}" as="d" hint-placeholder-count="31">
+              <div onClick="{{ d.onClick }}" style="{{ d.style }}">{{ d.num }}</div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ selectedDay }}">
+            <div style="margin-top:10px; padding:10px 12px; border-radius:var(--r-lg); background:oklch(93% 0.03 var(--accent-h)); font-size:12px; color:oklch(30% 0.06 var(--accent-h));">{{ selectedDay.date }} — {{ selectedDay.event }}</div>
+          </sc-if>
+
+          <sc-if value="{{ activeInstructor }}">
+            <div onClick="{{ closeInstructor }}" style="{{ instructorOverlayStyle }}">
+              <div style="flex:1; min-height:0;">
+                <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ activeInstructor.detailSlotId }}" shape="rect" fit="contain" placeholder="상세 사진 (신규)" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
+              </div>
+              <div style="padding:var(--pad-x) var(--pad-x) 30px; background:oklch(20% 0.02 240);">
+                <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:20px; font-weight:700; color:oklch(97% 0.01 235);">{{ activeInstructor.name }} <span style="font-weight:400; font-size:13px; color:oklch(75% 0.02 235);">— {{ activeInstructor.title }}</span></div>
+                <div style="font-size:12px; color:oklch(75% 0.02 235); margin-top:6px; line-height:1.5;">{{ activeInstructor.certs }}</div>
+                <div style="font-size:12px; color:oklch(65% 0.10 var(--accent-h)); margin-top:6px; font-family:'IBM Plex Mono',monospace;">{{ activeInstructor.contact }}</div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMagazine }}">
+        <div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:8px; overflow-x:auto; padding:14px var(--pad-x) 12px; cursor:grab;">
+            <sc-for list="{{ magazineCategoryChips }}" as="c" hint-placeholder-count="7">
+              <div onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</div>
+            </sc-for>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:16px; padding:0 var(--pad-x) 24px;">
+            <sc-for list="{{ magazineArticles }}" as="a" hint-placeholder-count="6">
+              <div onClick="{{ a.onOpen }}" style="cursor:pointer;">
+                <div style="aspect-ratio:4/3; border-radius:var(--r-lg); overflow:hidden; background:oklch(94% 0.01 240); position:relative;">
+                  <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ a.slotId }}" shape="rect" fit="cover" placeholder="매거진 이미지" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
+                  <div style="position:absolute; inset:0; background:linear-gradient(0deg, oklch(15% 0.02 240 / 0.85), oklch(15% 0.02 240 / 0.15) 65%, oklch(15% 0.02 240 / 0) 100%); display:flex; flex-direction:column; justify-content:flex-end; gap:4px; padding:14px; pointer-events:none;">
+                    <div style="font-size:11px; color:oklch(85% 0.06 var(--accent-h)); font-weight:600;">{{ a.category }}</div>
+                    <div style="font-size:15px; font-weight:600; color:oklch(97% 0.01 235); line-height:1.35;">{{ a.title }}</div>
+                    <div style="font-size:12px; color:oklch(88% 0.01 235); line-height:1.5;">{{ a.excerpt }}</div>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMagazineDetail }}">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; padding:12px var(--pad-x) 6px;">
+            <div onClick="{{ closeArticle }}" style="cursor:pointer; font-size:17px; color:oklch(30% 0.02 240);">←</div>
+            <div style="font-size:11px; color:oklch(45% 0.08 var(--accent-h)); font-weight:600; font-family:'IBM Plex Mono',monospace;">{{ activeArticle.category }}</div>
+          </div>
+          <div style="padding:6px var(--pad-x) 0;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:20px; font-weight:700; color:oklch(18% 0.02 240); line-height:1.4;">{{ activeArticle.title }}</div>
+            <div style="font-size:14px; color:oklch(40% 0.02 240); margin-top:8px; line-height:1.6;">{{ activeArticle.excerpt }}</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:20px; padding:20px 0 30px;">
+            <sc-for list="{{ articleImages }}" as="img" hint-placeholder-count="3">
+              <div style="aspect-ratio:4/5; overflow:hidden; background:oklch(94% 0.01 240);">
+                <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ img.slotId }}" shape="rect" fit="cover" placeholder="세로 이미지" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStore }}">
+        <div>
+          <div onMouseDown="{{ startDrag }}" style="display:flex; gap:8px; overflow-x:auto; padding:14px var(--pad-x) 12px; cursor:grab;">
+            <sc-for list="{{ storeCategoryChips }}" as="c" hint-placeholder-count="7">
+              <div onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</div>
+            </sc-for>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:0 var(--pad-x) 24px;">
+            <sc-for list="{{ storeProducts }}" as="p" hint-placeholder-count="6">
+              <div onClick="{{ p.onOpen }}" style="cursor:pointer;">
+                <div style="aspect-ratio:1; border-radius:var(--r-lg); overflow:hidden; background:oklch(94% 0.01 240);">
+                  <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ p.slotId }}" shape="rect" fit="cover" placeholder="제품 이미지" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
+                </div>
+                <div style="font-size:13px; font-weight:600; color:oklch(18% 0.02 240); margin-top:8px;">{{ p.name }}</div>
+                <div style="font-size:13px; color:oklch(45% 0.02 240); margin-top:2px;">{{ p.priceLabel }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStoreDetail }}">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; padding:12px var(--pad-x) 6px;">
+            <div onClick="{{ closeStoreProduct }}" style="cursor:pointer; font-size:17px; color:oklch(30% 0.02 240);">←</div>
+            <div style="font-size:13px; color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace;">제품 상세</div>
+          </div>
+          <div style="margin:6px var(--pad-x) 0; aspect-ratio:1; border-radius:var(--r-lg); overflow:hidden; background:oklch(94% 0.01 240);">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ activeStoreProduct.slotId }}" shape="rect" fit="cover" placeholder="제품 이미지" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
+          </div>
+          <div style="padding:16px var(--pad-x) 0;">
+            <div style="font-size:10px; color:oklch(45% 0.08 var(--accent-h)); font-weight:600;">{{ activeStoreProduct.category }}</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:20px; font-weight:700; color:oklch(18% 0.02 240); margin-top:4px;">{{ activeStoreProduct.name }}</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:19px; font-weight:700; color:oklch(18% 0.02 240); margin-top:8px;">{{ activeStoreProduct.priceLabel }}</div>
+            <div style="font-size:13px; color:oklch(40% 0.02 240); margin-top:12px; line-height:1.6;">{{ activeStoreProduct.desc }}</div>
+          </div>
+          <div style="display:flex; gap:10px; padding:20px var(--pad-x) 30px;">
+            <div onClick="{{ addToCartActive }}" style="flex:1; text-align:center; padding:13px; border-radius:var(--r-lg); border:1px solid oklch(24% 0.03 235); color:oklch(24% 0.03 235); font-size:14px; font-weight:600; cursor:pointer;">{{ tAddToCart }}</div>
+            <div onClick="{{ buyNow }}" style="flex:1; text-align:center; padding:13px; border-radius:var(--r-lg); background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); font-size:14px; font-weight:600; cursor:pointer;">{{ tBuyNow }}</div>
+          </div>
+          <sc-if value="{{ storeToast }}">
+            <div style="margin:0 var(--pad-x) 20px; padding:10px 14px; border-radius:var(--r-sm); background:oklch(93% 0.03 var(--accent-h)); color:oklch(30% 0.06 var(--accent-h)); font-size:12px;">{{ storeToast }}</div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+
+    <sc-if value="{{ showSignup }}">
+      <div onClick="{{ closeSignup }}" style="{{ signupOverlayStyle }}">
+        <div onClick="{{ stopClick }}" style="width:100%; background:oklch(98% 0.004 240); border-radius:var(--r-lg); padding:28px 22px; text-align:center;">
+          <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:19px; font-weight:700; color:oklch(18% 0.02 240);">지금 팀씨씨알랩에 가입하세요!</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px; margin-top:16px;">
+            <div style="font-size:13px; color:oklch(35% 0.02 240);">✓ 100% 정품 인증</div>
+            <div style="font-size:13px; color:oklch(35% 0.02 240);">✓ 프리미엄 안전 배송</div>
+            <div style="font-size:13px; color:oklch(35% 0.02 240);">✓ 투명한 시세 제공</div>
+          </div>
+          <div onClick="{{ goSignupLogin }}" style="margin-top:20px; padding:13px; border-radius:var(--r-lg); background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); font-size:14px; font-weight:600; cursor:pointer;">가입하고 혜택받기</div>
+          <div onClick="{{ closeSignup }}" style="margin-top:12px; font-size:12px; color:oklch(55% 0.02 240); cursor:pointer;">나중에 할게요</div>
+          <div onClick="{{ toggleHideToday }}" style="margin-top:22px; padding-top:6px; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;">
+            <div style="{{ hideTodayBoxStyle }}"><sc-if value="{{ hideTodayChecked }}">✓</sc-if></div>
+            <div style="font-size:12px; color:oklch(50% 0.02 240);">오늘은 그만보기</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ cartOpen }}">
+      <div onClick="{{ closeCart }}" style="{{ cartOverlayStyle }}">
+        <div onClick="{{ stopClick }}" style="width:100%; max-height:80%; background:oklch(98% 0.004 240); border-radius:var(--r-lg) var(--r-lg) 0 0; overflow-y:auto; padding:var(--pad-x) var(--pad-x) calc(var(--pad-x) + env(safe-area-inset-bottom)); cursor:default;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:16px; font-weight:700; color:oklch(18% 0.02 240);">{{ tCartTitle }}</div>
+            <div onClick="{{ closeCart }}" style="cursor:pointer; font-size:16px; color:oklch(45% 0.02 240);">✕</div>
+          </div>
+          <sc-if value="{{ noCartItems }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:30px 0; text-align:center; font-size:13px; color:oklch(50% 0.02 240);">{{ tCartEmpty }}</div>
+          </sc-if>
+          <sc-for list="{{ cartItems }}" as="c" hint-placeholder-count="0">
+            <div style="display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid oklch(92% 0.01 240);">
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:13px; font-weight:600; color:oklch(18% 0.02 240);">{{ c.name }}</div>
+                <div style="font-size:12px; color:oklch(45% 0.02 240); margin-top:2px;">{{ c.subtotalLabel }}</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div onClick="{{ c.dec }}" style="width:22px; height:22px; border-radius:50%; border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px;">−</div>
+                <div style="font-size:13px; min-width:14px; text-align:center;">{{ c.qty }}</div>
+                <div onClick="{{ c.inc }}" style="width:22px; height:22px; border-radius:50%; border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px;">+</div>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ hasCartItems }}">
+            <div style="display:flex; justify-content:space-between; padding:14px 0 6px; font-size:14px; font-weight:700; color:oklch(18% 0.02 240);"><span>합계</span><span>{{ cartTotalLabel }}</span></div>
+            <div onClick="{{ buyNow }}" style="margin-top:10px; text-align:center; padding:13px; border-radius:var(--r-lg); background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); font-size:14px; font-weight:600; cursor:pointer;">{{ tBuyNow }}</div>
+          </sc-if>
+          <sc-if value="{{ storeToast }}">
+            <div style="margin-top:12px; padding:10px 14px; border-radius:var(--r-sm); background:oklch(93% 0.03 var(--accent-h)); color:oklch(30% 0.06 var(--accent-h)); font-size:12px;">{{ storeToast }}</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="padding:20px var(--pad-x); border-top:1px solid oklch(89% 0.01 240); font-size:11px; color:oklch(55% 0.02 240); line-height:1.8;">
+      {{ tFooterLegal }}<br>
+      {{ tFooterAddr }}<br>
+      <span style="text-decoration:underline; cursor:pointer;">{{ tFooterTerms }}</span> · <span style="text-decoration:underline; cursor:pointer;">{{ tFooterPolicy }}</span> · <span style="text-decoration:underline; cursor:pointer;">{{ tFooterPrivacy }}</span>
+    </div>
+  </div>
+
+  <div class="side-panel" style="flex:1; min-width:0; position:sticky; top:0; height:100vh; height:100dvh; display:flex; align-items:center; justify-content:center; background: oklch(24% 0.03 235);"></div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:900},&quot;accentMood&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Teal&quot;,&quot;options&quot;:[&quot;Teal&quot;,&quot;Violet&quot;,&quot;Coral&quot;,&quot;Forest&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;cornerStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Rounded&quot;,&quot;options&quot;:[&quot;Rounded&quot;,&quot;Sharp&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Editorial&quot;,&quot;options&quot;:[&quot;Editorial&quot;,&quot;Compact&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;}}">
+
+const NAV_DEFS = [
+  { key:'home', tKey:'navHome' },
+  { key:'search', tKey:'navSearch' },
+  { key:'sell', tKey:'navSell' },
+  { key:'store', tKey:'navStore' },
+  { key:'team', tKey:'navTeam' },
+  { key:'magazine', tKey:'navMagazine' },
+];
+
+const STORE_CATEGORIES = ['전체','드라이수트','마스크/스노클','다이브 컴퓨터','산소센서','소다라임/스크러버','호스/피팅','툴/액세서리'];
+const STORE_PRODUCTS = [
+  { id:'st1', category:'드라이수트', name:'테크 드라이수트', price:1200000, desc:'테크니컬 다이빙용 트라이라미네이트 드라이수트. 팔뚝 포켓과 강화 무릎 패드 적용.', slotId:'store-st1' },
+  { id:'st2', category:'마스크/스노클', name:'로우볼륨 마스크', price:85000, desc:'좁은 시야각을 최소화한 로우볼륨 마스크. 실리콘 스커트로 편안한 착용감.', slotId:'store-st2' },
+  { id:'st3', category:'다이브 컴퓨터', name:'테크 다이브 컴퓨터', price:950000, desc:'멀티가스 감압 알고리즘을 지원하는 테크니컬 다이빙 전용 컴퓨터.', slotId:'store-st3' },
+  { id:'st4', category:'산소센서', name:'O2 센서 (3셀 세트)', price:180000, desc:'재호흡기 호환 산소센서 3셀 세트. 밀리볼트 정확도 검수 완료.', slotId:'store-st4' },
+  { id:'st5', category:'소다라임/스크러버', name:'소다라임 5kg', price:65000, desc:'CO2 흡수 성능이 검증된 소다라임 5kg 팩.', slotId:'store-st5' },
+  { id:'st6', category:'호스/피팅', name:'인플레이터 호스', price:45000, desc:'표준 규격 인플레이터 호스, 다양한 길이 옵션.', slotId:'store-st6' },
+  { id:'st7', category:'툴/액세서리', name:'다이브 나이프', price:55000, desc:'스테인리스 소재의 컴팩트 다이브 나이프.', slotId:'store-st7' },
+  { id:'st8', category:'드라이수트', name:'언더수트', price:320000, desc:'보온성이 뛰어난 드라이수트 전용 언더수트.', slotId:'store-st8' },
+];
+
+const PRODUCTS = [
+  { id:'TC-0142', brand:'Divesoft', model:'Liberty', mount:'BM', control:'eCCR', year:2022, hours:180, grade:'A', price:18500000, saleType:'위탁형', badge:'금주 등록', center:'센터', views:342 },
+  { id:'TC-0138', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'eCCR', year:2021, hours:260, grade:'B', price:15200000, saleType:'매입형', badge:'즉시구매가능', center:'센터', views:210 },
+  { id:'TC-0151', brand:'KISS Rebreathers', model:'Sidewinder', mount:'SM', control:'mCCR', year:2023, hours:60, grade:'S', price:12800000, saleType:'위탁형', badge:'신품급', center:'센터', views:157 },
+  { id:'TC-0119', brand:'AP Diving', model:'Inspiration', mount:'BM', control:'eCCR', year:2019, hours:420, grade:'B', price:9800000, saleType:'매입형', badge:'센터방문가능', center:'센터', views:401 },
+  { id:'TC-0160', brand:'rEvo', model:'rEvo III Standard', mount:'BM', control:'Hybrid', year:2022, hours:95, grade:'A', price:19900000, saleType:'위탁형', badge:'CARE 가능', center:'센터', views:88 },
+  { id:'TC-0163', brand:'Halcyon', model:'Symbios', mount:'CM', control:'eCCR', year:2023, hours:20, grade:'S', price:21500000, saleType:'매입형', badge:'금주 등록', center:'센터', views:64 },
+  { id:'TC-0127', brand:'iQsub', model:'X-CCR', mount:'BM', control:'eCCR', year:2020, hours:310, grade:'B', price:11200000, saleType:'위탁형', badge:'즉시구매가능', center:'센터', views:176 },
+  { id:'TC-0133', brand:'SF2', model:'SF2 Backmount', mount:'BM', control:'eCCR', year:2021, hours:150, grade:'A', price:13400000, saleType:'매입형', badge:'센터방문가능', center:'센터', views:120 },
+  { id:'TC-0171', brand:'KISS Rebreathers', model:'GEM', mount:'BM', control:'SCR', year:2023, hours:40, grade:'S', price:4200000, saleType:'매입형', badge:'신품급', center:'센터', views:96 },
+  { id:'TC-0155', brand:'Dive Rite', model:'O2ptima CM', mount:'CM', control:'eCCR', year:2020, hours:280, grade:'B', price:4800000, saleType:'위탁형', badge:'즉시구매가능', center:'센터', views:143 },
+];
+
+const BRAND_SLOTS = [
+  { label:'AP Diving', slotId:'brand-apdiving' },
+  { label:'Dive Rite', slotId:'brand-diverite' },
+  { label:'Divesoft', slotId:'brand-divesoft' },
+  { label:'Halcyon', slotId:'brand-halcyon' },
+  { label:'iQsub', slotId:'brand-iqsub' },
+  { label:'JJ-CCR', slotId:'brand-jjccr' },
+  { label:'KISS', slotId:'brand-kiss' },
+  { label:'rEvo', slotId:'brand-revo' },
+  { label:'SF2', slotId:'brand-sf2' },
+];
+
+const BRANDS = ['전체','AP Diving','Dive Rite','Divesoft','Halcyon','iQsub','JJ-CCR','KISS Rebreathers','rEvo','SF2'];
+const CHIPS = ['즉시구매가능','신품급','센터방문가능','CARE'];
+
+const INSTRUCTORS = [
+  { name:'박정훈', title:'책임 트레이너', certs:'SDI·TDI·ERDI ITE · PADI Tec100 CCR IT\nSF2/X-CCR/AP Evolution/Liberty/Optima', contact:'tdi19866@gmail.com · 010-4099-6530', slotId:'instructor-parkjunghoon', detailSlotId:'instructor-parkjunghoon-detail' },
+  { name:'백승균', title:'책임 트레이너', certs:'SDI·TDI·ERDI IT\nSF2 eCCR·X-CCR·AP Evolution', contact:'yamasg@hanmail.net · 010-7900-8259', slotId:'instructor-baekseunggyun', detailSlotId:'instructor-baekseunggyun-detail' },
+  { name:'조승훈', title:'책임강사', certs:'SDI·TDI·ERDI Instructor\nTDI SF2 eCCR Diluent/Deco Diver', contact:'idun07@naver.com · 010-9198-6494', slotId:'instructor-jhoseunghoon', detailSlotId:'instructor-jhoseunghoon-detail' },
+];
+
+const MAGAZINE_CATEGORIES = ['ALL','Beginner','Brand Focus','Guide','New Release News','People','Research'];
+const MAGAZINE_ARTICLES = [
+  { id:'m1', category:'Guide', title:'재호흡기 다이빙 시작 전 알아야 할 것들', excerpt:'첫 CCR 다이빙을 준비하는 다이버를 위한 안전 체크리스트', slotId:'mag-1' },
+  { id:'m2', category:'Brand Focus', title:'Divesoft Liberty 완전 분석', excerpt:'Light와 Heavy 옵션의 차이, 실사용 리뷰', slotId:'mag-2' },
+  { id:'m3', category:'Beginner', title:'mCCR vs eCCR, 무엇을 골라야 할까', excerpt:'입문자를 위한 제어방식 비교 가이드', slotId:'mag-3' },
+  { id:'m4', category:'New Release News', title:'KISS Sidewinder 2, CE 인증 진행 중', excerpt:'신제품 출시 소식과 예상 출고 일정', slotId:'mag-4' },
+  { id:'m5', category:'People', title:'책임 트레이너 박정훈 인터뷰', excerpt:'테크니컬 다이빙에 입문하게 된 계기', slotId:'mag-5' },
+  { id:'m6', category:'Research', title:'스크러버 사용시간, 어떻게 계산할까', excerpt:'소다라임 종류별 잔여 사용가능 시간 비교', slotId:'mag-6' },
+  { id:'m7', category:'Guide', title:'오버홀 주기, 놓치면 안 되는 이유', excerpt:'전자계통 점검이 안전에 미치는 영향', slotId:'mag-7' },
+  { id:'m8', category:'Brand Focus', title:'rEvo III, 하이브리드 CCR의 매력', excerpt:'mCCR/eCCR 전환이 가능한 이유', slotId:'mag-8' },
+];
+
+const POLICY_MENU = [
+  { label:'이벤트', action:'policyEvent' },
+  { label:'공지사항', action:'policyNotice' },
+  { label:'고객센터', action:null },
+  { label:'이용정책', action:'policyDoc' },
+  { label:'브랜드 소개', action:'team' },
+];
+const POLICY_EVENTS = [
+  { title:'여름 시즌 위탁 프로모션', desc:'거래 수수료 무료 · 7월 한정', bg:'linear-gradient(135deg, oklch(30% 0.05 235), oklch(18% 0.03 235))' },
+  { title:'신규 회원 첫 구매 혜택', desc:'가입 후 첫 구매 시 즉시 할인', bg:'linear-gradient(135deg, oklch(55% 0.15 250), oklch(40% 0.12 250))' },
+  { title:'오버홀 정기 점검 캠페인', desc:'8월 한정 오버홀 20% 할인', bg:'linear-gradient(135deg, oklch(45% 0.1 150), oklch(30% 0.08 150))' },
+  { title:'친구 초대 이벤트', desc:'초대할 때마다 포인트 적립', bg:'linear-gradient(135deg, oklch(60% 0.15 80), oklch(45% 0.12 60))' },
+];
+const POLICY_NOTICES = [
+  { tag:'주요 서비스 공지', title:'개인정보 처리방침 개정 안내', date:'2026.07.14' },
+  { tag:'주요 서비스 공지', title:'서비스 이용정책 변경사항 안내', date:'2026.07.10' },
+  { tag:'이벤트/프로모션 안내', title:'여름 시즌 위탁 프로모션 결과 안내', date:'2026.07.07' },
+  { tag:'주요 서비스 공지', title:'진단 기준 변경 안내', date:'2026.07.03' },
+  { tag:'당첨 안내', title:'친구 초대 이벤트 당첨자 발표', date:'2026.06.26' },
+];
+const NOTICE_TABS = ['전체','주요 서비스 공지','당첨 안내','이벤트/프로모션 안내'];
+const POLICY_DOC_SECTIONS = ['구매/판매 프로세스 및 관련 정책','상품 가격 정책','진단 정책','오버홀 정책','배송 정책','워런티 정책','거래 취소 수수료 및 페널티 정책','회원가입/계정관리/탈퇴 정책','거래 수수료 및 비용 정책','포인트 정책'];
+const MY_MENU = [
+  { label:'거래내역', count:'매입형 1 · 위탁형 2' },
+  { label:'오버홀 신청내역', count:'진행중 1건' },
+  { label:'교육 신청내역', count:'0건' },
+  { label:'인증서함', count:'2건 보관' },
+  { label:'관심매물', count:'5건' },
+  { label:'리뷰', count:'작성 1건' },
+];
+
+const CONSIGN_STEPS = ['판매 신청 및 모델 선택','장비 전달(센터 방문 · 전문배송업체)','검수 · 등급판정 및 촬영','판매자 승인 후 판매 시작'];
+const BUYOUT_STEPS = ['매입 신청 · 1차 견적 안내','동의 시 장비 전달','검수 후 최종 견적 안내','판매자 동의 시 매매계약 성립','3영업일 내 대금 지급'];
+
+const INSPECTION_PARTS = ['카운터렁','스크러버 캐니스터','호스','밸브','산소센서','하네스'];
+const FAQ_QA = [
+  { q:'위탁판매는 어떻게 진행되나요?', a:'센터로 장비를 보내주시면 TEAMCCR이 검수·등급판정·촬영 후 게시하며, 판매가 성사되면 대금을 정산해드립니다.' },
+  { q:'센터에서 실물 확인이 가능한가요?', a:'네, 센터 방문 예약을 통해 실물을 직접 확인하실 수 있습니다.' },
+  { q:'오버홀 서비스는 무엇인가요?', a:'재호흡기 등 장비의 정기 점검과 부품 교체를 포함한 종합 정비 서비스입니다.' },
+  { q:'정품 인증은 어떻게 이루어지나요?', a:'제조사 시리얼 넘버 조회와 TEAMCCR 자체 검수 기준을 통해 정품 여부를 확인합니다.' },
+];
+const FAQ_QA_EN = {
+  '위탁판매는 어떻게 진행되나요?':'How does consignment selling work?',
+  '센터에서 실물 확인이 가능한가요?':'Can I inspect the item in person at the center?',
+  '오버홀 서비스는 무엇인가요?':'What is the overhaul service?',
+  '정품 인증은 어떻게 이루어지나요?':'How is authenticity verified?',
+};
+const FAQ_A_EN = {
+  '센터로 장비를 보내주시면 TEAMCCR이 검수·등급판정·촬영 후 게시하며, 판매가 성사되면 대금을 정산해드립니다.':'Send your equipment to a center, and TEAMCCR will inspect, grade, photograph, and list it. You get paid once it sells.',
+  '네, 센터 방문 예약을 통해 실물을 직접 확인하실 수 있습니다.':'Yes, you can inspect it in person by booking a visit to our center.',
+  '재호흡기 등 장비의 정기 점검과 부품 교체를 포함한 종합 정비 서비스입니다.':'A full maintenance service for rebreathers and other gear, including routine inspection and parts replacement.',
+  '제조사 시리얼 넘버 조회와 TEAMCCR 자체 검수 기준을 통해 정품 여부를 확인합니다.':"We verify authenticity via manufacturer serial number lookup and TEAMCCR's own inspection standards.",
+};
+const DEALS = [
+  { date:'2026.06', overhaul:'있음', price:'1,750만' },
+  { date:'2026.05', overhaul:'없음', price:'1,820만' },
+  { date:'2026.03', overhaul:'있음', price:'1,690만' },
+];
+
+const POLICY_ACCORDION = [
+  { key:'inspect', title:'검수 정책', body:'모든 매물은 예외 없이 TEAMCCR 검수·등급판정을 거친 뒤 게시됩니다.' },
+  { key:'overhaul', title:'오버홀 정책', body:'오버홀은 검수 결과 필요 판정이 나오거나 판매자·구매자가 희망할 때만 선택적으로 진행됩니다.' },
+  { key:'refund', title:'검수 착오 상품 환불', body:'검수 기준 미달 상품이 통과되어 판매된 경우, 수령일로부터 7일 이내 환불 또는 A/S 대체가 가능합니다.' },
+  { key:'delivery', title:'배송 정책', body:'장비가액 구간별 보험배송 티어가 적용되며, 배송 중 분실·파손 시 전액 배상됩니다.' },
+];
+
+function fmtPrice(p){ return (p/10000).toLocaleString('ko-KR') + '만원'; }
+const EXCHANGE_RATE = 1488;
+const GRADE_COLORS = {
+  S: 'background:oklch(93% 0.09 95); color:oklch(38% 0.13 75);',
+  A: 'background:oklch(92% 0.06 255); color:oklch(38% 0.13 255);',
+  B: 'background:oklch(92% 0.07 150); color:oklch(35% 0.11 150);',
+  C: 'background:oklch(92% 0.01 240); color:oklch(45% 0.02 240);',
+};
+function gradeStyle(grade, size) {
+  const base = GRADE_COLORS[grade] || GRADE_COLORS.C;
+  return `font-size:${size}; padding:2px 6px; border-radius:var(--r-sm); font-weight:600; ${base}`;
+}
+const TR = {
+  navHome:{ko:'홈',en:'Home'}, navSearch:{ko:'검색',en:'Search'}, navSell:{ko:'판매',en:'Sell'}, navStore:{ko:'스토어',en:'Store'}, navTeam:{ko:'TEAMCCR',en:'TEAMCCR'}, navMagazine:{ko:'매거진',en:'Magazine'},
+  qOverhaul:{ko:'오버홀 신청',en:'Overhaul'}, qVisit:{ko:'센터 방문예약',en:'Visit Center'}, qEducation:{ko:'교육 신청',en:'Education'}, qMagazine:{ko:'매거진',en:'Magazine'},
+  sectionBrand:{ko:'브랜드',en:'Brands'}, sectionNew:{ko:'이번 주 등록된 신규 매물',en:'New This Week'}, sectionDrop:{ko:'최근 가격이 인하된 상품',en:'Recent Price Drops'},
+  sectionTrend:{ko:'관심 급상승',en:'Trending'}, sectionBudget:{ko:'500만원 이하로 시작하는 첫 재호흡기',en:'First Rebreather Under ₩5M'},
+  seeAll:{ko:'전체보기',en:'See all'}, more:{ko:'더보기',en:'More'},
+  cartTitle:{ko:'장바구니',en:'Cart'}, cartEmpty:{ko:'장바구니가 비어 있습니다.',en:'Your cart is empty.'},
+  addToCart:{ko:'장바구니 담기',en:'Add to Cart'}, buyNow:{ko:'바로 구매',en:'Buy Now'},
+  loginSignup:{ko:'로그인 / 회원가입',en:'Log In / Sign Up'},
+  footerLegal:{ko:'TEAMCCR · 대표자 성명 · 사업자등록번호 000-00-00000 · 통신판매업 000-0000-0000',en:'TEAMCCR · CEO Name · Business Reg. No. 000-00-00000 · E-commerce License 000-0000-0000'},
+  footerAddr:{ko:'경기도 센터 주소 · contact@teamccr.net',en:'Gyeonggi-do Center Address · contact@teamccr.net'},
+  footerTerms:{ko:'이용약관',en:'Terms'}, footerPolicy:{ko:'이용정책',en:'Policy'}, footerPrivacy:{ko:'개인정보처리방침',en:'Privacy'},
+  langSettingsTitle:{ko:'언어 설정',en:'Language Settings'}, region:{ko:'지역',en:'Region'}, language:{ko:'언어',en:'Language'}, currency:{ko:'통화',en:'Currency'},
+  changeBtn:{ko:'변경하기',en:'Save Changes'}, eventsTitle:{ko:'이벤트',en:'Events'}, noticeTitle:{ko:'공지사항',en:'Notices'}, policyTitle:{ko:'이용정책',en:'Policy'},
+  sellTitle:{ko:'장비 판매',en:'Sell Equipment'}, sellSubtitle:{ko:'모든 매물은 TEAMCCR 검수 후 게시됩니다. 직거래는 운영하지 않습니다.',en:'All listings are inspected by TEAMCCR before posting. Direct trades are not supported.'},
+  consignLabel:{ko:'위탁 판매',en:'Consignment'}, consignBadge:{ko:'판매속도 2배',en:'2x Faster Sale'}, consignDesc:{ko:'소유권 유지 · TEAMCCR이 검수·촬영·게시·판매 대행',en:'Keep ownership · TEAMCCR handles inspection, photos, listing & sale'},
+  buyoutLabel:{ko:'TEAMCCR 매입',en:'TEAMCCR Buyout'}, buyoutBadge:{ko:'즉시 현금화',en:'Instant Cash'}, buyoutDesc:{ko:'즉시 매입 후 검수 · 3영업일 내 대금 지급',en:'Instant buyout, inspection, payment within 3 business days'},
+  searchPlaceholder:{ko:'모델명, 모델번호 검색',en:'Search model name or number'}, recentSearch:{ko:'최근 검색어',en:'Recent Searches'}, noSearchHistory:{ko:'검색 내역이 없습니다.',en:'No search history.'}, recommendedKw:{ko:'추천 키워드',en:'Suggested Keywords'}, faqTitle:{ko:'자주 묻는 질문',en:'FAQ'},
+  processTitle:{ko:'진행 순서',en:'Process'},
+  consignFee:{ko:'거래수수료: 성사 시 청구(초기 프로모션 무료) · 주문관리수수료 2% · 오버홀은 검수 결과 필요 시 또는 요청 시에만 실비 청구',en:'Fee: charged upon sale (free during launch promo) · 2% order management fee · overhaul billed at cost only if needed or requested'},
+  consignApply:{ko:'위탁 판매 신청하기',en:'Apply for Consignment'},
+  buyoutFee:{ko:'최종 견적 거절 시 매입 중단, 반송비 TEAMCCR 부담. 매입 불가: 무단 개조·비정품·시리얼 없음 등',en:'If you decline the final quote, the buyout stops and TEAMCCR covers return shipping. Not eligible: unauthorized modifications, non-genuine parts, or missing serial number'},
+  buyoutApply:{ko:'매입 신청하기',en:'Apply for Buyout'},
+};
+const KO_EN = {
+  '전체':'All', '드라이수트':'Drysuits', '마스크/스노클':'Masks/Snorkels', '다이브 컴퓨터':'Dive Computers', '산소센서':'O2 Sensors', '소다라임/스크러버':'Sofnolime/Scrubber', '호스/피팅':'Hoses/Fittings', '툴/액세서리':'Tools/Accessories',
+  '이벤트':'Events', '공지사항':'Notices', '고객센터':'Support', '이용정책':'Policy', '브랜드 소개':'About Brand',
+  '주요 서비스 공지':'Service Notices', '당첨 안내':'Winner Announcements', '이벤트/프로모션 안내':'Events & Promotions',
+  '구매/판매 프로세스 및 관련 정책':'Buy/Sell Process & Policy', '상품 가격 정책':'Pricing Policy', '진단 정책':'Inspection Policy', '오버홀 정책':'Overhaul Policy', '배송 정책':'Shipping Policy', '워런티 정책':'Warranty Policy', '거래 취소 수수료 및 페널티 정책':'Cancellation Fee & Penalty Policy',
+  '거래내역':'Transaction History', '오버홀 신청내역':'Overhaul Requests', '교육 신청내역':'Education Requests', '센터 방문예약 내역':'Center Visit Bookings', '인증서':'Certificates', '리뷰':'Reviews',
+  '판매 신청 및 모델 선택':'Submit sale & select model', '장비 전달(센터 방문 · 전문배송업체)':'Deliver equipment (center visit or courier)', '검수 · 등급판정 및 촬영':'Inspection, grading & photography', '판매자 승인 후 판매 시작':'Listed for sale after seller approval',
+  '매입 신청 · 1차 견적 안내':'Submit buyout request · initial quote', '동의 시 장비 전달':'Deliver equipment upon agreement', '검수 후 최종 견적 안내':'Final quote after inspection', '판매자 동의 시 매매계약 성립':'Sale contract upon seller agreement', '3영업일 내 대금 지급':'Payment within 3 business days',
+  '카운터렁':'Counterlung', '스크러버 캐니스터':'Scrubber Canister', '호스':'Hose', '밸브':'Valve', '하네스':'Harness',
+  '장비 판매':'Sell Equipment', '위탁 판매':'Consignment', 'TEAMCCR 매입':'TEAMCCR Buyout', '판매속도 2배':'2x Faster Sale', '즉시 현금화':'Instant Cash',
+  '소유권 유지 · TEAMCCR이 검수·촬영·게시·판매 대행':'Keep ownership · TEAMCCR handles inspection, photos, listing & sale', '즉시 매입 후 검수 · 3영업일 내 대금 지급':'Instant buyout, inspection, payment within 3 business days',
+  '진행 순서':'Process', '희망 판매가':'Desired Sale Price', '위탁 판매 신청하기':'Apply for Consignment', '매입 신청하기':'Apply for Buyout',
+  '상품 상세':'Product Details', '검수 리포트':'Inspection Report', '이미지':'Images', '스펙':'Specs',
+  '모델명, 모델번호 검색':'Search model name or number', '최근 검색어':'Recent Searches', '검색 내역이 없습니다.':'No search history.', '추천 키워드':'Suggested Keywords', '자주 묻는 질문':'FAQ',
+  '위탁판매는 어떻게 진행되나요?':'How does consignment selling work?', '센터에서 실물 확인이 가능한가요?':'Can I inspect the item in person at the center?', '오버홀 서비스는 무엇인가요?':'What is the overhaul service?', '정품 인증은 어떻게 이루어지나요?':'How is authenticity verified?',
+  '모델':'Model', '가격':'Price', '필터':'Filter', '기본 정보':'Basic Info',
+  '상품':'Products', '즉시구매가능':'Buy Now', '신품급':'Like New', '센터방문가능':'Center Visit', 'CARE 가능':'CARE Eligible', '금주 등록':'New This Week',
+};
+function T(ko, lang) { return (lang === 'en' && KO_EN[ko]) ? KO_EN[ko] : ko; }
+
+function fmtPriceCur(p, currency){
+  if (currency === 'USD') return '$' + Math.round(p / EXCHANGE_RATE).toLocaleString('en-US');
+  return fmtPrice(p);
+}
+
+const MAP_EMBED_URL = 'https://www.google.com/maps/embed?pb=!1m5!3m3!1m2!1s0x357b472e17c18e29%3A0xf935f9a0a410e088!2sTSN!5e0!3m2!1sko!2skr!4v1784445035062!5m2!1sko!2skr';
+
+class Component extends DCLogic {
+  state = {
+    view: 'home',
+    prevView: 'home',
+    activeProductId: null,
+    searchTab: 'product',
+    brandFilter: '전체',
+    activeChips: {},
+    detailTab: 'report',
+    sellType: 'consign',
+    sellPriceKRW: '',
+    sellPriceUSD: '',
+    openFaqIndex: null,
+    loggedIn: false,
+    searchBoxOpen: false,
+    searchQuery: '',
+    buyToastOpen: false,
+    applyToastOpen: false,
+    selectedDayNum: null,
+    openPolicyKey: null,
+    heroTrackIndex: 1,
+    heroDragOffset: 0,
+    heroDragging: false,
+    heroNoTransition: false,
+    magazineCategory: 'ALL',
+    mapExpanded: false,
+    activeInstructorSlot: null,
+    overlayRect: null,
+    showSignup: true,
+    hideTodayChecked: false,
+    settingsRegion: (function(){ try { return localStorage.getItem('teamccr_region') || '한국'; } catch(e){ return '한국'; } })(),
+    settingsLanguage: (function(){ try { return localStorage.getItem('teamccr_language') || '한국어'; } catch(e){ return '한국어'; } })(),
+    screenMode: (function(){ try { return localStorage.getItem('teamccr_screen_mode') || 'light'; } catch(e){ return 'light'; } })(),
+    settingsInitialRegion: (function(){ try { return localStorage.getItem('teamccr_region') || '한국'; } catch(e){ return '한국'; } })(),
+    settingsInitialLanguage: (function(){ try { return localStorage.getItem('teamccr_language') || '한국어'; } catch(e){ return '한국어'; } })(),
+    draftRegion: (function(){ try { return localStorage.getItem('teamccr_region') || '한국'; } catch(e){ return '한국'; } })(),
+    draftLanguage: (function(){ try { return localStorage.getItem('teamccr_language') || '한국어'; } catch(e){ return '한국어'; } })(),
+    settingsPicker: null,
+    settingsLoading: false,
+    showLoginScreen: false,
+    showForeignerSheet: false,
+    loginPwVisible: false,
+    noticeTab: '전체',
+    storeCategory: '전체',
+    activeStoreProductId: null,
+    cart: {},
+    cartOpen: false,
+    storeToast: '',
+  };
+
+  componentDidMount() {
+    try {
+      const until = parseInt(localStorage.getItem('teamccr_hide_signup_until') || '0', 10);
+      if (until && Date.now() < until) this.state.showSignup = false;
+    } catch (e) {}
+    this.startHeroTimer();
+    this._wireMagAutoHeight();
+    this._wireLogoAutoWidth();
+    this._measureOverlay();
+    this._onResize = () => {
+      if (this.state.activeInstructorSlot || this.state.cartOpen || this.state.showSignup || this.state.settingsPicker || this.state.showLoginScreen) this._measureOverlay();
+    };
+    window.addEventListener('resize', this._onResize);
+    try { window.history.replaceState(this._navSnapshot(), ''); } catch (e) {}
+    this._onPopState = (e) => {
+      if (e.state) {
+        this._suppressPush = true;
+        this.setState(e.state, () => { this._suppressPush = false; });
+      }
+    };
+    window.addEventListener('popstate', this._onPopState);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._heroTimer);
+    if (this._magObserver) this._magObserver.disconnect();
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('popstate', this._onPopState);
+  }
+
+  _navSnapshot() {
+    const s = this.state;
+    return { view: s.view, prevView: s.prevView, activeProductId: s.activeProductId, activeStoreProductId: s.activeStoreProductId,
+      activeArticleId: s.activeArticleId, activeInstructorSlot: s.activeInstructorSlot, cartOpen: s.cartOpen, showSignup: s.showSignup,
+      mapExpanded: s.mapExpanded, detailTab: s.detailTab, sellType: s.sellType };
+  }
+  _pushNav(patch) {
+    if (patch && patch.view) window.scrollTo(0, 0);
+    this.setState(patch, () => {
+      if (!this._suppressPush) { try { window.history.pushState(this._navSnapshot(), ''); } catch (e) {} }
+    });
+  }
+
+  _measureOverlay = () => {
+    const col = document.getElementById('phone-col');
+    if (col) {
+      const r = col.getBoundingClientRect();
+      this.setState({ overlayRect: { left: r.left, width: r.width } });
+    }
+  };
+
+  _wireMagAutoHeight = () => {
+    const wire = (el) => {
+      if (el._omWired) return;
+      const img = el.shadowRoot && el.shadowRoot.querySelector('.frame img');
+      if (!img) return;
+      el._omWired = true;
+      const apply = () => {
+        if (img.naturalWidth && img.naturalHeight) {
+          const wrap = el.parentElement && el.parentElement.parentElement;
+          if (wrap) { wrap.style.height = 'auto'; wrap.style.aspectRatio = img.naturalWidth + ' / ' + img.naturalHeight; }
+        }
+      };
+      if (img.complete && img.naturalWidth) apply();
+      img.addEventListener('load', apply);
+    };
+    const scan = () => { document.querySelectorAll('image-slot[id^="mag-"]').forEach(wire); };
+    scan();
+    this._magObserver = new MutationObserver(scan);
+    this._magObserver.observe(document.body, { childList: true, subtree: true });
+    if (window.customElements && customElements.whenDefined) {
+      customElements.whenDefined('image-slot').then(scan).catch(() => {});
+    }
+    [100, 300, 800, 1500, 3000].forEach(ms => setTimeout(scan, ms));
+  };
+
+  _wireLogoAutoWidth = () => {
+    const wire = () => {
+      const el = document.getElementById('teamccr-lab-logo');
+      if (!el || el._omWired) return;
+      const img = el.shadowRoot && el.shadowRoot.querySelector('.frame img');
+      if (!img) return;
+      el._omWired = true;
+      const apply = () => {
+        if (img.naturalWidth && img.naturalHeight) {
+          const wrap = document.getElementById('teamccr-lab-logo-wrap');
+          if (wrap) wrap.style.width = (22.44 * img.naturalWidth / img.naturalHeight) + 'px';
+        }
+      };
+      if (img.complete && img.naturalWidth) apply();
+      img.addEventListener('load', apply);
+    };
+    wire();
+    if (window.customElements && customElements.whenDefined) {
+      customElements.whenDefined('image-slot').then(wire).catch(() => {});
+    }
+    [100, 300, 800, 1500, 3000].forEach(ms => setTimeout(wire, ms));
+  };
+
+  startHeroTimer = () => {
+    if (this._heroTimer) clearInterval(this._heroTimer);
+    this._heroTimer = setInterval(() => this.setState(s => ({ heroTrackIndex: s.heroTrackIndex + 1 })), 3000);
+  };
+
+  pauseHero = () => { if (this._heroTimer) clearInterval(this._heroTimer); };
+  resumeHero = () => { this.startHeroTimer(); };
+
+  heroPrev = () => { this.pauseHero(); this.setState(s => ({ heroTrackIndex: s.heroTrackIndex - 1 })); this.resumeHero(); };
+  heroNext = () => { this.pauseHero(); this.setState(s => ({ heroTrackIndex: s.heroTrackIndex + 1 })); this.resumeHero(); };
+  heroTransitionEnd = () => {
+    this.setState(s => {
+      if (s.heroTrackIndex >= 4) return { heroTrackIndex: 1, heroNoTransition: true };
+      if (s.heroTrackIndex <= 0) return { heroTrackIndex: 3, heroNoTransition: true };
+      return null;
+    }, () => {
+      if (this.state.heroNoTransition) requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ heroNoTransition: false })));
+    });
+  };
+  heroContainerClick = (e) => {
+    if (this._heroDidDrag) { this._heroDidDrag = false; return; }
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x < rect.width / 2) this.heroPrev(); else this.heroNext();
+  };
+  _heroEndDrag = () => {
+    if (!this._heroMove) return;
+    window.removeEventListener('pointermove', this._heroMove);
+    window.removeEventListener('pointerup', this._heroUp);
+    window.removeEventListener('pointercancel', this._heroUp);
+    window.removeEventListener('blur', this._heroUp);
+    this._heroMove = null;
+    const dx = this._heroLastDx || 0;
+    this.setState(s => {
+      let idx = s.heroTrackIndex;
+      if (dx < -40) idx = idx + 1;
+      else if (dx > 40) idx = idx - 1;
+      return { heroTrackIndex: idx, heroDragOffset: 0, heroDragging: false };
+    });
+    this.resumeHero();
+  };
+  heroPointerDown = (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    if (e.pointerType === 'mouse') e.preventDefault();
+    this.pauseHero();
+    this._heroStartX = e.clientX;
+    this._heroDidDrag = false;
+    this._heroLastDx = 0;
+    this.setState({ heroDragging: true, heroDragOffset: 0 });
+    this._heroMove = (ev) => {
+      const dx = ev.clientX - this._heroStartX;
+      this._heroLastDx = dx;
+      if (Math.abs(dx) > 5) this._heroDidDrag = true;
+      this.setState({ heroDragOffset: dx });
+    };
+    this._heroUp = () => this._heroEndDrag();
+    window.addEventListener('pointermove', this._heroMove);
+    window.addEventListener('pointerup', this._heroUp);
+    window.addEventListener('pointercancel', this._heroUp);
+    window.addEventListener('blur', this._heroUp);
+  };
+
+  nav = (v) => this._pushNav(v === 'settings' ? { view: v, buyToastOpen:false, applyToastOpen:false, draftRegion: this.state.settingsRegion, draftLanguage: this.state.settingsLanguage } : { view: v, buyToastOpen:false, applyToastOpen:false });
+  closeDetail = () => this._pushNav({ view: this.state.prevView });
+  openProduct = (id) => this._pushNav({ view:'detail', prevView: this.state.view, activeProductId: id, detailTab:'report', buyToastOpen:false });
+  toggleSearchBox = () => this.setState(s => ({ searchBoxOpen: !s.searchBoxOpen }));
+  openSearchEntry = () => this._pushNav({ view:'searchEntry', prevView: this.state.view });
+  closeSearchEntry = () => this._pushNav({ view: this.state.prevView });
+  setSearchQuery = (e) => this.setState({ searchQuery: e.target.value });
+  selectKeyword = (k) => this.setState({ searchQuery: k });
+  clearSearchQuery = () => this.setState({ searchQuery: '' });
+  setSearchTab = (t) => this.setState({ searchTab: t });
+  setBrandFilter = (b) => this.setState({ brandFilter: b });
+  toggleChip = (c) => this.setState(s => ({ activeChips: { ...s.activeChips, [c]: !s.activeChips[c] } }));
+  openFilterModal = () => {};
+  setDetailTab = (t) => this.setState({ detailTab: t });
+  selectSellType = (t) => this.setState({ sellType: t, applyToastOpen:false });
+  toggleFaq = (i) => this.setState(s => ({ openFaqIndex: s.openFaqIndex === i ? null : i }));
+  onChangeSellPriceKRW = (e) => {
+    const v = e.target.value.replace(/[^0-9]/g,'');
+    const usd = v ? Math.round(Number(v) / EXCHANGE_RATE) : '';
+    this.setState({ sellPriceKRW: v, sellPriceUSD: String(usd) });
+  };
+  onChangeSellPriceUSD = (e) => {
+    const v = e.target.value.replace(/[^0-9]/g,'');
+    const krw = v ? Math.round(Number(v) * EXCHANGE_RATE) : '';
+    this.setState({ sellPriceUSD: v, sellPriceKRW: String(krw) });
+  };
+  showBuyToast = () => this.setState({ buyToastOpen: true });
+  showApplyToast = () => this.setState({ applyToastOpen: true });
+  toggleLogin = () => this.setState(s => ({ loggedIn: !s.loggedIn }));
+  togglePolicy = (k) => this.setState(s => ({ openPolicyKey: s.openPolicyKey === k ? null : k }));
+  selectDay = (n) => this.setState(s => ({ selectedDayNum: s.selectedDayNum === n ? null : n }));
+  setMagazineCategory = (c) => this.setState({ magazineCategory: c });
+  openMap = () => this._pushNav({ mapExpanded: true });
+  closeMap = () => this._pushNav({ mapExpanded: false });
+  stopClick = (e) => e.stopPropagation();
+  openInstructor = (slotId) => { this._measureOverlay(); this._pushNav({ activeInstructorSlot: slotId }); };
+  closeInstructor = () => this._pushNav({ activeInstructorSlot: null });
+  setStoreCategory = (c) => this.setState({ storeCategory: c });
+  openStoreProduct = (id) => this._pushNav({ view: 'storeDetail', activeStoreProductId: id });
+  closeStoreProduct = () => this._pushNav({ view: 'store' });
+  addToCart = (id) => this.setState(s => ({ cart: { ...s.cart, [id]: (s.cart[id] || 0) + 1 }, storeToast: '장바구니에 담았습니다.' }));
+  changeCartQty = (id, delta) => this.setState(s => {
+    const next = Math.max(0, (s.cart[id] || 0) + delta);
+    const cart = { ...s.cart };
+    if (next === 0) delete cart[id]; else cart[id] = next;
+    return { cart };
+  });
+  toggleCart = () => {
+    if (!this.state.loggedIn) { this.nav('mypage'); return; }
+    this._measureOverlay(); this._pushNav({ cartOpen: !this.state.cartOpen });
+  };
+  closeCart = () => this._pushNav({ cartOpen: false });
+  buyNow = () => this.setState({ storeToast: '데모 프로토타입입니다. 결제는 다음 단계에서 연결됩니다.' });
+  goSignupLogin = () => { this.setState({ showSignup: false }); this.openLoginScreen(); };
+  closeSignup = () => {
+    if (this.state.hideTodayChecked) {
+      try {
+        const d = new Date(); d.setHours(23,59,59,999);
+        localStorage.setItem('teamccr_hide_signup_until', String(d.getTime()));
+      } catch (e) {}
+    }
+    this._pushNav({ showSignup: false });
+  };
+  toggleHideToday = () => {
+    try { localStorage.setItem('teamccr_hide_signup_until', String(Date.now() + 86400000)); } catch (e) {}
+    this.setState({ hideTodayChecked: true });
+    this._pushNav({ showSignup: false });
+  };
+  reloadPage = () => window.location.reload();
+  openRegionPicker = () => { this._measureOverlay(); this.setState({ settingsPicker: 'region' }); };
+  openLanguagePicker = () => { this._measureOverlay(); this.setState({ settingsPicker: 'language' }); };
+  openScreenModePicker = () => { this._measureOverlay(); this.setState({ settingsPicker: 'screenMode' }); };
+  selectScreenMode = (v) => {
+    try { localStorage.setItem('teamccr_screen_mode', v); } catch(e) {}
+    this.setState({ screenMode: v, settingsPicker: null });
+  };
+  closeSettingsPicker = () => this.setState({ settingsPicker: null });
+  selectRegion = (v) => this.setState({ draftRegion: v, settingsPicker: null });
+  selectLanguage = (v) => this.setState({ draftLanguage: v, settingsPicker: null });
+  applySettings = () => {
+    if (this.state.draftRegion === this.state.settingsRegion && this.state.draftLanguage === this.state.settingsLanguage) return;
+    this.setState({ settingsLoading: true });
+    setTimeout(() => this.setState(s => {
+      try { localStorage.setItem('teamccr_region', s.draftRegion); localStorage.setItem('teamccr_language', s.draftLanguage); } catch(e) {}
+      return { settingsRegion: s.draftRegion, settingsLanguage: s.draftLanguage, settingsInitialRegion: s.draftRegion, settingsInitialLanguage: s.draftLanguage, settingsLoading: false };
+    }), 400);
+  };
+  openLoginScreen = () => { this._measureOverlay(); this._pushNav({ showLoginScreen: true }); };
+  closeLoginScreen = () => this._pushNav({ showLoginScreen: false, showForeignerSheet: false });
+  openForeignerSheet = () => this.setState({ showForeignerSheet: true });
+  closeForeignerSheet = () => this.setState({ showForeignerSheet: false });
+  toggleLoginPw = () => this.setState(s => ({ loginPwVisible: !s.loginPwVisible }));
+  mockLogin = () => this.setState({ loggedIn: true, showLoginScreen: false, showForeignerSheet: false });
+  goAppSettings = () => this.nav('appSettings');
+  setNoticeTab = (t) => this.setState({ noticeTab: t });
+  openArticle = (id) => this._pushNav({ view:'magazineDetail', activeArticleId: id });
+  closeArticle = () => this._pushNav({ view:'magazine' });
+
+  startDrag = (e) => {
+    e.preventDefault();
+    const el = e.currentTarget;
+    const startX = e.pageX;
+    const startScroll = el.scrollLeft;
+    let moved = false;
+    const onMove = (ev) => {
+      moved = true;
+      el.scrollLeft = startScroll - (ev.pageX - startX);
+    };
+    const onUp = () => {
+      el.style.cursor = 'grab';
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      if (moved) {
+        const killClick = (ev) => { ev.stopPropagation(); window.removeEventListener('click', killClick, true); };
+        window.addEventListener('click', killClick, true);
+      }
+    };
+    el.style.cursor = 'grabbing';
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  };
+
+  matchesChips(p, activeChips) {
+    const keys = Object.keys(activeChips).filter(k => activeChips[k]);
+    if (keys.length === 0) return true;
+    return keys.some(k => p.badge === k || (k === 'CARE' && p.badge === 'CARE 가능'));
+  }
+
+  _storeVals(s) {
+    const currency = s.settingsRegion === '한국' ? 'KRW' : 'USD';
+    const lang = s.settingsLanguage === '한국어' ? 'ko' : 'en';
+    const tr = (k) => (TR[k] ? TR[k][lang] : k);
+    const storeCategoryChips = STORE_CATEGORIES.map(c => ({
+      label: T(c, lang),
+      onClick: () => this.setStoreCategory(c),
+      style: `flex-shrink:0; font-size:12px; padding:7px 14px; border-radius:var(--r-lg); cursor:pointer; font-weight:600; background:${s.storeCategory===c?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.storeCategory===c?'oklch(97% 0.01 235)':'oklch(35% 0.02 240)'};`
+    }));
+    const withLabel = (p) => ({ ...p, priceLabel: fmtPriceCur(p.price, currency) });
+    const storeProducts = STORE_PRODUCTS.filter(p => s.storeCategory==='전체' || p.category===s.storeCategory)
+      .map(p => ({ ...withLabel(p), onOpen: () => this.openStoreProduct(p.id) }));
+    const activeStoreProduct = STORE_PRODUCTS.find(p => p.id === s.activeStoreProductId) ? withLabel(STORE_PRODUCTS.find(p => p.id === s.activeStoreProductId)) : null;
+    const cartEntries = Object.keys(s.cart).filter(id => s.cart[id] > 0);
+    const cartItems = cartEntries.map(id => {
+      const p = STORE_PRODUCTS.find(pp => pp.id === id);
+      const qty = s.cart[id];
+      return { ...withLabel(p), qty, subtotalLabel: fmtPriceCur(p.price * qty, currency), inc: () => this.changeCartQty(id, 1), dec: () => this.changeCartQty(id, -1) };
+    });
+    const cartCount = cartEntries.reduce((sum, id) => sum + s.cart[id], 0);
+    const cartTotal = cartEntries.reduce((sum, id) => sum + (STORE_PRODUCTS.find(p => p.id === id).price * s.cart[id]), 0);
+    return {
+      storeCategoryChips, storeProducts, activeStoreProduct,
+      closeStoreProduct: this.closeStoreProduct,
+      addToCartActive: activeStoreProduct ? () => this.addToCart(activeStoreProduct.id) : () => {},
+      cartItems, cartCount, cartTotalLabel: fmtPriceCur(cartTotal, currency), hasCartItems: cartItems.length > 0, noCartItems: cartItems.length === 0,
+      toggleCart: this.toggleCart, closeCart: this.closeCart, cartOpen: s.cartOpen, buyNow: this.buyNow,
+      cartOverlayStyle: `position:fixed; top:0; height:100vh; height:100dvh; left:${s.overlayRect ? s.overlayRect.left : 0}px; width:${s.overlayRect ? s.overlayRect.width : 430}px; z-index:100; background:oklch(20% 0.02 240 / 0.6); display:flex; align-items:flex-end;`,
+      storeToast: s.storeToast,
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const currency = s.settingsRegion === '한국' ? 'KRW' : 'USD';
+    const lang = s.settingsLanguage === '한국어' ? 'ko' : 'en';
+    const tr = (k) => (TR[k] ? TR[k][lang] : k);
+    const moodHue = { Teal:200, Violet:290, Coral:25, Forest:150 }[this.props.accentMood ?? 'Teal'];
+    const sharp = (this.props.cornerStyle ?? 'Rounded') === 'Sharp';
+    const compact = (this.props.density ?? 'Editorial') === 'Compact';
+    const rootStyle = `display:flex; justify-content:center; min-height:100vh; min-height:100dvh; width:100%; font-family:'IBM Plex Sans KR', sans-serif; --accent-h:${moodHue}; --r-sm:${sharp?'3px':'6px'}; --r-lg:${sharp?'4px':'12px'}; --pad-x:${compact?'12px':'18px'};`;
+    const navItems = NAV_DEFS.map(n => ({
+      key: n.key,
+      label: tr(n.tKey),
+      onClick: () => this.nav(n.key),
+      style: `flex:1; text-align:center; padding:12px 2px; font-size:15px; font-weight:600; cursor:pointer; white-space:nowrap; color:${s.view===n.key ? 'oklch(55% 0.19 25)' : 'oklch(55% 0.02 240)'}; border-bottom:2px solid ${s.view===n.key ? 'oklch(55% 0.19 25)' : 'transparent'};`
+    }));
+
+    const quickDefs = [
+      { icon:'⚙', label: tr('qOverhaul'), view:'team' },
+      { icon:'⚑', label: tr('qVisit'), view:'team' },
+      { icon:'🎓', label: tr('qEducation'), view:'team' },
+      { icon:'▣', label: tr('qMagazine'), view:'magazine' },
+    ];
+    const quickIcons = quickDefs.map(q => ({ ...q, onClick: () => this.nav(q.view) }));
+
+    const brandLogos = BRAND_SLOTS.map(b => ({ ...b, onClick: () => { this.setBrandFilter(b.label); this.nav('search'); }, tileBg: 'oklch(99% 0.002 240)', tilePad: '4px' }));
+
+    const productWithLabels = PRODUCTS.map(p => ({ ...p, badge: T(p.badge, lang), priceLabel: fmtPriceCur(p.price, currency), specLine: `${p.mount} · ${p.control} · ${p.hours}시간`, onOpen: () => this.openProduct(p.id), gradeStyleMd: gradeStyle(p.grade, '10.5px'), gradeStyleSm: gradeStyle(p.grade, '10px') }));
+
+    const homeProducts = productWithLabels.slice(0,4).map(p => ({ ...p, hasOldPrice:false, oldPriceLabel:'' }));
+
+    const priceDropIds = ['TC-0142','TC-0138','TC-0163'];
+    const priceDropProducts = productWithLabels.filter(p=>priceDropIds.includes(p.id)).map(p => ({ ...p, badge:'가격 인하', hasOldPrice:true, oldPriceLabel: fmtPriceCur(Math.round(p.price*1.12), currency) }));
+
+    const trendingProducts = [...productWithLabels].sort((a,b)=>b.views-a.views).slice(0,4).map(p => ({ ...p, badge:'관심 급상승', hasOldPrice:false, oldPriceLabel:'' }));
+
+    const budgetProducts = productWithLabels.filter(p=>p.price<=5000000).map(p => ({ ...p, badge:'입문 추천', hasOldPrice:false, oldPriceLabel:'' }));
+
+    const filteredProducts = productWithLabels.filter(p =>
+      (s.brandFilter === '전체' || p.brand === s.brandFilter) && this.matchesChips(p, s.activeChips)
+    );
+
+    const searchBrandChips = BRANDS.map(b => ({
+      label: b,
+      onClick: () => this.setBrandFilter(b),
+      style: `flex-shrink:0; font-size:13px; padding:7px 14px; border-radius:16px; cursor:pointer; font-weight:600; background:${s.brandFilter===b?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.brandFilter===b?'oklch(97% 0.01 235)':'oklch(35% 0.02 240)'};`
+    }));
+
+    const filterChips = CHIPS.map(c => ({
+      label: T(c, lang),
+      onClick: () => this.toggleChip(c),
+      style: `flex-shrink:0; font-size:12px; padding:7px 12px; border-radius:16px; cursor:pointer; border:1px solid ${s.activeChips[c]?'oklch(62% 0.10 var(--accent-h))':'oklch(89% 0.01 240)'}; background:${s.activeChips[c]?'oklch(93% 0.03 var(--accent-h))':'transparent'}; color:${s.activeChips[c]?'oklch(38% 0.08 var(--accent-h))':'oklch(45% 0.02 240)'};`
+    }));
+
+    const modelMap = {};
+    PRODUCTS.forEach(p => {
+      const k = p.brand+'|'+p.model;
+      if (!modelMap[k]) modelMap[k] = { brand:p.brand, model:p.model, count:0, sum:0 };
+      modelMap[k].count++; modelMap[k].sum += p.price;
+    });
+    const modelList = Object.values(modelMap).map(m => ({ ...m, avgPrice: fmtPriceCur(m.sum/m.count, currency) }));
+
+    const productRaw = productWithLabels.find(p => p.id === s.activeProductId) || productWithLabels[0];
+    const product = productRaw ? { ...productRaw, gradeStyleLg: gradeStyle(productRaw.grade, '11px'), badgeTr: T(productRaw.badge, lang) } : productRaw;
+
+    const detailTabDefs = [ {key:'report',label:'인증 리포트'}, {key:'images',label:'상품 이미지'}, {key:'spec',label:'상세 스펙'} ];
+    const detailTabs = detailTabDefs.map(t => ({
+      label: T(t.label, lang),
+      onClick: () => this.setDetailTab(t.key),
+      style: `font-size:13px; font-weight:600; padding:8px 0; cursor:pointer; color:${s.detailTab===t.key?'oklch(18% 0.02 240)':'oklch(55% 0.02 240)'}; border-bottom:2px solid ${s.detailTab===t.key?'oklch(62% 0.10 var(--accent-h))':'transparent'};`
+    }));
+
+    const inspectionParts = INSPECTION_PARTS.map(label => ({ label: T(label, lang) }));
+
+    const policyAccordion = POLICY_ACCORDION.map(p => ({
+      title: p.title, body: p.body,
+      open: s.openPolicyKey === p.key,
+      chevron: s.openPolicyKey === p.key ? '−' : '+',
+      onClick: () => this.togglePolicy(p.key),
+    }));
+
+    const weekdayLabels = ['월','화','수','목','금','토','일'];
+    const eventDays = { 5:'정기 다이빙 · 센터', 12:'테크 CCR 교육', 19:'원정 다이빙(제주)', 26:'강사·트레이너 과정' };
+    const calendarDays = Array.from({length:31}, (_,i)=>i+1).map(n => ({
+      num: n,
+      onClick: () => this.selectDay(n),
+      style: `aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:12px; border-radius:6px; cursor:pointer; background:${s.selectedDayNum===n?'oklch(62% 0.10 var(--accent-h))':(eventDays[n]?'oklch(93% 0.03 var(--accent-h))':'transparent')}; color:${s.selectedDayNum===n?'oklch(98% 0.01 235)':(eventDays[n]?'oklch(38% 0.08 var(--accent-h))':'oklch(35% 0.02 240)')};`
+    }));
+    const selectedDay = s.selectedDayNum && eventDays[s.selectedDayNum] ? { date: `8월 ${s.selectedDayNum}일`, event: eventDays[s.selectedDayNum] } : null;
+
+    const magazineCategoryChips = MAGAZINE_CATEGORIES.map(c => ({
+      label: c,
+      onClick: () => this.setMagazineCategory(c),
+      style: `flex-shrink:0; font-size:13px; padding:7px 14px; border-radius:var(--r-lg); cursor:pointer; font-weight:600; background:${s.magazineCategory===c?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.magazineCategory===c?'oklch(97% 0.01 235)':'oklch(35% 0.02 240)'};`
+    }));
+    const magazineArticles = MAGAZINE_ARTICLES.filter(a => s.magazineCategory==='ALL' || a.category===s.magazineCategory)
+      .map(a => ({ ...a, onOpen: () => this.openArticle(a.id) }));
+
+    const activeArticle = MAGAZINE_ARTICLES.find(a => a.id === s.activeArticleId) || MAGAZINE_ARTICLES[0];
+    const articleImages = [1,2,3].map(n => ({ slotId: `${activeArticle.slotId}-${n}` }));
+
+    return {
+      rootStyle,
+      isHome: s.view==='home', isSearch: s.view==='search', isDetail: s.view==='detail', isSell: s.view==='sell', isMypage: s.view==='mypage', isTeam: s.view==='team', isMagazine: s.view==='magazine', isMagazineDetail: s.view==='magazineDetail',
+      isStore: s.view==='store', isStoreDetail: s.view==='storeDetail', isSettings: s.view==='settings', isSearchEntry: s.view==='searchEntry',
+      isAppSettings: s.view==='appSettings', isPolicyEvent: s.view==='policyEvent', isPolicyNotice: s.view==='policyNotice', isPolicyDoc: s.view==='policyDoc',
+      magazineCategoryChips, magazineArticles, activeArticle, articleImages, closeArticle: this.closeArticle,
+      nav: this.nav, navItems, toggleSearchBox: this.toggleSearchBox, searchBoxOpen: s.searchBoxOpen,
+      goHome: () => this.nav('home'), goSearch: () => this.nav('search'), goTeam: () => this.nav('team'), goSell: () => this.nav('sell'),
+      goAllBrands: () => { this.setBrandFilter('전체'); this.nav('search'); },
+      goMypage: () => this.nav('mypage'), reloadPage: this.reloadPage,
+      goSettings: () => this.nav('settings'),
+      openSearchEntry: this.openSearchEntry, closeSearchEntry: this.closeSearchEntry,
+      searchQuery: s.searchQuery, setSearchQuery: this.setSearchQuery, clearSearchQuery: this.clearSearchQuery,
+      searchQueryEntered: s.searchQuery.trim().length > 0,
+      recommendedKeywords: ['Divesoft','JJ-CCR','rEvo','KISS Sidewinder','Optima','Inspiration','Liberty'].map(k => ({ label: k, onClick: () => this.selectKeyword(k) })),
+      faqItems: FAQ_QA.map((item, i) => ({
+        q: lang === 'en' ? (FAQ_QA_EN[item.q] || item.q) : item.q,
+        a: lang === 'en' ? (FAQ_A_EN[item.a] || item.a) : item.a,
+        isOpen: s.openFaqIndex === i,
+        onClick: () => this.toggleFaq(i),
+        chevronStyle: `flex-shrink:0; transition:transform 0.2s; transform:${s.openFaqIndex === i ? 'rotate(180deg)' : 'rotate(0deg)'};`,
+      })),
+      settingsRegionLabel: s.draftRegion, settingsLanguageLabel: s.draftLanguage,
+      settingsCurrency: s.draftRegion === '한국' ? 'KRW' : 'USD',
+      settingsLoading: s.settingsLoading,
+      openRegionPicker: this.openRegionPicker, openLanguagePicker: this.openLanguagePicker, closeSettingsPicker: this.closeSettingsPicker,
+      settingsPickerIsRegion: s.settingsPicker === 'region', settingsPickerIsLanguage: s.settingsPicker === 'language',
+      settingsPickerIsScreenMode: s.settingsPicker === 'screenMode',
+      screenModeOptionItems: [['light','라이트'],['dark','다크']].map(([v,label]) => ({ label, active: s.screenMode===v, onClick: () => this.selectScreenMode(v) })),
+      effectiveScreenMode: s.screenMode === 'dark' ? 'dark' : 'light',
+      settingsOverlayStyle: `position:fixed; top:0; height:100vh; height:100dvh; left:${s.overlayRect ? s.overlayRect.left : 0}px; width:${s.overlayRect ? s.overlayRect.width : 430}px; z-index:120; background:oklch(20% 0.02 240 / 0.6); display:flex; align-items:flex-end;`,
+      regionOptionItems: ['한국','해외'].map(v => ({ label: v, onClick: () => this.selectRegion(v) })),
+      languageOptionItems: [{label:'한국어',code:'KO'},{label:'English',code:'EN'},{label:'日本語',code:'JA'},{label:'中文',code:'ZH'}].map(o => ({ ...o, onClick: () => this.selectLanguage(o.label) })),
+      applySettings: this.applySettings,
+      settingsApplyBtnStyle: (() => {
+        const changed = s.draftRegion !== s.settingsRegion || s.draftLanguage !== s.settingsLanguage;
+        return `padding:15px; border-radius:var(--r-lg); text-align:center; font-size:14px; font-weight:600; ${changed ? 'background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); cursor:pointer;' : 'background:oklch(94% 0.005 240); color:oklch(72% 0.01 240); cursor:not-allowed;'}`;
+      })(),
+      showLoginScreen: s.showLoginScreen, showForeignerSheet: s.showForeignerSheet,
+      openLoginScreen: this.openLoginScreen, closeLoginScreen: this.closeLoginScreen,
+      openForeignerSheet: this.openForeignerSheet, closeForeignerSheet: this.closeForeignerSheet,
+      mockLogin: this.mockLogin, toggleLoginPw: this.toggleLoginPw,
+      loginPwType: s.loginPwVisible ? 'text' : 'password',
+      loginOverlayStyle: `position:fixed; top:0; height:100vh; height:100dvh; left:${s.overlayRect ? s.overlayRect.left : 0}px; width:${s.overlayRect ? s.overlayRect.width : 430}px; z-index:130; background:oklch(98% 0.004 240); overflow-y:auto;`,
+      foreignerOverlayStyle: `position:fixed; top:0; height:100vh; height:100dvh; left:${s.overlayRect ? s.overlayRect.left : 0}px; width:${s.overlayRect ? s.overlayRect.width : 430}px; z-index:140; background:oklch(20% 0.02 240 / 0.6); display:flex; align-items:flex-end;`,
+      setTabProduct: () => this.setSearchTab('product'), setTabModel: () => this.setSearchTab('model'),
+      selectConsign: () => this.selectSellType('consign'), selectBuyout: () => this.selectSellType('buyout'),
+      quickIcons, brandLogos, homeProducts, priceDropProducts, trendingProducts, budgetProducts,
+      searchBrandChips, productTabStyle: `font-size:14px; font-weight:600; padding:6px 0; cursor:pointer; color:${s.searchTab==='product'?'oklch(18% 0.02 240)':'oklch(55% 0.02 240)'}; border-bottom:2px solid ${s.searchTab==='product'?'oklch(62% 0.10 var(--accent-h))':'transparent'};`,
+      modelTabStyle: `font-size:14px; font-weight:600; padding:6px 0; cursor:pointer; color:${s.searchTab==='model'?'oklch(18% 0.02 240)':'oklch(55% 0.02 240)'}; border-bottom:2px solid ${s.searchTab==='model'?'oklch(62% 0.10 var(--accent-h))':'transparent'};`,
+      setSearchTab: this.setSearchTab, searchTabIsProduct: s.searchTab==='product', searchTabIsModel: s.searchTab==='model',
+      productCount: PRODUCTS.length, modelCount: Object.keys(modelMap).length,
+      filterChips, openFilterModal: this.openFilterModal, filteredProducts, modelList,
+      product, closeDetail: this.closeDetail, detailSpecIcons: [ {icon:'✓',label:'검수인증서'}, {icon:'⚙',label:'오버홀이력'}, {icon:'▤',label:'구성품 포함'}, {icon:'!',label:'특이사항 없음'} ],
+      showBuyToast: this.showBuyToast, buyToastOpen: s.buyToastOpen,
+      detailTabs, detailTabIsReport: s.detailTab==='report', detailTabIsImages: s.detailTab==='images', detailTabIsSpec: s.detailTab==='spec', inspectionParts,
+      recentDeals: DEALS, policyAccordion,
+      consignCardStyle: `padding:16px; border-radius:12px; cursor:pointer; background:${s.sellType==='consign'?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.sellType==='consign'?'oklch(97% 0.01 235)':'oklch(20% 0.02 240)'};`,
+      buyoutCardStyle: `padding:16px; border-radius:12px; cursor:pointer; background:${s.sellType==='buyout'?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.sellType==='buyout'?'oklch(97% 0.01 235)':'oklch(20% 0.02 240)'};`,
+      selectSellType: this.selectSellType, sellTypeIsConsign: s.sellType==='consign', sellTypeIsBuyout: s.sellType==='buyout',
+      hasSellType: !!s.sellType,
+      sellPriceKRWDisplay: s.sellPriceKRW ? Number(s.sellPriceKRW).toLocaleString('ko-KR') : '',
+      sellPriceUSDDisplay: s.sellPriceUSD ? Number(s.sellPriceUSD).toLocaleString('en-US') : '',
+      onChangeSellPriceKRW: this.onChangeSellPriceKRW, onChangeSellPriceUSD: this.onChangeSellPriceUSD,
+      exchangeRateLabel: EXCHANGE_RATE.toLocaleString('ko-KR'),
+      tSectionBrand: tr('sectionBrand'), tSectionNew: tr('sectionNew'), tSectionDrop: tr('sectionDrop'), tSectionTrend: tr('sectionTrend'), tSectionBudget: tr('sectionBudget'),
+      tSeeAll: tr('seeAll'), tMore: tr('more'), tCartTitle: tr('cartTitle'), tCartEmpty: tr('cartEmpty'), tAddToCart: tr('addToCart'), tBuyNow: tr('buyNow'),
+      tLoginSignup: tr('loginSignup'), tFooterLegal: tr('footerLegal'), tFooterAddr: tr('footerAddr'), tFooterTerms: tr('footerTerms'), tFooterPolicy: tr('footerPolicy'), tFooterPrivacy: tr('footerPrivacy'),
+      tLangSettingsTitle: tr('langSettingsTitle'), tRegion: tr('region'), tLanguage: tr('language'), tCurrency: tr('currency'), tChangeBtn: tr('changeBtn'),
+      tEventsTitle: tr('eventsTitle'), tNoticeTitle: tr('noticeTitle'), tPolicyTitle: tr('policyTitle'),
+      tSellTitle: tr('sellTitle'), tSellSubtitle: tr('sellSubtitle'),
+      tConsignLabel: tr('consignLabel'), tConsignBadge: tr('consignBadge'), tConsignDesc: tr('consignDesc'),
+      tBuyoutLabel: tr('buyoutLabel'), tBuyoutBadge: tr('buyoutBadge'), tBuyoutDesc: tr('buyoutDesc'),
+      tSearchPlaceholder: tr('searchPlaceholder'), tRecentSearch: tr('recentSearch'), tNoSearchHistory: tr('noSearchHistory'), tRecommendedKw: tr('recommendedKw'), tFaqTitle: tr('faqTitle'),
+      tProcessTitle: tr('processTitle'), tConsignFee: tr('consignFee'), tConsignApply: tr('consignApply'), tBuyoutFee: tr('buyoutFee'), tBuyoutApply: tr('buyoutApply'),
+      tProductTab: T('상품', lang), tModelTab: T('모델', lang),
+      consignSteps: CONSIGN_STEPS.map(x => T(x, lang)), buyoutSteps: BUYOUT_STEPS.map(x => T(x, lang)), showApplyToast: this.showApplyToast, applyToastOpen: s.applyToastOpen,
+      loggedIn: s.loggedIn, toggleLogin: this.toggleLogin,
+      policyMenu: POLICY_MENU.map(m => ({ ...m, label: T(m.label, lang), onClick: m.action ? () => this.nav(m.action) : undefined })),
+      myMenu: MY_MENU.map(m => ({ ...m, label: T(m.label, lang), onClick: m.action ? () => this.nav(m.action) : undefined })),
+      goAppSettings: this.goAppSettings,
+      appSettingsMenu: [
+        { label:'언어 변경', value:'한국어 ›', onClick: () => this.nav('settings'), cursor:'pointer' },
+        { label:'화면 모드', value: ({light:'라이트',dark:'다크'}[s.screenMode] || '라이트') + ' ›', onClick: this.openScreenModePicker, cursor:'pointer' },
+        { label:'이용 약관', value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
+        { label:'이용 정책', value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
+        { label:'오픈소스 라이선스', value:'›', onClick: undefined, cursor:'default' },
+        { label:'개인정보 처리방침', value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
+        { label:'버전정보', value:'1.0.0', onClick: undefined, cursor:'default' },
+      ],
+      policyEvents: POLICY_EVENTS,
+      noticeTabs: NOTICE_TABS.map(t => ({ label: T(t, lang), onClick: () => this.setNoticeTab(t), style: `flex-shrink:0; font-size:12px; padding:7px 14px; border-radius:16px; cursor:pointer; ${s.noticeTab===t ? 'background:oklch(24% 0.03 235); color:oklch(97% 0.01 235);' : 'background:oklch(94% 0.01 240); color:oklch(40% 0.02 240);'}` })),
+      policyNotices: POLICY_NOTICES.filter(n => s.noticeTab==='전체' || n.tag===s.noticeTab),
+      policyDocSections: POLICY_DOC_SECTIONS.map(x => T(x, lang)),
+      instructors: INSTRUCTORS.map(ins => ({ ...ins, onOpen: () => this.openInstructor(ins.slotId),
+        email: ins.contact.split(' · ')[0], phone: ins.contact.split(' · ')[1],
+        onEmailClick: (e) => { e.stopPropagation(); if (window.confirm(ins.contact.split(' · ')[0] + ' 로 이메일을 보내시겠습니까?')) window.location.href = 'mailto:' + ins.contact.split(' · ')[0]; },
+        onPhoneClick: (e) => { e.stopPropagation(); if (window.confirm(ins.contact.split(' · ')[1] + ' 로 전화를 거시겠습니까?')) window.location.href = 'tel:' + ins.contact.split(' · ')[1]; },
+      })),
+      weekdayLabels, calendarDays, selectedDay, startDrag: this.startDrag,
+      mapEmbedUrl: MAP_EMBED_URL, openMap: this.openMap, closeMap: this.closeMap, mapExpanded: s.mapExpanded, stopClick: this.stopClick,
+      activeInstructor: INSTRUCTORS.find(i => i.slotId === s.activeInstructorSlot) || null,
+      closeInstructor: this.closeInstructor,
+      instructorOverlayStyle: `position:fixed; top:0; height:100vh; height:100dvh; left:${s.overlayRect ? s.overlayRect.left : 0}px; width:${s.overlayRect ? s.overlayRect.width : 430}px; z-index:100; background:oklch(20% 0.02 240 / 0.85); display:flex; flex-direction:column; cursor:pointer;`,
+      showSignup: s.showSignup && s.view === 'home', closeSignup: this.closeSignup, goSignupLogin: this.goSignupLogin,
+      hideTodayChecked: s.hideTodayChecked, toggleHideToday: this.toggleHideToday,
+      hideTodayBoxStyle: `width:16px; height:16px; border-radius:4px; border:1px solid ${s.hideTodayChecked ? 'oklch(24% 0.03 235)' : 'oklch(40% 0.02 240)'}; background:${s.hideTodayChecked ? 'oklch(24% 0.03 235)' : 'transparent'}; color:oklch(97% 0.01 235); font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0;`,
+      signupOverlayStyle: `position:fixed; top:0; height:100vh; height:100dvh; left:${s.overlayRect ? s.overlayRect.left : 0}px; width:${s.overlayRect ? s.overlayRect.width : 430}px; z-index:110; background:oklch(20% 0.02 240 / 0.6); display:flex; align-items:center; justify-content:center; padding:24px;`,
+      ...this._storeVals(s),
+      heroTrackStyle: `display:flex; width:500%; height:100%; cursor:grab; touch-action:pan-y; transform:translateX(calc(-${s.heroTrackIndex*20}% + ${s.heroDragOffset}px)); transition:${(s.heroDragging || s.heroNoTransition) ? 'none' : 'transform 0.35s cubic-bezier(.22,.61,.36,1)'};`,
+      heroIndicator: (() => { const r = ((s.heroTrackIndex - 1) % 3 + 3) % 3; return `${r+1} / 3`; })(),
+      heroDots: [0,1,2].map(i => { const r = ((s.heroTrackIndex - 1) % 3 + 3) % 3; return { style: `width:5px; height:5px; border-radius:50%; background:${i===r ? 'oklch(96% 0.01 235)' : 'oklch(96% 0.01 235 / 0.35)'};` }; }),
+      heroSlides: [2,0,1,2,0].map(n => ({ slotId: 'hero-banner-' + n })),
+      pauseHero: this.pauseHero, resumeHero: this.resumeHero, heroPointerDown: this.heroPointerDown, heroContainerClick: this.heroContainerClick, heroTransitionEnd: this.heroTransitionEnd,
+    };
+  }
+}
+
+</script>
+</body>
+</html>
