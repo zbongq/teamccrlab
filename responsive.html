@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; }
+    a { text-decoration:none; color:inherit; }
+    ::-webkit-scrollbar { height:8px; width:8px; }
+    ::-webkit-scrollbar-thumb { background:oklch(85% 0.01 240); border-radius:6px; }
+    @keyframes riseIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+    .rp-shell[data-theme="dark"] { filter: invert(1) hue-rotate(180deg); background:#0b0f14 !important; }
+    .rp-shell[data-theme="dark"] img, .rp-shell[data-theme="dark"] iframe, .rp-shell[data-theme="dark"] .rp-noinvert { filter: invert(1) hue-rotate(180deg); }
+  </style>
+</helmet>
+<div class="rp-shell" data-theme="{{ theme }}" style="font-family:'IBM Plex Sans KR', sans-serif; color:oklch(20% 0.02 240); background:oklch(98% 0.004 240); min-height:100vh;">
+
+  <header style="position:sticky; top:0; z-index:30; background:oklch(99% 0.003 240 / 0.9); backdrop-filter:blur(12px); border-bottom:1px solid oklch(91% 0.008 240);">
+    <div style="max-width:1240px; margin:0 auto; padding:0 clamp(16px, 4vw, 40px); height:clamp(58px, 8vw, 72px); display:flex; align-items:center; gap:20px;">
+      <a href="#" onClick="{{ goHome }}" style="display:flex; align-items:center; height:26px; flex-shrink:0;"><img src="./assets/teamccr-lab-logo.png" alt="TEAMCCR Lab" style="height:100%; width:auto; display:block;" /></a>
+      <sc-if value="{{ isWide }}">
+        <nav style="display:flex; gap:clamp(14px, 2vw, 30px); margin-left:18px; flex:1;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6"><a href="#" onClick="{{ n.onClick }}" style="{{ n.style }}">{{ n.label }}</a></sc-for>
+        </nav>
+      </sc-if>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:clamp(12px,1.6vw,18px); color:oklch(38% 0.02 240);">
+        <div onClick="{{ openBrowser }}" title="브라우저 모드" style="cursor:pointer; display:flex;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4" width="19" height="13" rx="1.5"></rect><path d="M9 20.5h6M12 17v3.5"></path></svg></div>
+        <div onClick="{{ openScreen }}" title="화면 모드" style="cursor:pointer; display:flex;"><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg></sc-if><sc-if value="{{ isDark }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"></path></svg></sc-if><sc-if value="{{ isSystem }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"></path></svg></sc-if></div>
+        <div onClick="{{ openLang }}" title="언어" style="cursor:pointer; display:flex; position:relative;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><ellipse cx="12" cy="12" rx="4" ry="9"></ellipse><path d="M3 12h18"></path></svg><span style="position:absolute; bottom:-4px; right:-6px; font-size:8px; font-weight:700; background:oklch(98% 0.004 240); color:oklch(35% 0.02 240); border-radius:3px; padding:0 2px; line-height:1.3; font-family:'IBM Plex Mono',monospace;">{{ langCode }}</span></div>
+        <span style="cursor:pointer; display:flex; position:relative;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2.5 3h2.2l2.3 12.4a1.4 1.4 0 0 0 1.4 1.1h8.9a1.4 1.4 0 0 0 1.4-1.1L21 7H6"></path></svg></span>
+        <span onClick="{{ openLogin }}" style="cursor:pointer; display:flex;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"></path></svg></span>
+        <sc-if value="{{ !isWide }}"><span onClick="{{ toggleMenu }}" style="cursor:pointer; font-size:22px; line-height:1; display:flex;">☰</span></sc-if>
+      </div>
+    </div>
+    <sc-if value="{{ menuOpen }}">
+      <div style="border-top:1px solid oklch(93% 0.008 240); padding:8px clamp(16px,4vw,40px) 14px; display:flex; flex-direction:column;">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6"><a href="#" onClick="{{ n.onClick }}" style="padding:12px 2px; border-bottom:1px solid oklch(95% 0.006 240); font-size:15px; font-weight:500; color:oklch(24% 0.02 240);">{{ n.label }}</a></sc-for>
+      </div>
+    </sc-if>
+  </header>
+
+  <!-- ===================== HOME ===================== -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div>
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(16px,3vw,28px) clamp(16px,4vw,40px) 0;">
+    <div style="position:relative; border-radius:clamp(14px,2vw,22px); overflow:hidden; aspect-ratio:16/9; max-height:min(70vh, 560px); background:oklch(28% 0.03 235); animation:riseIn 0.7s ease both;">
+      <img src="./assets/hero-banner-0.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+      <div style="position:absolute; inset:0; background:linear-gradient(90deg, oklch(12% 0.03 240 / 0.82), oklch(12% 0.03 240 / 0.25) 60%, transparent);"></div>
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; gap:clamp(10px,1.4vw,18px); padding:clamp(20px,5vw,64px); max-width:640px;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:clamp(10px,1.1vw,13px); letter-spacing:0.22em; color:oklch(82% 0.09 200); text-transform:uppercase;">Rebreather Marketplace</div>
+        <div style="font-size:clamp(28px,4.6vw,58px); font-weight:700; line-height:1.05; letter-spacing:-0.02em; color:oklch(98% 0.01 235); text-wrap:balance;">검수받은 리브리더,<br>안심하고 거래하세요</div>
+        <div style="font-size:clamp(13px,1.5vw,17px); color:oklch(90% 0.02 235); line-height:1.6; max-width:460px;">모든 매물은 TEAMCCR 검수·등급판정을 거쳐 게시됩니다. 위탁·매입부터 오버홀, 교육까지 한 곳에서.</div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;">
+          <a href="#" onClick="{{ goSearch }}" style="background:oklch(70% 0.14 200); color:oklch(18% 0.03 235); font-weight:600; font-size:clamp(13px,1.4vw,15px); padding:clamp(11px,1.2vw,14px) clamp(20px,2.4vw,28px); border-radius:999px;">매물 둘러보기</a>
+          <a href="#" onClick="{{ goSell }}" style="background:oklch(100% 0 0 / 0.12); color:oklch(97% 0.01 235); font-weight:600; font-size:clamp(13px,1.4vw,15px); padding:clamp(11px,1.2vw,14px) clamp(20px,2.4vw,28px); border-radius:999px; border:1px solid oklch(100% 0 0 / 0.35);">장비 판매하기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 0;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:clamp(10px,1.4vw,16px);">
+      <sc-for list="{{ quickActions }}" as="q" hint-placeholder-count="5">
+        <a href="#" style="display:flex; align-items:center; gap:12px; padding:clamp(14px,1.6vw,18px); background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:14px;">
+          <span style="width:38px; height:38px; flex-shrink:0; border-radius:10px; background:oklch(95% 0.03 200); color:oklch(42% 0.1 200); display:flex; align-items:center; justify-content:center; font-size:18px;">{{ q.icon }}</span>
+          <span style="font-size:clamp(12px,1.2vw,14px); font-weight:600; color:oklch(28% 0.02 240);">{{ q.label }}</span>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(28px,4vw,48px) clamp(16px,4vw,40px) 0;">
+    <h2 style="margin:0 0 clamp(14px,1.6vw,20px); font-size:clamp(18px,2.4vw,26px); font-weight:700; letter-spacing:-0.01em;">브랜드</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(96px,1fr)); gap:clamp(10px,1.2vw,14px);">
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-apdiving.png" alt="AP Diving" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-diverite.png" alt="Dive Rite" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-divesoft.png" alt="Divesoft" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-halcyon.png" alt="Halcyon" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-iqsub.png" alt="iQsub" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-jjccr.png" alt="JJ-CCR" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-kiss.png" alt="KISS" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-revo.jpg" alt="rEvo" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+      <a href="#" onClick="{{ goSearch }}" style="aspect-ratio:1; background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px;"><img src="./assets/brand-sf2.png" alt="SF2" style="max-width:100%; max-height:60%; object-fit:contain;" /></a>
+    </div>
+  </section>
+
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(28px,4vw,48px) clamp(16px,4vw,40px) 0;">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:clamp(14px,1.6vw,20px);">
+      <h2 style="margin:0; font-size:clamp(18px,2.4vw,26px); font-weight:700; letter-spacing:-0.01em;">이번 주 신규 매물</h2>
+      <a href="#" onClick="{{ goSearch }}" style="font-size:clamp(12px,1.2vw,14px); color:oklch(45% 0.1 200); font-weight:600;">전체보기 →</a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap:clamp(14px,1.8vw,22px);">
+      <sc-for list="{{ listings }}" as="p" hint-placeholder-count="6">
+        <a href="#" onClick="{{ p.onOpen }}" style="background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:16px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="aspect-ratio:4/3; background:{{ p.bg }}; position:relative; display:flex; align-items:flex-end; padding:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:oklch(96% 0.01 235 / 0.8);">{{ p.id }}</span>
+            <span style="position:absolute; top:12px; left:12px; {{ p.gradeStyle }}">{{ p.grade }}</span>
+          </div>
+          <div style="padding:clamp(12px,1.4vw,16px); display:flex; flex-direction:column; gap:6px; flex:1;">
+            <div style="font-size:clamp(14px,1.5vw,16px); font-weight:600; letter-spacing:-0.01em;"><span style="color:oklch(48% 0.02 240); font-weight:500; font-size:0.86em;">{{ p.brand }}</span> {{ p.model }}</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:clamp(11px,1.1vw,12.5px); color:oklch(52% 0.02 240);">{{ p.spec }}</div>
+            <div style="margin-top:auto; display:flex; align-items:baseline; justify-content:space-between; gap:8px; padding-top:8px;">
+              <span style="font-size:clamp(15px,1.7vw,19px); font-weight:700;">{{ p.price }}</span>
+              <span style="font-size:11px; color:oklch(58% 0.02 240);">조회 {{ p.views }}</span>
+            </div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(28px,4vw,48px) clamp(16px,4vw,40px) 0;">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:clamp(14px,1.6vw,20px);">
+      <h2 style="margin:0; font-size:clamp(18px,2.4vw,26px); font-weight:700; letter-spacing:-0.01em;">매거진</h2>
+      <a href="#" onClick="{{ goMag }}" style="font-size:clamp(12px,1.2vw,14px); color:oklch(45% 0.1 200); font-weight:600;">전체보기 →</a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap:clamp(14px,1.8vw,22px);">
+      <a href="#" style="display:flex; flex-direction:column; gap:10px;">
+        <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:oklch(90% 0.01 240);"><img src="./assets/mag-7.jpg" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:oklch(50% 0.08 200); letter-spacing:0.04em;">GUIDE</div>
+        <div style="font-size:clamp(15px,1.6vw,17px); font-weight:600; line-height:1.35; letter-spacing:-0.01em;">오버홀 주기, 놓치면 안 되는 이유</div>
+        <div style="font-size:clamp(12px,1.3vw,13.5px); color:oklch(48% 0.02 240); line-height:1.55;">전자계통 점검이 안전에 미치는 영향</div>
+      </a>
+      <a href="#" style="display:flex; flex-direction:column; gap:10px;">
+        <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:oklch(90% 0.01 240);"><img src="./assets/mag-25-cover.png" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:oklch(50% 0.08 200); letter-spacing:0.04em;">PEOPLE</div>
+        <div style="font-size:clamp(15px,1.6vw,17px); font-weight:600; line-height:1.35; letter-spacing:-0.01em;">장비 정비사가 보는 흔한 실수들</div>
+        <div style="font-size:clamp(12px,1.3vw,13.5px); color:oklch(48% 0.02 240); line-height:1.55;">오버홀 현장에서 자주 발견되는 문제점</div>
+      </a>
+      <a href="#" style="display:flex; flex-direction:column; gap:10px;">
+        <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:oklch(90% 0.01 240);"><img src="./assets/mag-18-cover.png" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:oklch(50% 0.08 200); letter-spacing:0.04em;">BEGINNER</div>
+        <div style="font-size:clamp(15px,1.6vw,17px); font-weight:600; line-height:1.35; letter-spacing:-0.01em;">다이브 컴퓨터, CCR용은 무엇이 다른가</div>
+        <div style="font-size:clamp(12px,1.3vw,13.5px); color:oklch(48% 0.02 240); line-height:1.55;">PPO2 트렌드 로그와 알람 설정 이해하기</div>
+      </a>
+    </div>
+  </section>
+  </div>
+  </sc-if>
+
+  <!-- ===================== SEARCH ===================== -->
+  <sc-if value="{{ isSearch }}">
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(20px,3vw,32px) clamp(16px,4vw,40px) 0;">
+    <h1 style="margin:0 0 clamp(16px,2vw,24px); font-size:clamp(22px,3vw,32px); font-weight:700; letter-spacing:-0.02em;">매물 검색</h1>
+    <div style="{{ searchGridStyle }}">
+      <aside style="{{ filterPanelStyle }}">
+        <div style="font-size:13px; font-weight:700; color:oklch(30% 0.02 240); margin-bottom:12px;">브랜드</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <sc-for list="{{ searchBrandChips }}" as="c" hint-placeholder-count="8"><div onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</div></sc-for>
+        </div>
+      </aside>
+      <div>
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;"><div style="font-size:13px; color:oklch(50% 0.02 240);">{{ searchCount }}개 매물</div></div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap:clamp(14px,1.8vw,22px);">
+          <sc-for list="{{ searchResults }}" as="p" hint-placeholder-count="6">
+            <a href="#" onClick="{{ p.onOpen }}" style="background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:16px; overflow:hidden; display:flex; flex-direction:column;">
+              <div style="aspect-ratio:4/3; background:{{ p.bg }}; position:relative; display:flex; align-items:flex-end; padding:14px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:oklch(96% 0.01 235 / 0.8);">{{ p.id }}</span>
+                <span style="position:absolute; top:12px; left:12px; {{ p.gradeStyle }}">{{ p.grade }}</span>
+              </div>
+              <div style="padding:clamp(12px,1.4vw,16px); display:flex; flex-direction:column; gap:6px; flex:1;">
+                <div style="font-size:clamp(14px,1.5vw,16px); font-weight:600;"><span style="color:oklch(48% 0.02 240); font-weight:500; font-size:0.86em;">{{ p.brand }}</span> {{ p.model }}</div>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(52% 0.02 240);">{{ p.spec }}</div>
+                <div style="margin-top:auto; display:flex; align-items:baseline; justify-content:space-between; padding-top:8px;">
+                  <span style="font-size:clamp(15px,1.7vw,19px); font-weight:700;">{{ p.price }}</span>
+                  <span style="font-size:11px; color:oklch(58% 0.02 240);">조회 {{ p.views }}</span>
+                </div>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===================== STORE ===================== -->
+  <sc-if value="{{ isStore }}">
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(20px,3vw,32px) clamp(16px,4vw,40px) 0;">
+    <h1 style="margin:0 0 clamp(14px,2vw,20px); font-size:clamp(22px,3vw,32px); font-weight:700; letter-spacing:-0.02em;">스토어</h1>
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(16px,2vw,24px);">
+      <sc-for list="{{ storeCatChips }}" as="c" hint-placeholder-count="7"><div onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</div></sc-for>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap:clamp(14px,1.8vw,22px);">
+      <sc-for list="{{ storeResults }}" as="p" hint-placeholder-count="8">
+        <a href="#" style="background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:16px; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="aspect-ratio:1; background:{{ p.bg }}; display:flex; align-items:center; justify-content:center; color:oklch(96% 0.01 235 / 0.7); font-size:12px; font-family:'IBM Plex Mono',monospace;">{{ p.category }}</div>
+          <div style="padding:clamp(12px,1.4vw,16px); display:flex; flex-direction:column; gap:6px; flex:1;">
+            <div style="font-size:clamp(13px,1.4vw,15px); font-weight:600; line-height:1.35;">{{ p.name }}</div>
+            <div style="margin-top:auto; font-size:clamp(14px,1.6vw,17px); font-weight:700; padding-top:6px;">{{ p.price }}</div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===================== SELL ===================== -->
+  <sc-if value="{{ isSell }}">
+  <section style="max-width:1000px; margin:0 auto; padding:clamp(20px,3vw,32px) clamp(16px,4vw,40px) 0;">
+    <h1 style="margin:0 0 8px; font-size:clamp(22px,3vw,32px); font-weight:700; letter-spacing:-0.02em;">장비 판매</h1>
+    <div style="font-size:clamp(13px,1.4vw,15px); color:oklch(48% 0.02 240); line-height:1.6; margin-bottom:clamp(20px,2.5vw,30px);">모든 매물은 TEAMCCR 검수 후 게시됩니다. 직거래는 운영하지 않습니다.</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap:clamp(14px,2vw,20px);">
+      <sc-for list="{{ sellOptions }}" as="o" hint-placeholder-count="2">
+        <div style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:18px; padding:clamp(20px,2.4vw,28px); display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; align-items:center; gap:10px;"><span style="font-size:clamp(17px,2vw,20px); font-weight:700;">{{ o.title }}</span><span style="font-size:11px; font-weight:700; color:oklch(40% 0.1 200); background:oklch(95% 0.03 200); padding:3px 9px; border-radius:999px;">{{ o.badge }}</span></div>
+          <div style="font-size:clamp(12.5px,1.3vw,14px); color:oklch(45% 0.02 240); line-height:1.6;">{{ o.desc }}</div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+            <sc-for list="{{ o.steps }}" as="st" hint-placeholder-count="4"><div style="display:flex; gap:10px; font-size:12.5px; color:oklch(35% 0.02 240);"><span style="color:oklch(55% 0.12 200); font-weight:700;">{{ st.n }}</span><span>{{ st.t }}</span></div></sc-for>
+          </div>
+          <a href="#" style="margin-top:8px; text-align:center; background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); font-weight:600; font-size:14px; padding:13px; border-radius:12px;">{{ o.cta }}</a>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===================== TEAM ===================== -->
+  <sc-if value="{{ isTeam }}">
+  <section style="max-width:1100px; margin:0 auto; padding:clamp(20px,3vw,32px) clamp(16px,4vw,40px) 0;">
+    <div style="border-radius:clamp(14px,2vw,20px); overflow:hidden; aspect-ratio:21/9; max-height:380px; background:oklch(90% 0.01 240); margin-bottom:clamp(20px,2.5vw,30px);"><img src="./assets/teamccr-intro-photo.jpg" alt="TEAMCCR" style="width:100%; height:100%; object-fit:cover;" /></div>
+    <h1 style="margin:0 0 8px; font-size:clamp(22px,3vw,32px); font-weight:700; letter-spacing:-0.02em;">TEAMCCR</h1>
+    <div style="font-size:clamp(13px,1.4vw,15px); color:oklch(48% 0.02 240); line-height:1.7; max-width:640px; margin-bottom:clamp(24px,3vw,36px);">테크니컬 다이빙과 재호흡기(CCR) 전문 팀. 검수·오버홀·교육까지 다이버가 믿고 맡길 수 있는 파트너를 지향합니다.</div>
+
+    <h2 style="margin:0 0 clamp(12px,1.6vw,18px); font-size:clamp(17px,2.2vw,22px); font-weight:700;">강사진</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap:clamp(14px,1.8vw,20px); margin-bottom:clamp(28px,3.5vw,44px);">
+      <div style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:16px; padding:clamp(14px,1.6vw,18px); display:flex; gap:14px;">
+        <div style="width:64px; height:64px; flex-shrink:0; border-radius:50%; overflow:hidden; background:oklch(92% 0.01 240);"><img src="./assets/instructor-parkjunghoon.webp" alt="박정훈" style="width:100%; height:100%; object-fit:cover;" /></div>
+        <div style="min-width:0;">
+          <div style="font-size:15px; font-weight:600;">박정훈 <span style="font-weight:400; color:oklch(50% 0.02 240); font-size:12.5px;">· 책임 트레이너</span></div>
+          <div style="font-size:12px; color:oklch(46% 0.02 240); line-height:1.5; margin-top:5px; white-space:pre-line;">SDI·TDI·ERDI ITE · PADI Tec100 CCR IT
+SF2/X-CCR/AP Evolution/Liberty/Optima</div>
+        </div>
+      </div>
+      <div style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:16px; padding:clamp(14px,1.6vw,18px); display:flex; gap:14px;">
+        <div style="width:64px; height:64px; flex-shrink:0; border-radius:50%; overflow:hidden; background:oklch(92% 0.01 240);"><img src="./assets/instructor-baekseunggyun.webp" alt="백승균" style="width:100%; height:100%; object-fit:cover;" /></div>
+        <div style="min-width:0;">
+          <div style="font-size:15px; font-weight:600;">백승균 <span style="font-weight:400; color:oklch(50% 0.02 240); font-size:12.5px;">· 책임 트레이너</span></div>
+          <div style="font-size:12px; color:oklch(46% 0.02 240); line-height:1.5; margin-top:5px; white-space:pre-line;">SDI·TDI·ERDI IT
+SF2 eCCR·X-CCR·AP Evolution</div>
+        </div>
+      </div>
+      <div style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:16px; padding:clamp(14px,1.6vw,18px); display:flex; gap:14px;">
+        <div style="width:64px; height:64px; flex-shrink:0; border-radius:50%; overflow:hidden; background:oklch(92% 0.01 240);"><img src="./assets/instructor-jhoseunghoon.webp" alt="조승훈" style="width:100%; height:100%; object-fit:cover;" /></div>
+        <div style="min-width:0;">
+          <div style="font-size:15px; font-weight:600;">조승훈 <span style="font-weight:400; color:oklch(50% 0.02 240); font-size:12.5px;">· 책임강사</span></div>
+          <div style="font-size:12px; color:oklch(46% 0.02 240); line-height:1.5; margin-top:5px; white-space:pre-line;">SDI·TDI·ERDI Instructor
+TDI SF2 eCCR Diluent/Deco Diver</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="margin:0 0 clamp(12px,1.6vw,18px); font-size:clamp(17px,2.2vw,22px); font-weight:700;">찾아오시는 길</h2>
+    <div style="border-radius:14px; overflow:hidden; aspect-ratio:21/9; max-height:320px; background:oklch(90% 0.01 240);"><iframe src="https://www.google.com/maps/embed?pb=!1m5!3m3!1m2!1s0x357b472e17c18e29%3A0xf935f9a0a410e088!2sTSN!5e0!3m2!1sko!2skr!4v1784445035062!5m2!1sko!2skr" style="width:100%; height:100%; border:0;" loading="lazy"></iframe></div>
+    <div style="font-size:12.5px; color:oklch(50% 0.02 240); margin-top:10px; margin-bottom:20px;">경기도 오산시 수청동 청학로 607-1 286 TSN</div>
+  </section>
+  </sc-if>
+
+  <!-- ===================== MAGAZINE ===================== -->
+  <sc-if value="{{ isMag }}">
+  <section style="max-width:1240px; margin:0 auto; padding:clamp(20px,3vw,32px) clamp(16px,4vw,40px) 0;">
+    <h1 style="margin:0 0 clamp(14px,2vw,20px); font-size:clamp(22px,3vw,32px); font-weight:700; letter-spacing:-0.02em;">매거진</h1>
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(18px,2.4vw,26px);">
+      <sc-for list="{{ magCatChips }}" as="c" hint-placeholder-count="6"><div onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</div></sc-for>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap:clamp(16px,2vw,26px);">
+      <sc-for list="{{ magResults }}" as="a" hint-placeholder-count="6">
+        <a href="#" style="display:flex; flex-direction:column; gap:10px;">
+          <div style="aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:{{ a.bg }}; display:flex; align-items:flex-end; padding:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:oklch(96% 0.01 235 / 0.85);">{{ a.category }}</span></div>
+          <div style="font-size:clamp(15px,1.6vw,17px); font-weight:600; line-height:1.35;">{{ a.title }}</div>
+          <div style="font-size:clamp(12px,1.3vw,13.5px); color:oklch(48% 0.02 240); line-height:1.55;">{{ a.excerpt }}</div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===================== DETAIL ===================== -->
+  <sc-if value="{{ isDetail }}">
+  <section style="max-width:1100px; margin:0 auto; padding:clamp(16px,2.4vw,26px) clamp(16px,4vw,40px) 0;">
+    <div onClick="{{ goBack }}" style="font-size:13px; color:oklch(48% 0.02 240); cursor:pointer; margin-bottom:14px;">← 목록으로</div>
+    <div style="{{ detailGridStyle }}">
+      <div style="border-radius:clamp(14px,2vw,20px); overflow:hidden; aspect-ratio:4/3; background:{{ dl.bg }}; position:relative; display:flex; align-items:flex-end; padding:20px;">
+        <span style="position:absolute; top:16px; left:16px; {{ dl.gradeStyle }}">{{ dl.grade }}</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(96% 0.01 235 / 0.8);">{{ dl.id }}</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:clamp(12px,1.4vw,16px);">
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:oklch(46% 0.08 200);">{{ dl.brand }}</div>
+          <div style="font-size:clamp(22px,2.8vw,30px); font-weight:700; letter-spacing:-0.02em; margin-top:4px;">{{ dl.model }}</div>
+        </div>
+        <div style="font-size:clamp(20px,2.4vw,26px); font-weight:700;">{{ dl.price }}</div>
+        <div style="display:flex; gap:10px;">
+          <a href="#" style="flex:1; text-align:center; background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); font-weight:600; font-size:14px; padding:14px; border-radius:12px;">구매 문의</a>
+          <a href="#" style="width:52px; text-align:center; border:1px solid oklch(88% 0.01 240); font-size:16px; padding:14px 0; border-radius:12px;">♡</a>
+        </div>
+        <div style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:14px; padding:clamp(14px,1.6vw,18px); display:flex; flex-direction:column; gap:10px;">
+          <sc-for list="{{ dl.specs }}" as="sp" hint-placeholder-count="6"><div style="display:flex; justify-content:space-between; font-size:13px;"><span style="color:oklch(52% 0.02 240);">{{ sp.k }}</span><span style="color:oklch(26% 0.02 240); font-weight:500;">{{ sp.v }}</span></div></sc-for>
+        </div>
+        <div style="background:oklch(96% 0.02 200); border-radius:14px; padding:clamp(14px,1.6vw,18px); font-size:12.5px; color:oklch(40% 0.06 210); line-height:1.6;">✓ 전 항목 검수 통과 · 호흡회로/전자계통 정상 작동 확인 · TEAMCCR 등급판정 완료</div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <footer style="margin-top:clamp(40px,6vw,80px); background:oklch(22% 0.02 245); color:oklch(80% 0.02 245);">    <div style="max-width:1240px; margin:0 auto; padding:clamp(30px,4vw,52px) clamp(16px,4vw,40px); display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:clamp(20px,3vw,40px);">
+      <div style="min-width:200px;">
+        <img src="./assets/teamccr-lab-logo.png" alt="TEAMCCR Lab" style="height:24px; width:auto; filter:brightness(0) invert(1); opacity:0.9;" />
+        <div style="font-size:12.5px; line-height:1.8; margin-top:14px; color:oklch(68% 0.02 245);">TEAMCCR · 대표자 성명 · 사업자등록번호 000-00-00000 · 통신판매업 000-0000-0000<br>경기도 오산시 수청동 청학로 607-1 286 TSN</div>
+      </div>
+      <sc-for list="{{ footerCols }}" as="c" hint-placeholder-count="3">
+        <div>
+          <div style="font-size:13px; font-weight:600; color:oklch(92% 0.01 240); margin-bottom:12px;">{{ c.title }}</div>
+          <div style="display:flex; flex-direction:column; gap:9px;">
+            <sc-for list="{{ c.links }}" as="l" hint-placeholder-count="4"><a href="#" style="font-size:12.5px; color:oklch(70% 0.02 245);">{{ l }}</a></sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="border-top:1px solid oklch(30% 0.02 245); padding:18px clamp(16px,4vw,40px); text-align:center; font-size:11.5px; color:oklch(58% 0.02 245);">© 2026 TEAMCCR Lab. 반응형 데모 페이지.</div>
+  </footer>
+
+  <sc-if value="{{ popup }}">
+    <div onClick="{{ closePopup }}" style="position:fixed; inset:0; z-index:120; background:oklch(20% 0.02 240 / 0.6); display:flex; align-items:center; justify-content:center; padding:24px;">
+      <div onClick="{{ stopClick }}" style="width:100%; max-width:360px; background:oklch(98% 0.004 240); border-radius:18px; padding:22px; box-shadow:0 20px 60px oklch(20% 0.03 240 / 0.35);">
+        <div style="font-size:16px; font-weight:700; color:oklch(18% 0.02 240);">{{ popupTitle }}</div>
+        <sc-if value="{{ popupDesc }}"><div style="font-size:12px; color:oklch(52% 0.02 240); margin-top:4px;">{{ popupDesc }}</div></sc-if>
+        <div style="display:flex; flex-direction:column; margin-top:12px;">
+          <sc-for list="{{ popupOptions }}" as="o" hint-placeholder-count="3">
+            <div onClick="{{ o.onClick }}" style="padding:13px 2px; font-size:14px; color:oklch(28% 0.02 240); cursor:pointer; display:flex; align-items:center; justify-content:space-between; border-top:1px solid oklch(93% 0.008 240);"><span>{{ o.label }}<span style="color:oklch(55% 0.02 240); font-size:11px; margin-left:6px;">{{ o.sub }}</span></span><sc-if value="{{ o.active }}"><span style="color:oklch(24% 0.03 235); font-weight:700;">✓</span></sc-if></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { w: (typeof window !== 'undefined' ? window.innerWidth : 1200), menuOpen: false, view: 'home', prevView: 'home', activeId: null, searchBrand: '전체', storeCat: '전체', magCat: '전체', screenMode: 'light', lang: 'ko', popup: null };
+
+  componentDidMount() {
+    try { if ((localStorage.getItem('teamccr_browser_mode') || 'fixed') === 'fixed') { window.location.replace('./index.html'); return; } } catch(e) {}
+    this._onResize = () => this.setState({ w: window.innerWidth });
+    window.addEventListener('resize', this._onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+  toggleMenu = () => this.setState(s => ({ menuOpen: !s.menuOpen }));
+  stopClick = (e) => { if (e && e.stopPropagation) e.stopPropagation(); };
+  closePopup = () => this.setState({ popup: null });
+  openBrowser = () => this.setState({ popup: 'browser', menuOpen: false });
+  openScreen = () => this.setState({ popup: 'screen', menuOpen: false });
+  openLang = () => this.setState({ popup: 'lang', menuOpen: false });
+  openLogin = () => this.setState({ popup: 'login', menuOpen: false });
+  selectBrowser = (v) => { try { localStorage.setItem('teamccr_browser_mode', v); } catch(e){} this.setState({ popup: null }); if (v === 'fixed') { try { window.location.href = './index.html'; } catch(e){} } };
+  selectScreen = (v) => this.setState({ screenMode: v, popup: null });
+  selectLang = (v) => this.setState({ lang: v, popup: null });
+  L = (ko, en) => this.state.lang === 'ko' ? ko : en;
+  setView = (v) => (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ view: v, menuOpen: false }); window.scrollTo(0, 0); };
+  openDetail = (id) => (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState(s => ({ view: 'detail', prevView: s.view === 'detail' ? s.prevView : s.view, activeId: id, menuOpen: false })); window.scrollTo(0, 0); };
+  goBack = () => this.setState(s => ({ view: s.prevView || 'search' }));
+
+  won(n) { return (n / 10000).toLocaleString('ko-KR') + '만원'; }
+  gradeStyle(g) {
+    const c = { S:'background:oklch(93% 0.09 95); color:oklch(38% 0.13 75);', A:'background:oklch(92% 0.06 255); color:oklch(38% 0.13 255);', B:'background:oklch(93% 0.03 145); color:oklch(38% 0.1 150);', C:'background:oklch(93% 0.02 30); color:oklch(45% 0.1 30);' }[g] || '';
+    return 'font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; ' + c;
+  }
+
+  allListings() {
+    const bgs = [
+      'linear-gradient(135deg, oklch(42% 0.08 235), oklch(24% 0.05 240))',
+      'linear-gradient(135deg, oklch(40% 0.1 300), oklch(24% 0.06 300))',
+      'linear-gradient(135deg, oklch(42% 0.08 150), oklch(24% 0.05 155))',
+      'linear-gradient(135deg, oklch(44% 0.09 40), oklch(26% 0.06 35))',
+      'linear-gradient(135deg, oklch(40% 0.07 200), oklch(24% 0.05 205))',
+      'linear-gradient(135deg, oklch(42% 0.08 80), oklch(26% 0.05 80))',
+    ];
+    const raw = [
+      ['TC-118','Divesoft','Liberty','S',16800000,54,2021,'BM','eCCR',120,'위탁형'],
+      ['TC-142','JJ-CCR','JJ-CCR','A',14600000,63,2020,'BM','eCCR',90,'매입형'],
+      ['TC-103','KISS','Sidewinder','A',11400000,86,2021,'SM','eCCR',54,'위탁형'],
+      ['TC-121','rEvo','rEvo III Standard','B',19400000,132,2019,'BM','Hybrid',210,'위탁형'],
+      ['TC-107','iQsub','X-CCR','A',10200000,74,2022,'BM','eCCR',47,'위탁형'],
+      ['TC-115','AP Diving','Inspiration','B',9000000,58,2020,'BM','mCCR',165,'매입형'],
+      ['TC-133','Halcyon','Symbios','A',19700000,101,2022,'BM','eCCR',72,'위탁형'],
+      ['TC-140','SF2','SF2 Backmount','B',12700000,64,2019,'BM','eCCR',188,'매입형'],
+    ];
+    return raw.map((r, i) => ({
+      id: r[0], brand: r[1], model: r[2], gradeLetter: r[3], grade: r[3] + '등급', gradeStyle: this.gradeStyle(r[3]),
+      spec: r[7] + ' · ' + r[8] + ' · ' + r[9] + '시간', price: this.won(r[4]), views: r[5], bg: bgs[i % bgs.length],
+      year: r[6], mount: r[7], control: r[8], hours: r[9], saleType: r[10], priceRaw: r[4],
+    }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isWide = s.w >= 860;
+    const view = s.view;
+    const listAll = this.allListings();
+
+    const navDefs = [ ['홈','home'],['검색','search'],['판매','sell'],['스토어','store'],['팀씨씨알','team'],['매거진','magazine'] ];
+    const navItems = navDefs.map(([label, v]) => {
+      const active = view === v || (v === 'search' && view === 'detail');
+      return { label, onClick: this.setView(v),
+        style: `font-size:clamp(13px,1.4vw,15px); font-weight:${active?'700':'500'}; color:${active?'oklch(22% 0.02 240)':'oklch(42% 0.02 240)'}; padding:6px 0; border-bottom:2px solid ${active?'oklch(60% 0.12 200)':'transparent'}; cursor:pointer;`,
+        mstyle: 'padding:12px 2px; font-size:15px; font-weight:500; color:oklch(24% 0.02 240);' };
+    });
+
+    const chip = (label, active, onClick) => ({ label, onClick,
+      style: `flex-shrink:0; font-size:13px; padding:8px 15px; border-radius:999px; cursor:pointer; font-weight:600; ${active ? 'background:oklch(24% 0.03 235); color:oklch(97% 0.01 235);' : 'background:#fff; border:1px solid oklch(90% 0.01 240); color:oklch(40% 0.02 240);'}` });
+
+    // HOME data
+    const quickActions = [ {icon:'✦',label:'신품 구매 요청'},{icon:'⚙',label:'오버홀 신청'},{icon:'⚑',label:'센터 방문예약'},{icon:'🎓',label:'교육 신청'},{icon:'✉',label:'온라인 문의'} ];
+    const brands = [['AP Diving','brand-apdiving.png'],['Dive Rite','brand-diverite.png'],['Divesoft','brand-divesoft.png'],['Halcyon','brand-halcyon.png'],['iQsub','brand-iqsub.png'],['JJ-CCR','brand-jjccr.png'],['KISS','brand-kiss.png'],['rEvo','brand-revo.jpg'],['SF2','brand-sf2.png']].map(([name,f]) => ({ name, src:'./assets/'+f }));
+    const listings = listAll.slice(0, 6).map(p => ({ ...p, onOpen: this.openDetail(p.id) }));
+    const articlesBase = [
+      { category:'GUIDE', title:'오버홀 주기, 놓치면 안 되는 이유', excerpt:'전자계통 점검이 안전에 미치는 영향', img:'./assets/mag-7.jpg' },
+      { category:'PEOPLE', title:'장비 정비사가 보는 흔한 실수들', excerpt:'오버홀 현장에서 자주 발견되는 문제점', img:'./assets/mag-25-cover.png' },
+      { category:'BEGINNER', title:'다이브 컴퓨터, CCR용은 무엇이 다른가', excerpt:'PPO2 트렌드 로그와 알람 설정 이해하기', img:'./assets/mag-18-cover.png' },
+    ];
+
+    // SEARCH data
+    const searchBrandNames = ['전체','Divesoft','JJ-CCR','KISS','rEvo','AP Diving','Halcyon','iQsub','SF2'];
+    const searchBrandChips = searchBrandNames.map(b => chip(b, s.searchBrand === b, () => this.setState({ searchBrand: b })));
+    const searchResultsRaw = listAll.filter(p => s.searchBrand === '전체' || p.brand === s.searchBrand);
+    const searchResults = searchResultsRaw.map(p => ({ ...p, onOpen: this.openDetail(p.id) }));
+
+    // STORE data
+    const storeBgs = ['linear-gradient(135deg, oklch(46% 0.06 235), oklch(30% 0.04 240))','linear-gradient(135deg, oklch(46% 0.06 150), oklch(30% 0.04 155))','linear-gradient(135deg, oklch(46% 0.06 300), oklch(30% 0.04 300))','linear-gradient(135deg, oklch(48% 0.07 40), oklch(30% 0.05 35))'];
+    const storeRaw = [
+      ['테크 드라이수트','드라이수트',1200000],['로우볼륨 마스크','마스크/스노클',85000],['테크 다이브 컴퓨터','다이브 컴퓨터',950000],['O2 센서 프리미엄','산소센서',135000],
+      ['소다라임 5kg','소다라임/스크러버',42000],['LP 인플레이터 호스','호스/피팅',38000],['다이브 나이프','툴/액세서리',55000],['셸 드라이수트 프로','드라이수트',1450000],
+      ['갈바닉 O2 셀 3팩','산소센서',260000],['드라이 스노클','마스크/스노클',45000],['멀티가스 컴퓨터 프로','다이브 컴퓨터',1420000],['넥씰 교체 키트','드라이수트',65000],
+    ];
+    const storeCats = ['전체','드라이수트','마스크/스노클','다이브 컴퓨터','산소센서','소다라임/스크러버','호스/피팅','툴/액세서리'];
+    const storeCatChips = storeCats.map(c => chip(c, s.storeCat === c, () => this.setState({ storeCat: c })));
+    const storeResults = storeRaw.filter(r => s.storeCat === '전체' || r[1] === s.storeCat).map((r, i) => ({ name:r[0], category:r[1], price:this.won(r[2]), bg: storeBgs[i % storeBgs.length] }));
+
+    // SELL data
+    const sellOptions = [
+      { title:'위탁 판매', badge:'판매속도 2배', desc:'소유권을 유지한 채 TEAMCCR이 검수·촬영·게시·판매를 대행합니다.', cta:'위탁 판매 신청하기', steps:[['1','판매 신청 및 모델 선택'],['2','장비 전달(센터 방문·전문배송)'],['3','검수·등급판정 및 촬영'],['4','판매자 승인 후 판매 시작']].map(x=>({n:x[0],t:x[1]})) },
+      { title:'TEAMCCR 매입', badge:'즉시 현금화', desc:'즉시 매입 후 검수하며 3영업일 이내 대금을 지급합니다.', cta:'매입 신청하기', steps:[['1','매입 신청·1차 견적 안내'],['2','동의 시 장비 전달'],['3','검수 후 최종 견적 안내'],['4','3영업일 내 대금 지급']].map(x=>({n:x[0],t:x[1]})) },
+    ];
+
+    // TEAM data
+    const instructors = [
+      { name:'박정훈', title:'책임 트레이너', certs:'SDI·TDI·ERDI ITE · PADI Tec100 CCR IT\nSF2/X-CCR/AP Evolution/Liberty/Optima', img:'./assets/instructor-parkjunghoon.webp' },
+      { name:'백승균', title:'책임 트레이너', certs:'SDI·TDI·ERDI IT\nSF2 eCCR·X-CCR·AP Evolution', img:'./assets/instructor-baekseunggyun.webp' },
+      { name:'조승훈', title:'책임강사', certs:'SDI·TDI·ERDI Instructor\nTDI SF2 eCCR Diluent/Deco Diver', img:'./assets/instructor-jhoseunghoon.webp' },
+    ];
+
+    // MAGAZINE data
+    const magBgs = ['linear-gradient(135deg, oklch(48% 0.09 210), oklch(26% 0.06 220))','linear-gradient(135deg, oklch(48% 0.13 300), oklch(26% 0.08 300))','linear-gradient(135deg, oklch(50% 0.1 150), oklch(28% 0.07 150))','linear-gradient(135deg, oklch(52% 0.1 80), oklch(30% 0.07 80))','linear-gradient(135deg, oklch(52% 0.14 40), oklch(30% 0.09 35))'];
+    const magRaw = [
+      ['Guide','재호흡기 다이빙 시작 전 알아야 할 것들','첫 CCR 다이빙을 준비하는 다이버를 위한 안전 체크리스트'],
+      ['Guide','오버홀 주기, 놓치면 안 되는 이유','전자계통 점검이 안전에 미치는 영향'],
+      ['Brand Focus','Divesoft Liberty 완전 분석','Light와 Heavy 옵션의 차이, 실사용 리뷰'],
+      ['People','장비 정비사가 보는 흔한 실수들','오버홀 현장에서 자주 발견되는 문제점'],
+      ['Beginner','다이브 컴퓨터, CCR용은 무엇이 다른가','PPO2 트렌드 로그와 알람 설정 이해하기'],
+      ['Research','스크러버 캐니스터 수명 실측','CO2 브레이크스루 데이터로 보는 교체 주기'],
+    ];
+    const magCats = ['전체','Guide','Brand Focus','Beginner','People','Research'];
+    const magCatChips = magCats.map(c => chip(c === '전체' ? '전체' : c, s.magCat === c, () => this.setState({ magCat: c })));
+    const magResults = magRaw.filter(m => s.magCat === '전체' || m[0] === s.magCat).map((m, i) => ({ category:m[0], title:m[1], excerpt:m[2], bg: magBgs[i % magBgs.length], img:'' }));
+
+    // DETAIL data
+    const dlRaw = listAll.find(p => p.id === s.activeId) || listAll[0];
+    const dl = { ...dlRaw, specs: [
+      { k:'출시년도', v: String(dlRaw.year) }, { k:'마운트', v: dlRaw.mount }, { k:'제어방식', v: dlRaw.control },
+      { k:'사용시간', v: dlRaw.hours + '시간' }, { k:'판매형태', v: dlRaw.saleType }, { k:'검수등급', v: dlRaw.grade },
+    ] };
+
+    const footerCols = [
+      { title:'서비스', links:['매물 검색','장비 판매','스토어','오버홀 신청'] },
+      { title:'TEAMCCR', links:['브랜드 소개','강사진','찾아오시는 길','매거진'] },
+      { title:'고객지원', links:['이벤트','공지사항','온라인 문의','이용정책'] },
+    ];
+
+    const sysDark = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const theme = s.screenMode === 'dark' || (s.screenMode === 'system' && sysDark) ? 'dark' : 'light';
+    const langCodeMap = { ko:'KO', en:'EN', ja:'JA', zh:'ZH' };
+    let popupTitle = '', popupDesc = '', popupOptions = [];
+    if (s.popup === 'browser') { popupTitle = this.L('브라우저 모드','Browser Mode'); popupDesc = this.L('화면 크기에 맞는 레이아웃을 선택하세요','Choose a layout for your screen');
+      popupOptions = [['fixed', this.L('고정형','Fixed'), '(기본)'],['responsive', this.L('반응형','Responsive'), '(PC · PAD)']].map(([v,label,sub]) => ({ label, sub, active: v===((()=>{try{return localStorage.getItem('teamccr_browser_mode')||'fixed';}catch(e){return 'fixed';}})()), onClick: () => this.selectBrowser(v) })); }
+    else if (s.popup === 'screen') { popupTitle = this.L('화면 모드','Screen Mode');
+      popupOptions = [['light', this.L('라이트','Light')],['dark', this.L('다크','Dark')],['system', this.L('시스템 설정','System')]].map(([v,label]) => ({ label, sub:'', active: s.screenMode===v, onClick: () => this.selectScreen(v) })); }
+    else if (s.popup === 'lang') { popupTitle = this.L('언어','Language');
+      popupOptions = [['ko','한국어'],['en','English'],['ja','日本語'],['zh','中文']].map(([v,label]) => ({ label, sub:'', active: s.lang===v, onClick: () => this.selectLang(v) })); }
+    else if (s.popup === 'login') { popupTitle = this.L('로그인','Sign in'); popupDesc = this.L('데모 페이지입니다','Demo page');
+      popupOptions = [['x', this.L('로그인 / 회원가입','Log in / Sign up')]].map(([v,label]) => ({ label, sub:'', active:false, onClick: this.closePopup })); }
+
+    return {
+      theme, langCode: langCodeMap[s.lang] || 'KO',
+      isLight: s.screenMode==='light', isDark: s.screenMode==='dark', isSystem: s.screenMode==='system',
+      openBrowser: this.openBrowser, openScreen: this.openScreen, openLang: this.openLang, openLogin: this.openLogin,
+      popup: s.popup, closePopup: this.closePopup, stopClick: this.stopClick, popupTitle, popupDesc, popupOptions,
+      goHome: this.setView('home'), goSearch: this.setView('search'), goStore: this.setView('store'), goSell: this.setView('sell'), goTeam: this.setView('team'), goMag: this.setView('magazine'), goBack: this.goBack,
+      navItems,
+      isHome: view === 'home', isSearch: view === 'search', isStore: view === 'store', isSell: view === 'sell', isTeam: view === 'team', isMag: view === 'magazine', isDetail: view === 'detail',
+      quickActions, brands, listings, articles: articlesBase, footerCols,
+      isWide, menuOpen: s.menuOpen && !isWide, toggleMenu: this.toggleMenu,
+      searchBrandChips, searchResults, searchCount: searchResults.length,
+      searchGridStyle: isWide ? 'display:grid; grid-template-columns:250px 1fr; gap:clamp(20px,3vw,36px); align-items:start;' : 'display:flex; flex-direction:column; gap:18px;',
+      filterPanelStyle: isWide ? 'background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:16px; padding:18px; position:sticky; top:88px;' : 'background:#fff; border:1px solid oklch(93% 0.008 240); border-radius:16px; padding:16px;',
+      storeCatChips, storeResults, sellOptions, instructors, magCatChips, magResults,
+      dl, detailGridStyle: isWide ? 'display:grid; grid-template-columns:1.05fr 1fr; gap:clamp(20px,3vw,40px); align-items:start;' : 'display:flex; flex-direction:column; gap:20px;',
+    };
+  }
+}
+</script>
+</body>
+</html>

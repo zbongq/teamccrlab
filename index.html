@@ -63,6 +63,7 @@
           <img src="./assets/teamccr-lab-logo.png" alt="TEAMCCR" style="width:100%; height:100%; object-fit:contain; display:block;" />
         </div>
         <div style="display:flex; align-items:center; gap:16px; font-size:calc(14px * var(--font-scale)); color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace;">
+          <div onClick="{{ openLayoutPicker }}" style="cursor:pointer; display:flex;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4" width="19" height="13" rx="1.5"></rect><path d="M9 20.5h6M12 17v3.5"></path></svg></div>
           <div onClick="{{ openScreenModePicker }}" style="cursor:pointer; display:flex;">
             <sc-if value="{{ isScreenModeLight }}" hint-placeholder-val="{{ true }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg></sc-if>
             <sc-if value="{{ isScreenModeDark }}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"></path></svg></sc-if>
@@ -94,7 +95,7 @@
           <div onMouseEnter="{{ pauseHero }}" onMouseLeave="{{ resumeHero }}" onPointerDown="{{ heroPointerDown }}" onClick="{{ heroContainerClick }}" style="margin:14px 0 0; aspect-ratio:16/9; position:relative; overflow:hidden; background:oklch(30% 0.03 235); touch-action:pan-y;">
             <div style="{{ heroTrackStyle }}" onTransitionEnd="{{ heroTransitionEnd }}">
               <sc-for list="{{ heroSlides }}" as="hs" hint-placeholder-count="5">
-                <div style="width:20%; height:100%; flex-shrink:0;">
+                <div style="width:{{ hs.width }}; height:100%; flex-shrink:0;">
                   <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ hs.slotId }}" shape="rect" fit="cover" placeholder="배너 이미지 (16:9)" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
                 </div>
               </sc-for>
@@ -124,7 +125,7 @@
           </div>
           <div onMouseDown="{{ startDrag }}" style="display:flex; gap:10px; overflow-x:auto; padding:2px var(--pad-x) 20px; cursor:grab; touch-action:pan-x pan-y;">
             <div onClick="{{ goAllBrands }}" style="flex-shrink:0; width:64px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;">
-              <div style="width:64px; height:64px; border-radius:var(--r-lg); background:oklch(94% 0.01 240); display:flex; align-items:center; justify-content:center; font-size:calc(13px * var(--font-scale)); font-weight:600; color:oklch(30% 0.02 240);">전체</div>
+              <div style="width:64px; height:64px; border-radius:var(--r-lg); background:oklch(94% 0.01 240); display:flex; align-items:center; justify-content:center; font-size:calc(13px * var(--font-scale)); font-weight:600; color:oklch(30% 0.02 240);">{{ tAll }}</div>
             </div>
             <sc-for list="{{ brandLogos }}" as="b" hint-placeholder-count="6">
               <div style="flex-shrink:0; width:64px; display:flex; flex-direction:column; align-items:center; gap:4px;">
@@ -153,7 +154,7 @@
                 <div style="font-size:calc(14.5px * var(--font-scale)); color:oklch(45% 0.02 240); margin-top:2px;">{{ p.priceLabel }}</div>
                 <div style="display:flex; gap:6px; margin-top:5px;">
                   <div style="{{ p.gradeStyleMd }}">{{ p.gradeLabel }}</div>
-                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ p.viewsLabel }}</div>
                 </div>
               </div>
             </sc-for>
@@ -182,7 +183,7 @@
                 </div>
                 <div style="display:flex; gap:6px; margin-top:5px;">
                   <div style="{{ p.gradeStyleMd }}">{{ p.gradeLabel }}</div>
-                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ p.viewsLabel }}</div>
                 </div>
               </div>
             </sc-for>
@@ -206,7 +207,7 @@
                 <div style="font-size:calc(14.5px * var(--font-scale)); color:oklch(45% 0.02 240); margin-top:2px;">{{ p.priceLabel }}</div>
                 <div style="display:flex; gap:6px; margin-top:5px;">
                   <div style="{{ p.gradeStyleMd }}">{{ p.gradeLabel }}</div>
-                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ p.viewsLabel }}</div>
                 </div>
               </div>
             </sc-for>
@@ -230,7 +231,7 @@
                 <div style="font-size:calc(14.5px * var(--font-scale)); color:oklch(45% 0.02 240); margin-top:2px;">{{ p.priceLabel }}</div>
                 <div style="display:flex; gap:6px; margin-top:5px;">
                   <div style="{{ p.gradeStyleMd }}">{{ p.gradeLabel }}</div>
-                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                  <div style="font-size:calc(10.5px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ p.viewsLabel }}</div>
                 </div>
               </div>
             </sc-for>
@@ -292,11 +293,11 @@
                         <div style="font-size:calc(12.5px * var(--font-scale)); color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace; margin-top:4px;">{{ p.specLine }}</div>
                         <div style="display:flex; align-items:center; gap:6px; margin-top:6px;">
                           <div style="{{ p.gradeStyleSm }}">{{ p.gradeLabel }}</div>
-                          <div style="font-size:calc(11px * var(--font-scale)); color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                          <div style="font-size:calc(11px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ p.viewsLabel }}</div>
                         </div>
                         <div style="flex:1;"></div>
                         <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;">
-                          <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240);">{{ p.saleType }} · {{ p.year }}년식</div>
+                          <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240);">{{ p.saleTypeTr }} · {{ p.year }}{{ tYearSuffix }}</div>
                           <div style="font-size:calc(17px * var(--font-scale)); font-weight:700; color:oklch(18% 0.02 240);">{{ p.priceLabel }}</div>
                         </div>
                       </div>
@@ -414,11 +415,11 @@
                       <div style="font-size:calc(12.5px * var(--font-scale)); color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace; margin-top:4px;">{{ p.specLine }}</div>
                       <div style="display:flex; align-items:center; gap:6px; margin-top:6px;">
                         <div style="{{ p.gradeStyleSm }}">{{ p.gradeLabel }}</div>
-                        <div style="font-size:calc(11px * var(--font-scale)); color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                        <div style="font-size:calc(11px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ p.viewsLabel }}</div>
                       </div>
                       <div style="flex:1;"></div>
                       <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;">
-                        <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240);">{{ p.saleType }} · {{ p.year }}년식</div>
+                        <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240);">{{ p.saleTypeTr }} · {{ p.year }}{{ tYearSuffix }}</div>
                         <div style="font-size:calc(17px * var(--font-scale)); font-weight:700; color:oklch(18% 0.02 240);">{{ p.priceLabel }}</div>
                       </div>
                     </div>
@@ -438,17 +439,17 @@
         <div>
           <div style="display:flex; align-items:center; gap:10px; padding:12px var(--pad-x) 6px;">
             <div onClick="{{ closeDetail }}" style="cursor:pointer; font-size:calc(17px * var(--font-scale)); color:oklch(30% 0.02 240);">←</div>
-            <div style="font-size:calc(13px * var(--font-scale)); color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace;">상품 상세</div>
+            <div style="font-size:calc(13px * var(--font-scale)); color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace;">{{ tProductDetailTitle }}</div>
           </div>
 
           <div style="margin:6px var(--pad-x) 0; height:220px; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 12px, oklch(96% 0.01 240) 12px, oklch(96% 0.01 240) 24px); position:relative; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:calc(12px * var(--font-scale)); color:oklch(45% 0.02 240); text-align:center;">
-            {{ product.brand }} {{ product.model }} — 제품 이미지
+            {{ product.brand }} {{ product.model }} — {{ tProductImage }}
             <div style="position:absolute; bottom:10px; right:12px; font-size:calc(11px * var(--font-scale)); color:oklch(35% 0.02 240); background:oklch(100% 0 0 / 0.8); padding:3px 8px; border-radius:var(--r-lg);">1 / 6 · 360°</div>
           </div>
 
           <div style="display:flex; gap:8px; padding:12px var(--pad-x) 0; flex-wrap:wrap;">
             <div style="font-size:calc(11px * var(--font-scale)); padding:4px 8px; border-radius:var(--r-sm); background:oklch(92% 0.005 240); color:oklch(40% 0.01 240);">{{ product.badgeTr }}</div>
-            <div style="{{ product.gradeStyleLg }}">{{ product.grade }}등급</div>
+            <div style="{{ product.gradeStyleLg }}">{{ product.gradeLabelLg }}</div>
           </div>
 
           <div style="padding:12px var(--pad-x) 0;">
@@ -469,43 +470,44 @@
             <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:calc(21px * var(--font-scale)); font-weight:700; color:oklch(18% 0.02 240);">{{ product.priceLabel }}</div>
             <div style="display:flex; align-items:center; gap:8px;">
               <div onClick="{{ product.toggleFavorite }}" style="width:44px; height:44px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; {{ product.favoriteIconStyle }}">{{ product.favoriteIcon }}</div>
-              <div onClick="{{ showBuyToast }}" style="background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); padding:10px 22px; border-radius:var(--r-lg); font-size:calc(14px * var(--font-scale)); font-weight:600; cursor:pointer;">구매하기</div>
+              <div onClick="{{ showBuyToast }}" style="background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); padding:10px 22px; border-radius:var(--r-lg); font-size:calc(14px * var(--font-scale)); font-weight:600; cursor:pointer;">{{ tBuyNow }}</div>
             </div>
           </div>
 
           <sc-if value="{{ buyToastOpen }}">
-            <div style="margin:12px var(--pad-x) 0; padding:10px 14px; border-radius:var(--r-lg); background:oklch(93% 0.03 var(--accent-h)); color:oklch(30% 0.06 var(--accent-h)); font-size:calc(12px * var(--font-scale));">데모 프로토타입에서는 결제가 비활성화되어 있습니다.</div>
+            <div style="margin:12px var(--pad-x) 0; padding:10px 14px; border-radius:var(--r-lg); background:oklch(93% 0.03 var(--accent-h)); color:oklch(30% 0.06 var(--accent-h)); font-size:calc(12px * var(--font-scale));">{{ tCheckoutDemo }}</div>
           </sc-if>
 
           <div style="margin:16px var(--pad-x); padding:14px; border-radius:var(--r-lg); background:linear-gradient(135deg, oklch(93% 0.03 var(--accent-h)), oklch(96% 0.02 var(--accent-h))); display:flex; align-items:center; justify-content:space-between; gap:10px;">
             <div>
               <div style="font-size:calc(13px * var(--font-scale)); font-weight:700; color:oklch(30% 0.08 var(--accent-h));">TEAMCCR CARE 멤버십</div>
-              <div style="font-size:calc(11px * var(--font-scale)); color:oklch(40% 0.05 var(--accent-h)); margin-top:3px;">구매와 함께 가입 시 무상 정기점검 제공</div>
+              <div style="font-size:calc(11px * var(--font-scale)); color:oklch(40% 0.05 var(--accent-h)); margin-top:3px;">{{ tCareSubtitle }}</div>
             </div>
-            <div style="font-size:calc(11px * var(--font-scale)); font-weight:600; color:oklch(30% 0.08 var(--accent-h)); flex-shrink:0;">가입하기 →</div>
           </div>
 
           <div style="padding:0 var(--pad-x) 6px; display:flex; flex-direction:column; gap:10px; font-size:calc(13px * var(--font-scale)); color:oklch(35% 0.02 240);">
-            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">배송정보</span><span>빠른 배송(1~2일) · 센터 픽업 가능</span></div>
-            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">판매정보</span><span>{{ product.saleType }}</span></div>
-            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">상품번호</span><span style="font-family:'IBM Plex Mono',monospace;">{{ product.id }}</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">{{ tShippingInfo }}</span><span>{{ tFastShipping }}</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">{{ tSaleInfo }}</span><span>{{ product.saleTypeTr }}</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">{{ tProductNo }}</span><span style="font-family:'IBM Plex Mono',monospace;">{{ product.id }}</span></div>
           </div>
 
-          <div onClick="{{ goTeam }}" style="margin:16px var(--pad-x); padding:12px 14px; border:1px solid oklch(89% 0.01 240); border-radius:var(--r-lg); font-size:calc(13px * var(--font-scale)); color:oklch(30% 0.02 240); cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
-            <span>센터에서 실물 확인 가능한 상품입니다</span><span>방문 예약 →</span>
+          <div style="margin:16px var(--pad-x); padding:12px 14px; border:1px solid oklch(89% 0.01 240); border-radius:var(--r-lg); font-size:calc(13px * var(--font-scale)); color:oklch(30% 0.02 240); display:flex; justify-content:space-between; align-items:center;">
+            <span>{{ tVisitCenter }}</span>
           </div>
 
-          <div style="padding:8px var(--pad-x) 4px; font-family:'IBM Plex Sans KR',sans-serif; font-size:calc(16px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240);">TEAMCCR 인증 결과</div>
-          <div style="display:flex; gap:18px; padding:0 var(--pad-x) 10px; border-bottom:1px solid oklch(89% 0.01 240);">
-            <sc-for list="{{ detailTabs }}" as="t" hint-placeholder-count="3">
-              <div onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</div>
-            </sc-for>
-          </div>
-          <div style="padding:14px var(--pad-x) 20px;">
-            <sc-if value="{{ detailTabIsReport }}" hint-placeholder-val="{{ true }}">
-              <div style="font-size:calc(13px * var(--font-scale)); color:oklch(35% 0.02 240); line-height:1.7;">전 항목 검수 통과 · 호흡회로/전자계통 정상 작동 확인 · 판정기준 문서 <span style="color:oklch(45% 0.10 var(--accent-h)); text-decoration:underline; cursor:pointer;">보기</span></div>
-            </sc-if>
-            <sc-if value="{{ detailTabIsImages }}">
+          <div style="padding:8px var(--pad-x) 4px; font-family:'IBM Plex Sans KR',sans-serif; font-size:calc(16px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240);">{{ tCertResults }}</div>
+          <div style="padding:6px var(--pad-x) 20px; display:flex; flex-direction:column; gap:20px;">
+            <div>
+              <div style="font-size:calc(13px * var(--font-scale)); font-weight:600; color:oklch(20% 0.02 240); margin-bottom:10px;">{{ tDetailSpec }}</div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:calc(13px * var(--font-scale)); color:oklch(35% 0.02 240);">
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">{{ tReleaseYear }}</span><span>{{ product.year }}</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">{{ tMountType }}</span><span>{{ product.mount }}</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">{{ tControlType }}</span><span>{{ product.control }}</span></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">{{ tUsageHours }}</span><span>{{ product.hours }}{{ tHoursSuffix }}</span></div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:calc(13px * var(--font-scale)); font-weight:600; color:oklch(20% 0.02 240); margin-bottom:10px;">{{ tDetailImages }}</div>
               <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
                 <sc-for list="{{ inspectionParts }}" as="part" hint-placeholder-count="6">
                   <div style="aspect-ratio:1; border-radius:var(--r-lg); background:repeating-linear-gradient(135deg, oklch(93% 0.01 240), oklch(93% 0.01 240) 8px, oklch(96% 0.01 240) 8px, oklch(96% 0.01 240) 16px); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:calc(10px * var(--font-scale)); color:oklch(45% 0.02 240); text-align:center; gap:4px;">
@@ -514,21 +516,17 @@
                   </div>
                 </sc-for>
               </div>
-            </sc-if>
-            <sc-if value="{{ detailTabIsSpec }}">
-              <div style="display:flex; flex-direction:column; gap:8px; font-size:calc(13px * var(--font-scale)); color:oklch(35% 0.02 240);">
-                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">출시년도</span><span>{{ product.year }}</span></div>
-                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">마운트타입</span><span>{{ product.mount }}</span></div>
-                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">제어방식</span><span>{{ product.control }}</span></div>
-                <div style="display:flex; justify-content:space-between;"><span style="color:oklch(50% 0.02 240);">사용시간</span><span>{{ product.hours }}시간</span></div>
-              </div>
-            </sc-if>
+            </div>
+            <div>
+              <div style="font-size:calc(13px * var(--font-scale)); font-weight:600; color:oklch(20% 0.02 240); margin-bottom:10px;">{{ tDetailReport }}</div>
+              <div style="font-size:calc(13px * var(--font-scale)); color:oklch(35% 0.02 240); line-height:1.7;">{{ tReportBody }} <span style="color:oklch(45% 0.10 var(--accent-h)); text-decoration:underline; cursor:pointer;">{{ tView }}</span></div>
+            </div>
           </div>
 
-          <div style="padding:8px var(--pad-x) 4px; font-family:'IBM Plex Sans KR',sans-serif; font-size:calc(16px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240);">TEAMCCR 실거래가</div>
+          <div style="padding:8px var(--pad-x) 4px; font-family:'IBM Plex Sans KR',sans-serif; font-size:calc(16px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240);">{{ tRecentPrices }}</div>
           <div style="padding:8px var(--pad-x) 20px;">
             <div style="display:grid; grid-template-columns:1fr 1fr 1fr; font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240); padding-bottom:6px; border-bottom:1px solid oklch(89% 0.01 240);">
-              <span>거래일</span><span>오버홀이력</span><span style="text-align:right;">거래가</span>
+              <span>{{ tDealDate }}</span><span>{{ tOverhaulHistory }}</span><span style="text-align:right;">{{ tDealPrice }}</span>
             </div>
             <sc-for list="{{ recentDeals }}" as="d" hint-placeholder-count="3">
               <div style="display:grid; grid-template-columns:1fr 1fr 1fr; font-size:calc(12px * var(--font-scale)); color:oklch(30% 0.02 240); padding:7px 0; border-bottom:1px solid oklch(94% 0.01 240);">
@@ -544,7 +542,7 @@
                   <span style="font-size:calc(13px * var(--font-scale)); color:oklch(30% 0.02 240);">{{ pa.title }}</span><span style="font-size:calc(13px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ pa.chevron }}</span>
                 </div>
                 <sc-if value="{{ pa.open }}">
-                  <div style="font-size:calc(12px * var(--font-scale)); color:oklch(45% 0.02 240); padding:8px 0 4px; line-height:1.6;">{{ pa.body }}</div>
+                  <div style="font-size:calc(12px * var(--font-scale)); color:oklch(45% 0.02 240); padding:8px 0 4px; line-height:1.6; white-space:pre-line;">{{ pa.body }}</div>
                 </sc-if>
               </div>
             </sc-for>
@@ -667,6 +665,9 @@
               </div>
             </div>
           </sc-if>
+          <div style="margin-top:28px; padding-top:16px; border-top:1px dashed oklch(85% 0.01 240);">
+            <a href="./admin.html" style="display:block; text-align:center; padding:12px; border-radius:var(--r-lg); background:oklch(30% 0.02 240); color:oklch(97% 0.01 235); font-size:calc(13px * var(--font-scale)); font-weight:600; text-decoration:none;">관리자페이지(임시)</a>
+          </div>
         </div>
       </sc-if>
 
@@ -828,12 +829,8 @@
       </sc-if>
 
       <sc-if value="{{ isTeam }}">
-        <div style="padding:var(--pad-x);">
-          <img src="./assets/teamccr-logo-wordmark-small.png" alt="TEAMCCR" class="dark-invert-ok" style="height:102px; width:auto; display:block; margin:0 auto;" />
-        </div>
-
         <div style="width:100%; margin-top:12px;">
-          <img src="./assets/teamccr-intro-photo.jpg" alt="TeamCCR 소개" style="display:block; width:100%; height:auto;" />
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="team-hero" shape="rect" fit="cover" placeholder="팀 소개 상단 이미지" hint-size="100%,auto" style="display:block; width:100%; aspect-ratio:16/10;"></x-import>
         </div>
 
         <div style="padding:0 var(--pad-x); margin-top:4px;">
@@ -861,8 +858,11 @@
             <iframe src="{{ mapEmbedUrl }}" style="width:100%; height:100%; border:0; pointer-events:none;" loading="lazy"></iframe>
             <div style="position:absolute; inset:0;"></div>
           </div>
-          <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240); margin-top:6px;">경기도 오산시 수청동 청학로 607-1 286</div>
+          <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240); margin-top:6px;">{{ teamAddress }}</div>
           <div style="margin-top:18px; font-size:calc(14px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240);">팀 공식 스케줄</div>
+          <sc-if value="{{ teamCalendarUrl }}">
+            <a href="{{ teamCalendarUrl }}" target="_blank" rel="noopener" style="display:block; margin-top:8px; padding:11px 14px; border:1px solid oklch(85% 0.04 var(--accent-h)); border-radius:var(--r-lg); font-size:calc(12.5px * var(--font-scale)); color:oklch(40% 0.08 var(--accent-h)); text-decoration:none;">📅 Google 달력으로 전체 일정 보기 →</a>
+          </sc-if>
           <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:10px;">
             <sc-for list="{{ weekdayLabels }}" as="w" hint-placeholder-count="7">
               <div style="font-size:calc(10px * var(--font-scale)); text-align:center; color:oklch(55% 0.02 240); padding-bottom:4px;">{{ w }}</div>
@@ -948,11 +948,11 @@
                   <div style="font-size:calc(12.5px * var(--font-scale)); color:oklch(45% 0.02 240); font-family:'IBM Plex Mono',monospace; margin-top:4px;">{{ p.specLine }}</div>
                   <div style="display:flex; align-items:center; gap:6px; margin-top:6px;">
                     <div style="{{ p.gradeStyleSm }}">{{ p.gradeLabel }}</div>
-                    <div style="font-size:calc(11px * var(--font-scale)); color:oklch(55% 0.02 240);">조회 {{ p.views }}</div>
+                    <div style="font-size:calc(11px * var(--font-scale)); color:oklch(55% 0.02 240);">{{ p.viewsLabel }}</div>
                   </div>
                   <div style="flex:1;"></div>
                   <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;">
-                    <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240);">{{ p.saleType }} · {{ p.year }}년식</div>
+                    <div style="font-size:calc(11px * var(--font-scale)); color:oklch(50% 0.02 240);">{{ p.saleTypeTr }} · {{ p.year }}{{ tYearSuffix }}</div>
                     <div style="font-size:calc(17px * var(--font-scale)); font-weight:700; color:oklch(18% 0.02 240);">{{ p.priceLabel }}</div>
                   </div>
                 </div>
@@ -1045,6 +1045,33 @@
         </div>
       </sc-if>
 
+      <sc-if value="{{ isRequest }}">
+        <div style="padding:0 var(--pad-x) 30px; display:flex; flex-direction:column; min-height:400px;">
+          <div style="display:flex; align-items:center; gap:10px; padding:14px 0 6px;">
+            <div onClick="{{ closeRequest }}" style="cursor:pointer; font-size:calc(18px * var(--font-scale)); color:oklch(20% 0.02 240);">←</div>
+            <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:calc(17px * var(--font-scale)); font-weight:700; color:oklch(18% 0.02 240);">{{ requestTitle }}</div>
+          </div>
+          <div style="font-size:calc(12.5px * var(--font-scale)); color:oklch(48% 0.02 240); line-height:1.6; margin-top:2px;">{{ requestIntro }}</div>
+          <sc-if value="{{ requestSent }}">
+            <div style="margin-top:14px; padding:12px 14px; border-radius:var(--r-lg); background:oklch(93% 0.03 var(--accent-h)); color:oklch(30% 0.06 var(--accent-h)); font-size:calc(13px * var(--font-scale));">신청이 접수되었습니다. 남겨주신 연락처로 안내드리겠습니다.</div>
+          </sc-if>
+          <div style="display:flex; flex-direction:column; gap:16px; margin-top:18px; flex:1;">
+            <sc-for list="{{ requestFields }}" as="f" hint-placeholder-count="4">
+              <div style="display:flex; flex-direction:column;">
+                <div style="font-size:calc(13px * var(--font-scale)); font-weight:600; color:oklch(28% 0.02 240); margin-bottom:6px;">{{ f.label }}</div>
+                <sc-if value="{{ f.isText }}"><input type="text" value="{{ f.value }}" onInput="{{ f.onInput }}" placeholder="{{ f.placeholder }}" style="width:100%; box-sizing:border-box; padding:12px 14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); font-size:calc(13px * var(--font-scale));" /></sc-if>
+                <sc-if value="{{ f.isDate }}"><input type="text" value="{{ f.value }}" onInput="{{ f.onInput }}" placeholder="2026.08.20" style="width:100%; box-sizing:border-box; padding:12px 14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); font-size:calc(13px * var(--font-scale));" /></sc-if>
+                <sc-if value="{{ f.isSelect }}"><select value="{{ f.value }}" onChange="{{ f.onInput }}" style="width:100%; box-sizing:border-box; padding:12px 14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); font-size:calc(13px * var(--font-scale)); background:#fff;"><sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></sc-if>
+                <sc-if value="{{ f.isTextarea }}"><textarea value="{{ f.value }}" onInput="{{ f.onInput }}" placeholder="{{ f.placeholder }}" style="width:100%; box-sizing:border-box; min-height:120px; padding:12px 14px; border-radius:var(--r-lg); border:1px solid oklch(85% 0.01 240); font-size:calc(13px * var(--font-scale)); font-family:inherit; resize:vertical;"></textarea></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+            <div onClick="{{ submitRequest }}" style="padding:12px 24px; border-radius:var(--r-lg); background:oklch(24% 0.03 235); color:oklch(97% 0.01 235); font-size:calc(14px * var(--font-scale)); font-weight:600; cursor:pointer;">신청하기</div>
+          </div>
+        </div>
+      </sc-if>
+
       <sc-if value="{{ isMagazine }}">
         <div>
           <div style="display:flex; flex-wrap:wrap; gap:8px; padding:14px var(--pad-x) 12px;">
@@ -1065,7 +1092,7 @@
                     </div>
                   </sc-if>
                   <div class="no-invert-grad" style="position:absolute; inset:0; background:linear-gradient(0deg, oklch(11% 0.02 240 / 0.96), oklch(11% 0.02 240 / 0.6) 50%, oklch(11% 0.02 240 / 0.08) 100%); display:flex; flex-direction:column; justify-content:flex-end; gap:4px; padding:14px; pointer-events:none;">
-                    <div style="font-size:calc(11px * var(--font-scale)); color:oklch(85% 0.06 var(--accent-h)); font-weight:600;">{{ a.category }}</div>
+                    <div style="font-size:calc(11px * var(--font-scale)); color:oklch(85% 0.06 var(--accent-h)); font-weight:600;">{{ a.categoryLabel }}</div>
                     <div style="font-size:calc(15px * var(--font-scale)); font-weight:600; color:oklch(97% 0.01 235); line-height:1.35;">{{ a.title }}</div>
                     <div style="font-size:calc(12px * var(--font-scale)); color:oklch(88% 0.01 235); line-height:1.5;">{{ a.excerpt }}</div>
                   </div>
@@ -1083,7 +1110,7 @@
         <div>
           <div style="display:flex; align-items:center; gap:10px; padding:12px var(--pad-x) 6px;">
             <div onClick="{{ closeArticle }}" style="cursor:pointer; font-size:calc(17px * var(--font-scale)); color:oklch(30% 0.02 240);">←</div>
-            <div style="font-size:calc(11px * var(--font-scale)); color:oklch(45% 0.08 var(--accent-h)); font-weight:600; font-family:'IBM Plex Mono',monospace;">{{ activeArticle.category }}</div>
+            <div style="font-size:calc(11px * var(--font-scale)); color:oklch(45% 0.08 var(--accent-h)); font-weight:600; font-family:'IBM Plex Mono',monospace;">{{ activeArticle.categoryLabel }}</div>
           </div>
           <div style="padding:6px var(--pad-x) 0;">
             <div style="font-family:'IBM Plex Sans KR',sans-serif; font-size:calc(20px * var(--font-scale)); font-weight:700; color:oklch(18% 0.02 240); line-height:1.4;">{{ activeArticle.title }}</div>
@@ -1169,9 +1196,26 @@
     <sc-if value="{{ settingsPickerIsLanguage }}">
       <div onClick="{{ closeSettingsPicker }}" class="phone-overlay" style="{{ settingsOverlayStyle }}">
         <div onClick="{{ stopClick }}" style="width:100%; background:oklch(98% 0.004 240); border-radius:var(--r-lg); padding:20px var(--pad-x) calc(20px + env(safe-area-inset-bottom));">
-          <div style="font-size:calc(15px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240); margin-bottom:14px;">Language</div>
+          <div style="font-size:calc(15px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240); margin-bottom:14px;">{{ tRegion }}</div>
+          <sc-for list="{{ regionOptionNowItems }}" as="o" hint-placeholder-count="2">
+            <div onClick="{{ o.onClick }}" style="{{ o.style }}">{{ o.label }}<span style="font-size:calc(10px * var(--font-scale)); color:oklch(55% 0.02 240); background:oklch(93% 0.01 240); padding:1px 6px; border-radius:4px;">{{ o.currency }}</span></div>
+          </sc-for>
+          <div style="height:1px; background:oklch(90% 0.01 240); margin:16px 0;"></div>
+          <div style="font-size:calc(15px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240); margin-bottom:14px;">{{ tLanguage }}</div>
           <sc-for list="{{ languageOptionItems }}" as="o" hint-placeholder-count="4">
             <div onClick="{{ o.onClick }}" style="padding:13px 2px; font-size:calc(14px * var(--font-scale)); color:oklch(28% 0.02 240); cursor:pointer; display:flex; align-items:center; gap:8px;">{{ o.label }}<span style="font-size:calc(10px * var(--font-scale)); color:oklch(55% 0.02 240); background:oklch(93% 0.01 240); padding:1px 6px; border-radius:4px;">{{ o.code }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ settingsPickerIsLayout }}">
+      <div onClick="{{ closeSettingsPicker }}" class="phone-overlay" style="{{ settingsOverlayStyle }}">
+        <div onClick="{{ stopClick }}" style="width:100%; background:oklch(98% 0.004 240); border-radius:var(--r-lg); padding:20px var(--pad-x) calc(20px + env(safe-area-inset-bottom));">
+          <div style="font-size:calc(15px * var(--font-scale)); font-weight:600; color:oklch(18% 0.02 240); margin-bottom:4px;">{{ tBrowserMode }}</div>
+          <div style="font-size:calc(11.5px * var(--font-scale)); color:oklch(52% 0.02 240); margin-bottom:12px;">{{ tBrowserModeDesc }}</div>
+          <sc-for list="{{ layoutOptionItems }}" as="o" hint-placeholder-count="2">
+            <div onClick="{{ o.onClick }}" style="padding:13px 2px; font-size:calc(14px * var(--font-scale)); color:oklch(28% 0.02 240); cursor:pointer; display:flex; align-items:center; justify-content:space-between;"><span>{{ o.label }}<span style="color:oklch(55% 0.02 240); font-size:calc(11px * var(--font-scale)); margin-left:6px;">{{ o.sub }}</span></span><sc-if value="{{ o.active }}"><span style="color:oklch(24% 0.03 235); font-weight:700;">✓</span></sc-if></div>
           </sc-for>
         </div>
       </div>
@@ -1289,6 +1333,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:900},&quot;accentMood&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Teal&quot;,&quot;options&quot;:[&quot;Teal&quot;,&quot;Violet&quot;,&quot;Coral&quot;,&quot;Forest&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;cornerStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Rounded&quot;,&quot;options&quot;:[&quot;Rounded&quot;,&quot;Sharp&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Editorial&quot;,&quot;options&quot;:[&quot;Editorial&quot;,&quot;Compact&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;cardShadow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;brandTileStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Outline&quot;,&quot;options&quot;:[&quot;Outline&quot;,&quot;Plain&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;chipStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Pill&quot;,&quot;options&quot;:[&quot;Pill&quot;,&quot;Sharp&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;fontScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.85,&quot;max&quot;:1.25,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;lightBgColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#ffffff&quot;,&quot;options&quot;:[&quot;#f7f7f8&quot;,&quot;#ffffff&quot;,&quot;#f0efe9&quot;,&quot;#eef2f6&quot;,&quot;#f4f1ea&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;darkBgColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#1c1e22&quot;,&quot;options&quot;:[&quot;#1c1e22&quot;,&quot;#15171a&quot;,&quot;#101828&quot;,&quot;#1a1a1a&quot;,&quot;#161b22&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look &amp; feel&quot;},&quot;heroAutoplaySec&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:5,&quot;min&quot;:0,&quot;max&quot;:8,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Behavior&quot;}}">
 
+function CMS_GET(key, fallback){ try{ var v = localStorage.getItem('teamccr_cms_'+key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; } }
 const NAV_DEFS = [
   { key:'home', tKey:'navHome' },
   { key:'search', tKey:'navSearch' },
@@ -1299,7 +1344,7 @@ const NAV_DEFS = [
 ];
 
 const STORE_CATEGORIES = ['전체','드라이수트','마스크/스노클','다이브 컴퓨터','산소센서','소다라임/스크러버','호스/피팅','툴/액세서리'];
-const STORE_PRODUCTS = [
+const STORE_PRODUCTS_DEFAULT = [
   { id:'st1', category:'드라이수트', name:'테크 드라이수트', price:1200000, desc:'테크니컬 다이빙용 트라이라미네이트 드라이수트. 팔뚝 포켓과 강화 무릎 패드 적용.', slotId:'store-st1' },
   { id:'st2', category:'마스크/스노클', name:'로우볼륨 마스크', price:85000, desc:'좁은 시야각을 최소화한 로우볼륨 마스크. 실리콘 스커트로 편안한 착용감.', slotId:'store-st2' },
   { id:'st3', category:'다이브 컴퓨터', name:'테크 다이브 컴퓨터', price:950000, desc:'멀티가스 감압 알고리즘을 지원하는 테크니컬 다이빙 전용 컴퓨터.', slotId:'store-st3' },
@@ -1351,10 +1396,10 @@ const STORE_PRODUCTS = [
   { id:'st49', category:'툴/액세서리', name:'보조 마스크 스트랩', price:11000, desc:'툴/액세서리 카테고리의 보조 마스크 스트랩 상품입니다. TEAMCCR이 엄선한 정품 장비입니다.', slotId:'store-st49' },
 ];
 
-const PRODUCTS = [
+const PRODUCTS_DEFAULT = [
   { id:'TC-101', brand:'Divesoft', model:'Liberty', mount:'BM', control:'eCCR', year:2019, hours:20, grade:'S', price:16800000, saleType:'위탁형', center:'센터', views:40, condition:'중고' , overhaul:'완료' },
   { id:'TC-102', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'eCCR', year:2020, hours:37, grade:'A', price:14600000, saleType:'매입형', center:'센터', views:63, condition:'중고' , overhaul:'완료' },
-  { id:'TC-103', brand:'KISS Rebreathers', model:'Sidewinder', mount:'SM', control:'eCCR', year:2021, hours:54, grade:'A', price:11400000, saleType:'위탁형', center:'센터', views:86, condition:'중고' , overhaul:'완료' },
+  { id:'TC-103', brand:'KISS', model:'Sidewinder', mount:'SM', control:'eCCR', year:2021, hours:54, grade:'A', price:11400000, saleType:'위탁형', center:'센터', views:86, condition:'중고' , overhaul:'완료' },
   { id:'TC-104', brand:'AP Diving', model:'Inspiration', mount:'BM', control:'mCCR', year:2022, hours:71, grade:'B', price:10100000, saleType:'매입형', center:'센터', views:109, condition:'중고' , overhaul:'완료' },
   { id:'TC-105', brand:'rEvo', model:'rEvo III Standard', mount:'BM', control:'Hybrid', year:2023, hours:88, grade:'B', price:19400000, saleType:'위탁형', center:'센터', views:132, condition:'중고' , overhaul:'완료' },
   { id:'TC-106', brand:'Halcyon', model:'Symbios', mount:'BM', control:'eCCR', year:2019, hours:105, grade:'C', price:19700000, saleType:'매입형', center:'센터', views:155, condition:'중고' , overhaul:'완료' },
@@ -1363,7 +1408,7 @@ const PRODUCTS = [
   { id:'TC-109', brand:'Dive Rite', model:'O2ptima CM', mount:'CM', control:'mCCR', year:2022, hours:156, grade:'A', price:4500000, saleType:'위탁형', center:'센터', views:224, condition:'중고' , overhaul:'완료' },
   { id:'TC-110', brand:'Divesoft', model:'Liberty Sidemount', mount:'SM', control:'Hybrid', year:2023, hours:173, grade:'B', price:17200000, saleType:'매입형', center:'센터', views:247, condition:'중고' , overhaul:'완료' },
   { id:'TC-111', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'eCCR', year:2019, hours:190, grade:'B', price:13000000, saleType:'위탁형', center:'센터', views:270, condition:'중고' , overhaul:'완료' },
-  { id:'TC-112', brand:'KISS Rebreathers', model:'GEM', mount:'BM', control:'SCR', year:2020, hours:207, grade:'C', price:9700000, saleType:'매입형', center:'센터', views:293, condition:'중고' , overhaul:'필요' },
+  { id:'TC-112', brand:'KISS', model:'GEM', mount:'BM', control:'SCR', year:2020, hours:207, grade:'C', price:9700000, saleType:'매입형', center:'센터', views:293, condition:'중고' , overhaul:'필요' },
   { id:'TC-113', brand:'AP Diving', model:'Evolution', mount:'BM', control:'eCCR', year:2021, hours:224, grade:'S', price:8500000, saleType:'위탁형', center:'센터', views:316, condition:'중고' , overhaul:'완료' },
   { id:'TC-114', brand:'rEvo', model:'rEvo III Micro', mount:'BM', control:'Hybrid', year:2022, hours:241, grade:'A', price:17800000, saleType:'매입형', center:'센터', views:339, condition:'중고' , overhaul:'완료' },
   { id:'TC-115', brand:'Halcyon', model:'Symbios', mount:'BM', control:'Hybrid', year:2023, hours:258, grade:'A', price:20000000, saleType:'위탁형', center:'센터', views:362, condition:'중고' , overhaul:'완료' },
@@ -1372,7 +1417,7 @@ const PRODUCTS = [
   { id:'TC-118', brand:'Dive Rite', model:'O2ptima FX', mount:'CM', control:'eCCR', year:2021, hours:309, grade:'C', price:2800000, saleType:'매입형', center:'센터', views:431, condition:'중고' , overhaul:'필요' },
   { id:'TC-119', brand:'Divesoft', model:'Liberty', mount:'BM', control:'mCCR', year:2022, hours:326, grade:'S', price:15600000, saleType:'위탁형', center:'센터', views:54, condition:'중고' , overhaul:'완료' },
   { id:'TC-120', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'Hybrid', year:2023, hours:343, grade:'A', price:13400000, saleType:'매입형', center:'센터', views:77, condition:'중고' , overhaul:'완료' },
-  { id:'TC-121', brand:'KISS Rebreathers', model:'Classic', mount:'BM', control:'eCCR', year:2019, hours:360, grade:'A', price:8100000, saleType:'위탁형', center:'센터', views:100, condition:'중고' , overhaul:'완료' },
+  { id:'TC-121', brand:'KISS', model:'Classic', mount:'BM', control:'eCCR', year:2019, hours:360, grade:'A', price:8100000, saleType:'위탁형', center:'센터', views:100, condition:'중고' , overhaul:'완료' },
   { id:'TC-122', brand:'AP Diving', model:'Inspiration', mount:'BM', control:'eCCR', year:2020, hours:377, grade:'B', price:6900000, saleType:'매입형', center:'센터', views:123, condition:'중고' , overhaul:'필요' },
   { id:'TC-123', brand:'rEvo', model:'rEvo III Standard', mount:'BM', control:'Hybrid', year:2021, hours:394, grade:'B', price:16100000, saleType:'위탁형', center:'센터', views:146, condition:'중고' , overhaul:'필요' },
   { id:'TC-124', brand:'Halcyon', model:'Symbios', mount:'BM', control:'mCCR', year:2022, hours:411, grade:'C', price:18400000, saleType:'매입형', center:'센터', views:169, condition:'중고' , overhaul:'필요' },
@@ -1381,7 +1426,7 @@ const PRODUCTS = [
   { id:'TC-127', brand:'Dive Rite', model:'O2ptima CM', mount:'CM', control:'eCCR', year:2020, hours:42, grade:'A', price:4600000, saleType:'위탁형', center:'센터', views:238, condition:'중고' , overhaul:'완료' },
   { id:'TC-128', brand:'Divesoft', model:'Liberty Sidemount', mount:'SM', control:'eCCR', year:2021, hours:59, grade:'B', price:17300000, saleType:'매입형', center:'센터', views:261, condition:'중고' , overhaul:'완료' },
   { id:'TC-129', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'mCCR', year:2022, hours:76, grade:'B', price:15100000, saleType:'위탁형', center:'센터', views:284, condition:'중고' , overhaul:'완료' },
-  { id:'TC-130', brand:'KISS Rebreathers', model:'Sidewinder', mount:'SM', control:'Hybrid', year:2023, hours:93, grade:'C', price:11900000, saleType:'매입형', center:'센터', views:307, condition:'중고' , overhaul:'완료' },
+  { id:'TC-130', brand:'KISS', model:'Sidewinder', mount:'SM', control:'Hybrid', year:2023, hours:93, grade:'C', price:11900000, saleType:'매입형', center:'센터', views:307, condition:'중고' , overhaul:'완료' },
   { id:'TC-131', brand:'AP Diving', model:'Evolution', mount:'BM', control:'eCCR', year:2019, hours:110, grade:'S', price:8600000, saleType:'위탁형', center:'센터', views:330, condition:'중고' , overhaul:'완료' },
   { id:'TC-132', brand:'rEvo', model:'rEvo III Micro', mount:'BM', control:'Hybrid', year:2020, hours:127, grade:'A', price:17900000, saleType:'매입형', center:'센터', views:353, condition:'중고' , overhaul:'완료' },
   { id:'TC-133', brand:'Halcyon', model:'Symbios', mount:'BM', control:'eCCR', year:2021, hours:144, grade:'A', price:20100000, saleType:'위탁형', center:'센터', views:376, condition:'중고' , overhaul:'완료' },
@@ -1390,7 +1435,7 @@ const PRODUCTS = [
   { id:'TC-136', brand:'Dive Rite', model:'O2ptima FX', mount:'CM', control:'eCCR', year:2019, hours:195, grade:'C', price:2900000, saleType:'매입형', center:'센터', views:45, condition:'중고' , overhaul:'완료' },
   { id:'TC-137', brand:'Divesoft', model:'Liberty', mount:'BM', control:'eCCR', year:2020, hours:212, grade:'S', price:15700000, saleType:'위탁형', center:'센터', views:68, condition:'중고' , overhaul:'완료' },
   { id:'TC-138', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'eCCR', year:2021, hours:229, grade:'A', price:13500000, saleType:'매입형', center:'센터', views:91, condition:'중고' , overhaul:'완료' },
-  { id:'TC-139', brand:'KISS Rebreathers', model:'GEM', mount:'BM', control:'SCR', year:2022, hours:246, grade:'A', price:10200000, saleType:'위탁형', center:'센터', views:114, condition:'중고' , overhaul:'완료' },
+  { id:'TC-139', brand:'KISS', model:'GEM', mount:'BM', control:'SCR', year:2022, hours:246, grade:'A', price:10200000, saleType:'위탁형', center:'센터', views:114, condition:'중고' , overhaul:'완료' },
   { id:'TC-140', brand:'AP Diving', model:'Inspiration', mount:'BM', control:'Hybrid', year:2023, hours:263, grade:'B', price:9000000, saleType:'매입형', center:'센터', views:137, condition:'중고' , overhaul:'필요' },
   { id:'TC-141', brand:'rEvo', model:'rEvo III Standard', mount:'BM', control:'Hybrid', year:2019, hours:280, grade:'B', price:16300000, saleType:'위탁형', center:'센터', views:160, condition:'중고' , overhaul:'필요' },
   { id:'TC-142', brand:'Halcyon', model:'Symbios', mount:'BM', control:'eCCR', year:2020, hours:297, grade:'C', price:18500000, saleType:'매입형', center:'센터', views:183, condition:'중고' , overhaul:'필요' },
@@ -1399,12 +1444,12 @@ const PRODUCTS = [
   { id:'TC-145', brand:'Dive Rite', model:'O2ptima CM', mount:'CM', control:'Hybrid', year:2023, hours:348, grade:'A', price:3300000, saleType:'위탁형', center:'센터', views:252, condition:'중고' , overhaul:'완료' },
   { id:'TC-146', brand:'Divesoft', model:'Liberty Sidemount', mount:'SM', control:'eCCR', year:2019, hours:365, grade:'B', price:14100000, saleType:'매입형', center:'센터', views:275, condition:'중고' , overhaul:'필요' },
   { id:'TC-147', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'eCCR', year:2020, hours:382, grade:'B', price:11800000, saleType:'위탁형', center:'센터', views:298, condition:'중고' , overhaul:'필요' },
-  { id:'TC-148', brand:'KISS Rebreathers', model:'Classic', mount:'BM', control:'eCCR', year:2021, hours:399, grade:'C', price:8600000, saleType:'매입형', center:'센터', views:321, condition:'중고' , overhaul:'필요' },
+  { id:'TC-148', brand:'KISS', model:'Classic', mount:'BM', control:'eCCR', year:2021, hours:399, grade:'C', price:8600000, saleType:'매입형', center:'센터', views:321, condition:'중고' , overhaul:'필요' },
   { id:'TC-149', brand:'AP Diving', model:'Evolution', mount:'BM', control:'mCCR', year:2022, hours:416, grade:'S', price:7400000, saleType:'위탁형', center:'센터', views:344, condition:'중고' , overhaul:'완료' },
   { id:'TC-150', brand:'rEvo', model:'rEvo III Micro', mount:'BM', control:'Hybrid', year:2023, hours:433, grade:'A', price:16600000, saleType:'매입형', center:'센터', views:367, condition:'중고' , overhaul:'완료' },
   { id:'TC-N01', brand:'Divesoft', model:'Liberty', mount:'BM', control:'eCCR', year:2026, hours:0, grade:'', price:21800000, saleType:'TEAMCCR 정품', center:'센터', views:52, condition:'신품' , overhaul:'완료' },
   { id:'TC-N02', brand:'JJ-CCR', model:'JJ-CCR', mount:'BM', control:'eCCR', year:2026, hours:0, grade:'', price:17200000, saleType:'TEAMCCR 정품', center:'센터', views:41, condition:'신품' , overhaul:'완료' },
-  { id:'TC-N03', brand:'KISS Rebreathers', model:'Sidewinder', mount:'SM', control:'mCCR', year:2026, hours:0, grade:'', price:14500000, saleType:'TEAMCCR 정품', center:'센터', views:66, condition:'신품' , overhaul:'완료' },
+  { id:'TC-N03', brand:'KISS', model:'Sidewinder', mount:'SM', control:'mCCR', year:2026, hours:0, grade:'', price:14500000, saleType:'TEAMCCR 정품', center:'센터', views:66, condition:'신품' , overhaul:'완료' },
   { id:'TC-N04', brand:'AP Diving', model:'Inspiration', mount:'BM', control:'eCCR', year:2026, hours:0, grade:'', price:13800000, saleType:'TEAMCCR 정품', center:'센터', views:38, condition:'신품' , overhaul:'완료' },
   { id:'TC-N05', brand:'rEvo', model:'rEvo III Standard', mount:'BM', control:'Hybrid', year:2026, hours:0, grade:'', price:22900000, saleType:'TEAMCCR 정품', center:'센터', views:29, condition:'신품' , overhaul:'완료' },
   { id:'TC-N06', brand:'Halcyon', model:'Symbios', mount:'CM', control:'eCCR', year:2026, hours:0, grade:'', price:23500000, saleType:'TEAMCCR 정품', center:'센터', views:22, condition:'신품' , overhaul:'완료' },
@@ -1424,14 +1469,15 @@ const BRAND_SLOTS = [
   { label:'SF2', slotId:'brand-sf2', logoSrc:'./assets/brand-sf2.png' },
 ];
 
-const BRANDS = ['전체','AP Diving','Dive Rite','Divesoft','Halcyon','iQsub','JJ-CCR','KISS Rebreathers','rEvo','SF2'];
+const BRANDS = ['전체','AP Diving','Dive Rite','Divesoft','Halcyon','iQsub','JJ-CCR','KISS','rEvo','SF2'];
 
-const INSTRUCTORS = [
+const INSTRUCTORS_DEFAULT = [
   { name:'박정훈', title:'책임 트레이너', certs:'SDI·TDI·ERDI ITE · PADI Tec100 CCR IT\nSF2/X-CCR/AP Evolution/Liberty/Optima', contact:'tdi19866@gmail.com · 010-4099-6530', slotId:'instructor-parkjunghoon', detailSlotId:'instructor-parkjunghoon-detail', photoSrc:'./assets/instructor-parkjunghoon.webp', detailSrc:'./assets/instructor-parkjunghoon-detail.webp' },
   { name:'백승균', title:'책임 트레이너', certs:'SDI·TDI·ERDI IT\nSF2 eCCR·X-CCR·AP Evolution', contact:'yamasg@hanmail.net · 010-7900-8259', slotId:'instructor-baekseunggyun', detailSlotId:'instructor-baekseunggyun-detail', photoSrc:'./assets/instructor-baekseunggyun.webp', detailSrc:'./assets/instructor-baekseunggyun-detail.webp' },
   { name:'조승훈', title:'책임강사', certs:'SDI·TDI·ERDI Instructor\nTDI SF2 eCCR Diluent/Deco Diver', contact:'idun07@naver.com · 010-9198-6494', slotId:'instructor-jhoseunghoon', detailSlotId:'instructor-jhoseunghoon-detail', photoSrc:'./assets/instructor-jhoseunghoon.webp', detailSrc:'./assets/instructor-jhoseunghoon-detail.webp' },
 ];
 const HERO_SLIDE_SRCS = ['./assets/hero-banner-0.jpg', './assets/hero-banner-1.jpg', './assets/hero-banner-2.jpg'];
+const HERO_DEFAULT = [{slotId:'hero-banner-0'},{slotId:'hero-banner-1'},{slotId:'hero-banner-2'}];
 // Maps each image-slot id to its real file in assets/. Slots are display-only and
 // resolve their image from this file (folder + link), not from the sidecar blob.
 const SLOT_IMAGES = {
@@ -1441,7 +1487,7 @@ const SLOT_IMAGES = {
   'hero-banner':'./assets/hero-banner.webp','hero-banner-0':'./assets/hero-banner-0.jpg','hero-banner-1':'./assets/hero-banner-1.jpg','hero-banner-2':'./assets/hero-banner-2.jpg',
   'instructor-parkjunghoon':'./assets/instructor-parkjunghoon.webp','instructor-baekseunggyun':'./assets/instructor-baekseunggyun.webp','instructor-jhoseunghoon':'./assets/instructor-jhoseunghoon.webp',
   'instructor-parkjunghoon-detail':'./assets/instructor-parkjunghoon-detail.webp','instructor-baekseunggyun-detail':'./assets/instructor-baekseunggyun-detail.webp','instructor-jhoseunghoon-detail':'./assets/instructor-jhoseunghoon-detail.webp',
-  'teamccr-lab-logo':'./assets/teamccr-lab-logo.png','mag-7':'./assets/mag-7.jpg','mag-7-1':'./assets/mag-7-1.jpg',
+  'teamccr-lab-logo':'./assets/teamccr-lab-logo.png','team-hero':'./assets/teamccr-intro-photo.jpg','mag-7':'./assets/mag-7.jpg','mag-7-1':'./assets/mag-7-1.jpg',
   'mag-1-1':'./assets/mag-1-1.png','mag-1-2':'./assets/mag-1-2.png','mag-1-3':'./assets/mag-1-3.png','mag-1-4':'./assets/mag-1-4.png',
   'mag-9-1':'./assets/mag-9-1.png','mag-9-2':'./assets/mag-9-2.png','mag-9-3':'./assets/mag-9-3.png','mag-9-4':'./assets/mag-9-4.png',
   'mag-9-5':'./assets/mag-9-5.png','mag-9-6':'./assets/mag-9-6.png','mag-9-7':'./assets/mag-9-7.png',
@@ -1472,9 +1518,11 @@ const SLOT_IMAGES = {
   'mag-18-5':'./assets/mag-18-5.png','mag-18-6':'./assets/mag-18-6.png','mag-18-cover':'./assets/mag-18-cover.png',
 };
 
-const MAGAZINE_CATEGORIES = ['NEW','Beginner','Brand Focus','Guide','New Release News','People','Research'];
+const MAGAZINE_CATEGORIES = ['NEW','Beginner','Brand Focus','Guide','Product News','People','Research'];
+const MAGAZINE_CATEGORY_KO = { 'NEW':'전체', 'Beginner':'입문', 'Brand Focus':'브랜드', 'Guide':'가이드', 'Product News':'신제품 소식', 'People':'인터뷰', 'Research':'리서치' };
+function magCat(c, lang) { return lang === 'en' ? c : (MAGAZINE_CATEGORY_KO[c] || c); }
 const MAGAZINE_POST_NUMBERS = [16,18,4,7,10,25,15,29,13,24,26,28,2,23,30,12,1,19,6,9,22,14,17,3,11,8,5,27,20,21];
-const MAGAZINE_ARTICLES = [
+const MAGAZINE_ARTICLES_DEFAULT = [
   { id:'m1', category:'Guide', title:'재호흡기 다이빙 시작 전 알아야 할 것들', excerpt:'첫 CCR 다이빙을 준비하는 다이버를 위한 안전 체크리스트', slotId:'mag-1', imageCount:4 },
   { id:'m7', category:'Guide', title:'오버홀 주기, 놓치면 안 되는 이유', excerpt:'전자계통 점검이 안전에 미치는 영향', slotId:'mag-7', imgSrc:'./assets/mag-7-overhaul.jpg' },
   { id:'m9', category:'Guide', title:'베일아웃 실린더, 몇 개가 적당할까', excerpt:'다이빙 프로필별 여분 가스 계산법', slotId:'mag-9', imageCount:7 },
@@ -1493,11 +1541,11 @@ const MAGAZINE_ARTICLES = [
   { id:'m17', category:'Beginner', title:'첫 CCR, 자가 구매 vs 렌탈', excerpt:'초기 비용과 유지비를 비교해봤습니다', slotId:'mag-17', imageCount:9, cardSlotId:'mag-17-cover' },
   { id:'m18', category:'Beginner', title:'다이브 컴퓨터, CCR용은 무엇이 다른가', excerpt:'PPO2 트렌드 로그와 알람 설정 이해하기', slotId:'mag-18', imageCount:6, cardSlotId:'mag-18-cover' },
 
-  { id:'m4', category:'New Release News', title:'KISS Sidewinder 2, CE 인증 진행 중', excerpt:'신제품 출시 소식과 예상 출고 일정', slotId:'mag-4' },
-  { id:'m19', category:'New Release News', title:'Shearwater Petrel 3 국내 정식 출시', excerpt:'배터리 개선과 신규 알고리즘 업데이트', slotId:'mag-19' },
-  { id:'m20', category:'New Release News', title:'차세대 O2 센서, 3셀에서 4셀로', excerpt:'제조사들의 리던던시 강화 트렌드', slotId:'mag-20' },
-  { id:'m21', category:'New Release News', title:'신형 스크러버 캐니스터 국내 입고', excerpt:'사용시간 15% 늘어난 신규 필터 구조', slotId:'mag-21' },
-  { id:'m22', category:'New Release News', title:'TEAMCCR 여름 위탁 프로모션 결과', excerpt:'8월 한 달간 접수된 위탁 매물 결산', slotId:'mag-22' },
+  { id:'m4', category:'Product News', title:'KISS Sidewinder 2, CE 인증 진행 중', excerpt:'신제품 출시 소식과 예상 출고 일정', slotId:'mag-4' },
+  { id:'m19', category:'Product News', title:'Shearwater Petrel 3 국내 정식 출시', excerpt:'배터리 개선과 신규 알고리즘 업데이트', slotId:'mag-19' },
+  { id:'m20', category:'Product News', title:'차세대 O2 센서, 3셀에서 4셀로', excerpt:'제조사들의 리던던시 강화 트렌드', slotId:'mag-20' },
+  { id:'m21', category:'Product News', title:'신형 스크러버 캐니스터 국내 입고', excerpt:'사용시간 15% 늘어난 신규 필터 구조', slotId:'mag-21' },
+  { id:'m22', category:'Product News', title:'TEAMCCR 여름 위탁 프로모션 결과', excerpt:'8월 한 달간 접수된 위탁 매물 결산', slotId:'mag-22' },
 
   { id:'m5', category:'People', title:'책임 트레이너 박정훈 인터뷰', excerpt:'테크니컬 다이빙에 입문하게 된 계기', slotId:'mag-5' },
   { id:'m23', category:'People', title:'10년차 CCR 다이버가 말하는 안전', excerpt:'사고 사례로 배우는 체크리스트의 중요성', slotId:'mag-23', imageCount:10, cardSlotId:'mag-23-cover' },
@@ -1525,7 +1573,7 @@ const ARTICLE_BODY_BY_CATEGORY = {
     '처음 CCR을 접하는 다이버라면 제어 방식(mCCR/eCCR)에 따라 학습 곡선과 유지관리 부담이 다르다는 점을 먼저 이해하는 것이 중요합니다. 교육 과정에서 이 차이를 충분히 체험해보는 것을 추천합니다.',
     '장비 구매는 교육 이후 천천히 결정해도 늦지 않습니다. 렌탈로 여러 모델을 경험해보고, 본인의 다이빙 빈도와 예산에 맞는 선택을 하는 편이 장기적으로 만족도가 높습니다.'
   ],
-  'New Release News': [
+  'Product News': [
     '신제품 소식은 스펙 변경뿐 아니라 인증 진행 상황과 실제 출고 일정까지 함께 확인하는 것이 중요합니다. 발표와 실제 공급 사이에 시차가 있는 경우가 많기 때문입니다.',
     'TEAMCCR은 국내 유통 일정이 확정되는 대로 매거진과 공지사항을 통해 안내드릴 예정입니다.'
   ],
@@ -1546,13 +1594,13 @@ const POLICY_MENU = [
   { label:'이용정책', action:'policyDoc' },
   { label:'브랜드 소개', action:'team' },
 ];
-const POLICY_EVENTS = [
+const POLICY_EVENTS_DEFAULT = [
   { title:'여름 시즌 위탁 프로모션', desc:'거래 수수료 무료 · 7월 한정', bg:'linear-gradient(135deg, oklch(30% 0.05 235), oklch(18% 0.03 235))' },
   { title:'신규 회원 첫 구매 혜택', desc:'가입 후 첫 구매 시 즉시 할인', bg:'linear-gradient(135deg, oklch(55% 0.15 250), oklch(40% 0.12 250))' },
   { title:'오버홀 정기 점검 캠페인', desc:'8월 한정 오버홀 20% 할인', bg:'linear-gradient(135deg, oklch(45% 0.1 150), oklch(30% 0.08 150))' },
   { title:'친구 초대 이벤트', desc:'초대할 때마다 포인트 적립', bg:'linear-gradient(135deg, oklch(60% 0.15 80), oklch(45% 0.12 60))' },
 ];
-const POLICY_NOTICES = [
+const POLICY_NOTICES_DEFAULT = [
   { tag:'주요 서비스 공지', title:'개인정보 처리방침 개정 안내', date:'2026.07.14' },
   { tag:'주요 서비스 공지', title:'서비스 이용정책 변경사항 안내', date:'2026.07.10' },
   { tag:'이벤트/프로모션 안내', title:'여름 시즌 위탁 프로모션 결과 안내', date:'2026.07.07' },
@@ -1621,7 +1669,7 @@ const DEALS = [
 ];
 
 const POLICY_ACCORDION = [
-  { key:'inspect', title:'검수 정책', body:'모든 매물은 예외 없이 TEAMCCR 검수·등급판정을 거친 뒤 게시됩니다.' },
+  { key:'inspect', title:'검수 정책', body:'모든 매물은 예외 없이 TEAMCCR 검수·등급판정을 거친 뒤 게시됩니다.\n\n[등급 분류 기준]\nS등급 - 사용 흔적이 거의 없는 최상 상태. 외관 스크래치 없음, 전 부품 정상 작동, 사용시간 기준 이내.\nA등급 - 경미한 사용 흔적. 기능상 문제 없음, 소모품 교체 이력 양호.\nB등급 - 사용감이 뚜렷한 중고 상태. 외관 마모 있으나 기능 정상, 일부 소모품 교체 권장.\nC등급 - 사용 흔적이 많은 상태. 기능은 정상이나 오버홀 또는 부품 점검이 필요할 수 있음.\n\n등급은 외관 상태, 사용시간, 부품 이력, 기능 테스트 결과를 종합해 TEAMCCR 검수팀이 판정합니다.' },
   { key:'overhaul', title:'오버홀 정책', body:'오버홀은 검수 결과 필요 판정이 나오거나 판매자·구매자가 희망할 때만 선택적으로 진행됩니다.' },
   { key:'refund', title:'검수 착오 상품 환불', body:'검수 기준 미달 상품이 통과되어 판매된 경우, 수령일로부터 7일 이내 환불 또는 A/S 대체가 가능합니다.' },
   { key:'delivery', title:'배송 정책', body:'장비가액 구간별 보험배송 티어가 적용되며, 배송 중 분실·파손 시 전액 배상됩니다.' },
@@ -1643,28 +1691,28 @@ function gradeStyle(grade, size) {
   return `font-size:${size}; padding:2px 6px; border-radius:var(--r-sm); font-weight:600; ${base}`;
 }
 const TR = {
-  navHome:{ko:'홈',en:'Home'}, navSearch:{ko:'검색',en:'Search'}, navSell:{ko:'판매',en:'Sell'}, navStore:{ko:'스토어',en:'Store'}, navTeam:{ko:'TEAMCCR',en:'TEAMCCR'}, navMagazine:{ko:'매거진',en:'Magazine'},
-  qOverhaul:{ko:'오버홀 신청',en:'Overhaul'}, qVisit:{ko:'센터 방문예약',en:'Visit Center'}, qEducation:{ko:'교육 신청',en:'Education'}, qMagazine:{ko:'매거진',en:'Magazine'}, qNewRequest:{ko:'신품 구매 요청',en:'New Unit Request'}, qInquiry:{ko:'온라인 문의',en:'Online Inquiry'},
-  sectionBrand:{ko:'브랜드',en:'Brands'}, sectionNew:{ko:'이번 주 등록된 신규 매물',en:'New This Week'}, sectionDrop:{ko:'최근 가격이 인하된 상품',en:'Recent Price Drops'},
-  sectionTrend:{ko:'관심 급상승',en:'Trending'}, sectionBudget:{ko:'500만원 이하로 시작하는 첫 재호흡기',en:'First Rebreather Under ₩5M'},
-  seeAll:{ko:'전체보기',en:'See all'}, more:{ko:'더보기',en:'More'},
-  cartTitle:{ko:'장바구니',en:'Cart'}, cartEmpty:{ko:'장바구니가 비어 있습니다.',en:'Your cart is empty.'},
-  addToCart:{ko:'장바구니 담기',en:'Add to Cart'}, buyNow:{ko:'바로 구매',en:'Buy Now'},
-  loginSignup:{ko:'로그인 / 회원가입',en:'Log In / Sign Up'},
-  footerLegal:{ko:'TEAMCCR · 대표자 성명 · 사업자등록번호 000-00-00000 · 통신판매업 000-0000-0000',en:'TEAMCCR · CEO Name · Business Reg. No. 000-00-00000 · E-commerce License 000-0000-0000'},
-  footerAddr:{ko:'TEAMCCR 센터 주소 · 경기도 오산시 수청동 청학로 607-1 286 TSN',en:'TEAMCCR Center Address · 286 TSN, 607-1 Cheonghak-ro, Sucheong-dong, Osan-si, Gyeonggi-do'},
-  footerTerms:{ko:'이용약관',en:'Terms'}, footerPolicy:{ko:'이용정책',en:'Policy'}, footerPrivacy:{ko:'개인정보처리방침',en:'Privacy'},
-  langSettingsTitle:{ko:'언어 설정',en:'Language Settings'}, region:{ko:'지역',en:'Region'}, language:{ko:'언어',en:'Language'}, currency:{ko:'통화',en:'Currency'},
-  changeBtn:{ko:'변경하기',en:'Save Changes'}, eventsTitle:{ko:'이벤트',en:'Events'}, noticeTitle:{ko:'공지사항',en:'Notices'}, policyTitle:{ko:'이용정책',en:'Policy'},
-  sellTitle:{ko:'장비 판매',en:'Sell Equipment'}, sellSubtitle:{ko:'모든 매물은 TEAMCCR 검수 후 게시됩니다. 직거래는 운영하지 않습니다.',en:'All listings are inspected by TEAMCCR before posting. Direct trades are not supported.'},
-  consignLabel:{ko:'위탁 판매',en:'Consignment'}, consignBadge:{ko:'판매속도 2배',en:'2x Faster Sale'}, consignDesc:{ko:'소유권 유지 · TEAMCCR이 검수·촬영·게시·판매 대행',en:'Keep ownership · TEAMCCR handles inspection, photos, listing & sale'},
-  buyoutLabel:{ko:'TEAMCCR 매입',en:'TEAMCCR Buyout'}, buyoutBadge:{ko:'즉시 현금화',en:'Instant Cash'}, buyoutDesc:{ko:'즉시 매입 후 검수 · 3영업일 내 대금 지급',en:'Instant buyout, inspection, payment within 3 business days'},
-  searchPlaceholder:{ko:'모델명, 모델번호 검색',en:'Search model name or number'}, searchInline:{ko:'검색어 입력',en:'Search'}, recentSearch:{ko:'최근 검색어',en:'Recent Searches'}, noSearchHistory:{ko:'검색 내역이 없습니다.',en:'No search history.'}, recommendedKw:{ko:'추천 키워드',en:'Suggested Keywords'}, faqTitle:{ko:'자주 묻는 질문',en:'FAQ'},
-  processTitle:{ko:'진행 순서',en:'Process'},
-  consignFee:{ko:'거래수수료: 성사 시 청구(초기 프로모션 무료) · 주문관리수수료 2% · 오버홀은 검수 결과 필요 시 또는 요청 시에만 실비 청구',en:'Fee: charged upon sale (free during launch promo) · 2% order management fee · overhaul billed at cost only if needed or requested'},
-  consignApply:{ko:'위탁 판매 신청하기',en:'Apply for Consignment'},
-  buyoutFee:{ko:'최종 견적 거절 시 매입 중단, 반송비 TEAMCCR 부담. 매입 불가: 무단 개조·비정품·시리얼 없음 등',en:'If you decline the final quote, the buyout stops and TEAMCCR covers return shipping. Not eligible: unauthorized modifications, non-genuine parts, or missing serial number'},
-  buyoutApply:{ko:'매입 신청하기',en:'Apply for Buyout'},
+  navHome:{ko:'홈',en:'Home',ja:'ホーム',zh:'首页'}, navSearch:{ko:'검색',en:'Search',ja:'検索',zh:'搜索'}, navSell:{ko:'판매',en:'Sell',ja:'販売',zh:'出售'}, navStore:{ko:'스토어',en:'Store',ja:'ストア',zh:'商店'}, navTeam:{ko:'팀씨씨알',en:'TEAMCCR',ja:'TEAMCCR',zh:'TEAMCCR'}, navMagazine:{ko:'매거진',en:'Magazine',ja:'マガジン',zh:'杂志'},
+  qOverhaul:{ko:'오버홀 신청',en:'Overhaul',ja:'オーバーホール申請',zh:'大修申请'}, qVisit:{ko:'센터 방문예약',en:'Visit Center',ja:'センター訪問予約',zh:'中心到访预约'}, qEducation:{ko:'교육 신청',en:'Education',ja:'講習申込',zh:'教育申请'}, qMagazine:{ko:'매거진',en:'Magazine',ja:'マガジン',zh:'杂志'}, qNewRequest:{ko:'신품 구매 요청',en:'New Unit Request',ja:'新品購入リクエスト',zh:'新品购买请求'}, qInquiry:{ko:'온라인 문의',en:'Online Inquiry',ja:'オンライン問い合わせ',zh:'在线咨询'},
+  sectionBrand:{ko:'브랜드',en:'Brands',ja:'ブランド',zh:'品牌'}, sectionNew:{ko:'이번 주 등록된 신규 매물',en:'New This Week',ja:'今週登録の新着',zh:'本周新上架'}, sectionDrop:{ko:'최근 가격이 인하된 상품',en:'Recent Price Drops',ja:'最近値下げされた商品',zh:'近期降价商品'},
+  sectionTrend:{ko:'관심 급상승',en:'Trending',ja:'注目急上昇',zh:'人气飙升'}, sectionBudget:{ko:'500만원 이하로 시작하는 첫 재호흡기',en:'First Rebreather Under ₩5M',ja:'500万ウォン以下で始める初リブリーザー',zh:'500万韩元以下的入门循环呼吸器'},
+  seeAll:{ko:'전체보기',en:'See all',ja:'すべて見る',zh:'查看全部'}, more:{ko:'더보기',en:'More',ja:'もっと見る',zh:'更多'},
+  cartTitle:{ko:'장바구니',en:'Cart',ja:'カート',zh:'购物车'}, cartEmpty:{ko:'장바구니가 비어 있습니다.',en:'Your cart is empty.',ja:'カートは空です。',zh:'购物车是空的。'},
+  addToCart:{ko:'장바구니 담기',en:'Add to Cart',ja:'カートに入れる',zh:'加入购物车'}, buyNow:{ko:'바로 구매',en:'Buy Now',ja:'すぐ購入',zh:'立即购买'},
+  loginSignup:{ko:'로그인 / 회원가입',en:'Log In / Sign Up',ja:'ログイン / 会員登録',zh:'登录 / 注册'},
+  footerLegal:{ko:'TEAMCCR · 대표자 성명 · 사업자등록번호 000-00-00000 · 통신판매업 000-0000-0000',en:'TEAMCCR · CEO Name · Business Reg. No. 000-00-00000 · E-commerce License 000-0000-0000',ja:'TEAMCCR · 代表者氏名 · 事業者登録番号 000-00-00000 · 通信販売業 000-0000-0000',zh:'TEAMCCR · 法人代表 · 营业执照号 000-00-00000 · 网络销售许可 000-0000-0000'},
+  footerAddr:{ko:'TEAMCCR 센터 주소 · 경기도 오산시 수청동 청학로 607-1 286 TSN',en:'TEAMCCR Center Address · 286 TSN, 607-1 Cheonghak-ro, Sucheong-dong, Osan-si, Gyeonggi-do',ja:'TEAMCCRセンター住所 · 京畿道烏山市水淸洞青鶴路607-1 286 TSN',zh:'TEAMCCR中心地址 · 京畿道乌山市水清洞青鹤路607-1 286 TSN'},
+  footerTerms:{ko:'이용약관',en:'Terms',ja:'利用規約',zh:'使用条款'}, footerPolicy:{ko:'이용정책',en:'Policy',ja:'利用ポリシー',zh:'使用政策'}, footerPrivacy:{ko:'개인정보처리방침',en:'Privacy',ja:'プライバシーポリシー',zh:'隐私政策'},
+  langSettingsTitle:{ko:'언어 설정',en:'Language Settings',ja:'言語設定',zh:'语言设置'}, region:{ko:'지역',en:'Region',ja:'地域',zh:'地区'}, language:{ko:'언어',en:'Language',ja:'言語',zh:'语言'}, currency:{ko:'통화',en:'Currency',ja:'通貨',zh:'货币'},
+  changeBtn:{ko:'변경하기',en:'Save Changes',ja:'変更する',zh:'保存更改'}, eventsTitle:{ko:'이벤트',en:'Events',ja:'イベント',zh:'活动'}, noticeTitle:{ko:'공지사항',en:'Notices',ja:'お知らせ',zh:'公告'}, policyTitle:{ko:'이용정책',en:'Policy',ja:'利用ポリシー',zh:'使用政策'},
+  sellTitle:{ko:'장비 판매',en:'Sell Equipment',ja:'機材販売',zh:'装备出售'}, sellSubtitle:{ko:'모든 매물은 TEAMCCR 검수 후 게시됩니다. 직거래는 운영하지 않습니다.',en:'All listings are inspected by TEAMCCR before posting. Direct trades are not supported.',ja:'すべての出品はTEAMCCRの検品後に掲載されます。直接取引は行っていません。',zh:'所有商品经TEAMCCR检验后上架。不支持私下交易。'},
+  consignLabel:{ko:'위탁 판매',en:'Consignment',ja:'委託販売',zh:'委托销售'}, consignBadge:{ko:'판매속도 2배',en:'2x Faster Sale',ja:'販売スピード2倍',zh:'销售速度2倍'}, consignDesc:{ko:'소유권 유지 · TEAMCCR이 검수·촬영·게시·판매 대행',en:'Keep ownership · TEAMCCR handles inspection, photos, listing & sale',ja:'所有権を維持・TEAMCCRが検品・撮影・掲載・販売を代行',zh:'保留所有权 · TEAMCCR代理检验·拍摄·上架·销售'},
+  buyoutLabel:{ko:'TEAMCCR 매입',en:'TEAMCCR Buyout',ja:'TEAMCCR買取',zh:'TEAMCCR收购'}, buyoutBadge:{ko:'즉시 현금화',en:'Instant Cash',ja:'即現金化',zh:'即时变现'}, buyoutDesc:{ko:'즉시 매입 후 검수 · 3영업일 내 대금 지급',en:'Instant buyout, inspection, payment within 3 business days',ja:'即買取後に検品・3営業日以内に代金支払い',zh:'即时收购后检验 · 3个工作日内付款'},
+  searchPlaceholder:{ko:'모델명, 모델번호 검색',en:'Search model name or number',ja:'モデル名・型番で検索',zh:'搜索型号名称、型号编号'}, searchInline:{ko:'검색어 입력',en:'Search',ja:'キーワード入力',zh:'输入搜索词'}, recentSearch:{ko:'최근 검색어',en:'Recent Searches',ja:'最近の検索',zh:'最近搜索'}, noSearchHistory:{ko:'검색 내역이 없습니다.',en:'No search history.',ja:'検索履歴がありません。',zh:'没有搜索记录。'}, recommendedKw:{ko:'추천 키워드',en:'Suggested Keywords',ja:'おすすめキーワード',zh:'推荐关键词'}, faqTitle:{ko:'자주 묻는 질문',en:'FAQ',ja:'よくある質問',zh:'常见问题'},
+  processTitle:{ko:'진행 순서',en:'Process',ja:'進行の流れ',zh:'流程'},
+  consignFee:{ko:'거래수수료: 성사 시 청구(초기 프로모션 무료) · 주문관리수수료 2% · 오버홀은 검수 결과 필요 시 또는 요청 시에만 실비 청구',en:'Fee: charged upon sale (free during launch promo) · 2% order management fee · overhaul billed at cost only if needed or requested',ja:'取引手数料：成約時に請求（初期プロモーション無料）・注文管理手数料2%・オーバーホールは検品結果で必要な場合または要望時のみ実費請求',zh:'交易手续费：成交时收取（初期促销免费）· 订单管理费2% · 大修仅在检验需要或有要求时按实收取'},
+  consignApply:{ko:'위탁 판매 신청하기',en:'Apply for Consignment',ja:'委託販売を申し込む',zh:'申请委托销售'},
+  buyoutFee:{ko:'최종 견적 거절 시 매입 중단, 반송비 TEAMCCR 부담. 매입 불가: 무단 개조·비정품·시리얼 없음 등',en:'If you decline the final quote, the buyout stops and TEAMCCR covers return shipping. Not eligible: unauthorized modifications, non-genuine parts, or missing serial number',ja:'最終見積もりを断った場合は買取中止、返送料はTEAMCCR負担。買取不可：無断改造・非正規品・シリアルなしなど',zh:'拒绝最终报价时终止收购，退货运费由TEAMCCR承担。不可收购：擅自改装·非正品·无序列号等'},
+  buyoutApply:{ko:'매입 신청하기',en:'Apply for Buyout',ja:'買取を申し込む',zh:'申请收购'},
 };
 const KO_EN = {
   '위탁형':'Consignment', '매입형':'Buyout', '완료':'Done', '필요':'Needed', 'TEAMCCR 정품':'TEAMCCR Genuine New',
@@ -1683,10 +1731,79 @@ const KO_EN = {
   '상품 상세':'Product Details', '검수 리포트':'Inspection Report', '이미지':'Images', '스펙':'Specs',
   '모델명, 모델번호 검색':'Search model name or number', '최근 검색어':'Recent Searches', '검색 내역이 없습니다.':'No search history.', '추천 키워드':'Suggested Keywords', '자주 묻는 질문':'FAQ',
   '위탁판매는 어떻게 진행되나요?':'How does consignment selling work?', '센터에서 실물 확인이 가능한가요?':'Can I inspect the item in person at the center?', '오버홀 서비스는 무엇인가요?':'What is the overhaul service?', '정품 인증은 어떻게 이루어지나요?':'How is authenticity verified?',
-  '모델':'Model', '가격':'Price', '필터':'Filter', '기본 정보':'Basic Info',
+  '모델':'Model', '기본 정보':'Basic Info',
   '상품':'Products', '즉시구매가능':'Buy Now', '신품급':'Like New', '센터방문가능':'Center Visit', 'CARE 가능':'CARE Eligible', '금주 등록':'New This Week',
+  '제품 이미지':'Product Image', '구매하기':'Buy Now', '데모 프로토타입에서는 결제가 비활성화되어 있습니다.':'Checkout is disabled in this demo prototype.',
+  '구매와 함께 가입 시 무상 정기점검 제공':'Enroll with your purchase for free routine checkups', '배송정보':'Shipping', '판매정보':'Sale Type', '상품번호':'Product No.',
+  '빠른 배송(1~2일) · 센터 픽업 가능':'Fast shipping (1–2 days) · Center pickup available', '센터에서 실물 확인 가능한 상품입니다.':'This item can be inspected in person at the center.',
+  'TEAMCCR 인증 결과':'TEAMCCR Certification Results', '출시년도':'Release Year', '마운트타입':'Mount Type', '전 항목 검수 통과 · 호흡회로/전자계통 정상 작동 확인 · 판정기준 문서':'All items passed inspection · Breathing loop/electronics confirmed functional · Grading criteria document',
+  '보기':'View', 'TEAMCCR 실거래가':'TEAMCCR Recent Sale Prices', '거래일':'Date', '오버홀이력':'Overhaul History', '거래가':'Sale Price', '신품':'New', '중고':'Used', '시간':'hrs',
+  '상세 스펙':'Detailed Specs', '상품 이미지':'Product Images', '인증 리포트':'Certification Report', '있음':'Yes', '없음':'No',
+  '추천':'Recommended', '인기':'Popular', '가격인하':'Price Drop', '신규':'New',
+  '년식':'yr', '조회':'Views', '한국':'Korea', '해외':'Overseas', '언어 변경':'Language', '화면 모드':'Screen Mode', '라이트':'Light', '다크':'Dark', '시스템 설정':'System', '브라우저 모드':'Browser Mode', '화면 크기에 맞는 레이아웃을 선택하세요':'Choose a layout for your screen', '고정형':'Fixed', '반응형':'Responsive', '이용 약관':'Terms of Service', '이용 정책':'Usage Policy', '오픈소스 라이선스':'Open Source Licenses', '개인정보 처리방침':'Privacy Policy', '버전정보':'Version',
 };
-function T(ko, lang) { return (lang === 'en' && KO_EN[ko]) ? KO_EN[ko] : ko; }
+const KO_JA = {
+  '위탁형':'委託', '매입형':'買取', '완료':'完了', '필요':'必要', 'TEAMCCR 정품':'TEAMCCR正規新品',
+  '판매형태':'販売形態', '중고여부':'中古状態', '사용시간':'使用時間', '마운트':'マウント', '제어방식':'制御方式', '검수등급':'検品グレード', '오버홀':'オーバーホール', '가격':'価格', '필터':'フィルター', '초기화':'リセット', '적용':'適用', '시간 이상':'時間以上', '이상':'以上', '태그':'タグ',
+  '전체':'すべて', '드라이수트':'ドライスーツ', '마스크/스노클':'マスク/シュノーケル', '다이브 컴퓨터':'ダイブコンピューター', '산소센서':'酸素センサー', '소다라임/스크러버':'ソーダライム/スクラバー', '호스/피팅':'ホース/フィッティング', '툴/액세서리':'ツール/アクセサリー',
+  '이벤트':'イベント', '공지사항':'お知らせ', '고객센터':'カスタマーセンター', '이용정책':'利用ポリシー', '브랜드 소개':'ブランド紹介',
+  '주요 서비스 공지':'主要サービス告知', '당첨 안내':'当選案内', '이벤트/프로모션 안내':'イベント/プロモーション案内',
+  '구매/판매 프로세스 및 관련 정책':'購入/販売プロセス及び関連ポリシー', '상품 가격 정책':'商品価格ポリシー', '진단 정책':'診断ポリシー', '오버홀 정책':'オーバーホールポリシー', '배송 정책':'配送ポリシー', '워런티 정책':'保証ポリシー', '거래 취소 수수료 및 페널티 정책':'取引キャンセル手数料及びペナルティポリシー',
+  '거래내역':'取引履歴', '오버홀 신청내역':'オーバーホール申請履歴', '교육 신청내역':'講習申込履歴', '센터 방문예약 내역':'センター訪問予約履歴', '인증서':'証明書', '리뷰':'レビュー',
+  '판매 신청 및 모델 선택':'販売申請及びモデル選択', '장비 전달(센터 방문 · 전문배송업체)':'機材の引き渡し（センター訪問・専門配送業者）', '검수 · 등급판정 및 촬영':'検品・グレード判定及び撮影', '판매자 승인 후 판매 시작':'出品者承認後に販売開始',
+  '매입 신청 · 1차 견적 안내':'買取申請・一次見積もり案内', '동의 시 장비 전달':'同意後に機材引き渡し', '검수 후 최종 견적 안내':'検品後に最終見積もり案内', '판매자 동의 시 매매계약 성립':'出品者同意で売買契約成立', '3영업일 내 대금 지급':'3営業日以内に代金支払い',
+  '카운터렁':'カウンターラング', '스크러버 캐니스터':'スクラバーキャニスター', '호스':'ホース', '밸브':'バルブ', '하네스':'ハーネス',
+  '장비 판매':'機材販売', '위탁 판매':'委託販売', 'TEAMCCR 매입':'TEAMCCR買取', '판매속도 2배':'販売スピード2倍', '즉시 현금화':'即現金化',
+  '소유권 유지 · TEAMCCR이 검수·촬영·게시·판매 대행':'所有権を維持・TEAMCCRが検品・撮影・掲載・販売を代行', '즉시 매입 후 검수 · 3영업일 내 대금 지급':'即買取後に検品・3営業日以内に代金支払い',
+  '진행 순서':'進行の流れ', '희망 판매가':'希望販売価格', '위탁 판매 신청하기':'委託販売を申し込む', '매입 신청하기':'買取を申し込む',
+  '상품 상세':'商品詳細', '검수 리포트':'検品レポート', '이미지':'画像', '스펙':'スペック',
+  '모델명, 모델번호 검색':'モデル名・型番で検索', '최근 검색어':'最近の検索', '검색 내역이 없습니다.':'検索履歴がありません。', '추천 키워드':'おすすめキーワード', '자주 묻는 질문':'よくある質問',
+  '위탁판매는 어떻게 진행되나요?':'委託販売はどのように進みますか？', '센터에서 실물 확인이 가능한가요?':'センターで実物確認はできますか？', '오버홀 서비스는 무엇인가요?':'オーバーホールサービスとは何ですか？', '정품 인증은 어떻게 이루어지나요?':'正規品認証はどのように行われますか？',
+  '모델':'モデル', '기본 정보':'基本情報',
+  '상품':'商品', '즉시구매가능':'即購入可能', '신품급':'新品級', '센터방문가능':'センター訪問可能', 'CARE 가능':'CARE対応', '금주 등록':'今週登録',
+  '제품 이미지':'製品画像', '구매하기':'購入する', '데모 프로토타입에서는 결제가 비활성화되어 있습니다.':'このデモプロトタイプでは決済が無効になっています。',
+  '구매와 함께 가입 시 무상 정기점검 제공':'購入と同時に加入で無料定期点検を提供', '배송정보':'配送情報', '판매정보':'販売情報', '상품번호':'商品番号',
+  '빠른 배송(1~2일) · 센터 픽업 가능':'迅速配送（1〜2日）・センター受取可能', '센터에서 실물 확인 가능한 상품입니다.':'センターで実物確認が可能な商品です。',
+  'TEAMCCR 인증 결과':'TEAMCCR認証結果', '출시년도':'発売年', '마운트타입':'マウントタイプ', '전 항목 검수 통과 · 호흡회로/전자계통 정상 작동 확인 · 판정기준 문서':'全項目検品合格・呼吸回路/電子系統の正常動作確認・判定基準文書',
+  '보기':'見る', 'TEAMCCR 실거래가':'TEAMCCR実取引価格', '거래일':'取引日', '오버홀이력':'オーバーホール履歴', '거래가':'取引価格', '신품':'新品', '중고':'中古', '시간':'時間',
+  '상세 스펙':'詳細スペック', '상품 이미지':'商品画像', '인증 리포트':'認証レポート', '있음':'あり', '없음':'なし',
+  '추천':'おすすめ', '인기':'人気', '가격인하':'値下げ', '신규':'新着',
+  '년식':'年式', '조회':'閲覧', '한국':'韓国', '해외':'海外', '언어 변경':'言語変更', '화면 모드':'画面モード', '라이트':'ライト', '다크':'ダーク', '브라우저 모드':'ブラウザモード', '화면 크기에 맞는 레이아웃을 선택하세요':'画面サイズに合うレイアウトを選択', '고정형':'固定型', '반응형':'レスポンシブ', '시스템 설정':'システム設定', '이용 약관':'利用規約', '이용 정책':'利用ポリシー', '오픈소스 라이선스':'オープンソースライセンス', '개인정보 처리방침':'個人情報の取り扱い', '버전정보':'バージョン情報',
+};
+const KO_ZH = {
+  '위탁형':'委托', '매입형':'收购', '완료':'完成', '필요':'需要', 'TEAMCCR 정품':'TEAMCCR正品新机',
+  '판매형태':'销售形式', '중고여부':'新旧状态', '사용시간':'使用时间', '마운트':'安装方式', '제어방식':'控制方式', '검수등급':'检验等级', '오버홀':'大修', '가격':'价格', '필터':'筛选', '초기화':'重置', '적용':'应用', '시간 이상':'小时以上', '이상':'以上', '태그':'标签',
+  '전체':'全部', '드라이수트':'干式潜水服', '마스크/스노클':'面镜/呼吸管', '다이브 컴퓨터':'潜水电脑', '산소센서':'氧气传感器', '소다라임/스크러버':'钠石灰/洗涤器', '호스/피팅':'软管/接头', '툴/액세서리':'工具/配件',
+  '이벤트':'活动', '공지사항':'公告', '고객센터':'客服中心', '이용정책':'使用政策', '브랜드 소개':'品牌介绍',
+  '주요 서비스 공지':'主要服务公告', '당첨 안내':'中奖公告', '이벤트/프로모션 안내':'活动/促销公告',
+  '구매/판매 프로세스 및 관련 정책':'购买/销售流程及相关政策', '상품 가격 정책':'商品价格政策', '진단 정책':'检测政策', '오버홀 정책':'大修政策', '배송 정책':'配送政策', '워런티 정책':'保修政策', '거래 취소 수수료 및 페널티 정책':'交易取消手续费及罚则政策',
+  '거래내역':'交易记录', '오버홀 신청내역':'大修申请记录', '교육 신청내역':'教育申请记录', '센터 방문예약 내역':'中心到访预约记录', '인증서':'证书', '리뷰':'评价',
+  '판매 신청 및 모델 선택':'提交销售及选择型号', '장비 전달(센터 방문 · 전문배송업체)':'交付装备（中心到访·专业配送）', '검수 · 등급판정 및 촬영':'检验·评级及拍摄', '판매자 승인 후 판매 시작':'卖家批准后开始销售',
+  '매입 신청 · 1차 견적 안내':'提交收购申请·初次报价', '동의 시 장비 전달':'同意后交付装备', '검수 후 최종 견적 안내':'检验后最终报价', '판매자 동의 시 매매계약 성립':'卖家同意后成立买卖合同', '3영업일 내 대금 지급':'3个工作日内付款',
+  '카운터렁':'呼吸囊', '스크러버 캐니스터':'洗涤罐', '호스':'软管', '밸브':'阀门', '하네스':'背架',
+  '장비 판매':'装备出售', '위탁 판매':'委托销售', 'TEAMCCR 매입':'TEAMCCR收购', '판매속도 2배':'销售速度2倍', '즉시 현금화':'即时变现',
+  '소유권 유지 · TEAMCCR이 검수·촬영·게시·판매 대행':'保留所有权 · TEAMCCR代理检验·拍摄·上架·销售', '즉시 매입 후 검수 · 3영업일 내 대금 지급':'即时收购后检验 · 3个工作日内付款',
+  '진행 순서':'流程', '희망 판매가':'期望售价', '위탁 판매 신청하기':'申请委托销售', '매입 신청하기':'申请收购',
+  '상품 상세':'商品详情', '검수 리포트':'检验报告', '이미지':'图片', '스펙':'规格',
+  '모델명, 모델번호 검색':'搜索型号名称、型号编号', '최근 검색어':'最近搜索', '검색 내역이 없습니다.':'没有搜索记录。', '추천 키워드':'推荐关键词', '자주 묻는 질문':'常见问题',
+  '위탁판매는 어떻게 진행되나요?':'委托销售如何进行？', '센터에서 실물 확인이 가능한가요?':'可以在中心查看实物吗？', '오버홀 서비스는 무엇인가요?':'什么是大修服务？', '정품 인증은 어떻게 이루어지나요?':'如何进行正品认证？',
+  '모델':'型号', '기본 정보':'基本信息',
+  '상품':'商品', '즉시구매가능':'可即时购买', '신품급':'准新品', '센터방문가능':'可到访中心', 'CARE 가능':'可享CARE', '금주 등록':'本周登记',
+  '제품 이미지':'产品图片', '구매하기':'购买', '데모 프로토타입에서는 결제가 비활성화되어 있습니다.':'演示原型中已禁用支付。',
+  '구매와 함께 가입 시 무상 정기점검 제공':'购买同时加入可享免费定期检查', '배송정보':'配送信息', '판매정보':'销售信息', '상품번호':'商品编号',
+  '빠른 배송(1~2일) · 센터 픽업 가능':'快速配送（1~2天）· 可中心自取', '센터에서 실물 확인 가능한 상품입니다.':'该商品可在中心查看实物。',
+  'TEAMCCR 인증 결과':'TEAMCCR认证结果', '출시년도':'上市年份', '마운트타입':'安装类型', '전 항목 검수 통과 · 호흡회로/전자계통 정상 작동 확인 · 판정기준 문서':'全项目检验通过 · 呼吸回路/电子系统正常运作确认 · 判定标准文件',
+  '보기':'查看', 'TEAMCCR 실거래가':'TEAMCCR实际成交价', '거래일':'交易日', '오버홀이력':'大修记录', '거래가':'成交价', '신품':'新品', '중고':'二手', '시간':'小时',
+  '상세 스펙':'详细规格', '상품 이미지':'商品图片', '인증 리포트':'认证报告', '있음':'有', '없음':'无',
+  '추천':'推荐', '인기':'热门', '가격인하':'降价', '신규':'新品',
+  '년식':'年款', '조회':'浏览', '한국':'韩国', '해외':'海外', '언어 변경':'语言更改', '화면 모드':'屏幕模式', '라이트':'浅色', '다크':'深色', '브라우저 모드':'浏览模式', '화면 크기에 맞는 레이아웃을 선택하세요':'请选择适合屏幕的布局', '고정형':'固定式', '반응형':'自适应', '시스템 설정':'跟随系统', '이용 약관':'使用条款', '이용 정책':'使用政策', '오픈소스 라이선스':'开源许可', '개인정보 처리방침':'隐私政策', '버전정보':'版本信息',
+};
+function T(ko, lang) {
+  if (lang === 'en') return KO_EN[ko] || ko;
+  if (lang === 'ja') return KO_JA[ko] || ko;
+  if (lang === 'zh') return KO_ZH[ko] || ko;
+  return ko;
+}
 
 function fmtPriceCur(p, currency){
   if (currency === 'USD') return '$' + Math.round(p / EXCHANGE_RATE).toLocaleString('en-US');
@@ -1705,9 +1822,9 @@ function productTagLabels(p) {
   if (idNum % 6 === 0) list.push('신규');
   return list;
 }
-function productTags(p, size) {
+function productTags(p, size, lang) {
   const colors = { '추천':'background:oklch(62% 0.14 var(--accent-h)); color:oklch(98% 0.01 235);', '인기':'background:oklch(62% 0.19 25); color:oklch(98% 0.01 235);', '이벤트':'background:oklch(76% 0.14 70); color:oklch(20% 0.02 240);', '가격인하':'background:oklch(55% 0.18 255); color:oklch(98% 0.01 235);', '신규':'background:oklch(60% 0.16 145); color:oklch(98% 0.01 235);' };
-  return productTagLabels(p).map(label => ({ label, style: `font-size:calc(${size}px * var(--font-scale)); font-weight:600; padding:2px 6px; border-radius:var(--r-sm); white-space:nowrap; ${colors[label]}` }));
+  return productTagLabels(p).map(label => ({ label: T(label, lang), style: `font-size:calc(${size}px * var(--font-scale)); font-weight:600; padding:2px 6px; border-radius:var(--r-sm); white-space:nowrap; ${colors[label]}` }));
 }
 
 class Component extends DCLogic {
@@ -1720,6 +1837,7 @@ class Component extends DCLogic {
     filterPanelOpen: false,
     filters: { saleTypes:{}, mounts:{}, controls:{}, grades:{}, overhauls:{}, tags:{}, hoursMin:0, hoursMax:1000, priceMin:0, priceMax:15000000 },
     inquiryEmail: '', inquirySubject: '', inquiryMessage: '', inquirySent: false,
+    requestType: null, requestForm: {}, requestSent: false,
     expandedInquiryId: null,
     favorites: (function(){ try { return JSON.parse(sessionStorage.getItem('teamccr_logged_in')==='1' ? (localStorage.getItem('teamccr_favorites')||'{}') : '{}'); } catch(e){ return {}; } })(),
     favoritesViewIds: [],
@@ -1774,6 +1892,7 @@ class Component extends DCLogic {
   };
 
   componentDidMount() {
+    try { if (localStorage.getItem('teamccr_browser_mode') === 'responsive') { window.location.replace('./responsive.html'); return; } } catch(e) {}
     this.startHeroTimer();
     this._wireSlotImages();
     this._wireMagAutoHeight();
@@ -1945,8 +2064,9 @@ class Component extends DCLogic {
   heroNext = () => { this.pauseHero(); this.setState(s => ({ heroTrackIndex: s.heroTrackIndex + 1 })); this.resumeHero(); };
   heroTransitionEnd = () => {
     this.setState(s => {
-      if (s.heroTrackIndex >= 4) return { heroTrackIndex: 1, heroNoTransition: true };
-      if (s.heroTrackIndex <= 0) return { heroTrackIndex: 3, heroNoTransition: true };
+      const N = (function(){ var h = CMS_GET('hero', HERO_DEFAULT); return (h && h.length) ? h.length : 1; })();
+      if (s.heroTrackIndex >= N + 1) return { heroTrackIndex: 1, heroNoTransition: true };
+      if (s.heroTrackIndex <= 0) return { heroTrackIndex: N, heroNoTransition: true };
       return null;
     }, () => {
       if (this.state.heroNoTransition) requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ heroNoTransition: false })));
@@ -2031,6 +2151,23 @@ class Component extends DCLogic {
   goSearchTrend = () => this.goSearchFiltered({ tags:{'인기':true} });
   goSearchBudget = () => this.goSearchFiltered({ priceMax:5000000 });
   closeInquiry = () => this.goBack();
+  reqForms = {
+    newunit: { title:'신품 구매 요청', key:'req_newunit', idp:'N', status:'접수', intro:'원하시는 신품 모델과 수량을 남겨주시면 재고·납기·견적을 안내드립니다.', fields:[['model','희망 모델','text','예: KISS Sidewinder 2'],['memo','요청 내용','textarea','수량, 옵션, 희망 납기 등을 적어주세요']] },
+    overhaul: { title:'오버홀 신청', key:'req_overhaul', idp:'O', status:'접수', intro:'장비 모델과 증상을 남겨주시면 점검 일정과 예상 비용을 안내드립니다.', fields:[['model','장비 모델','text','예: JJ-CCR'],['memo','점검·요청 내용','textarea','증상, 마지막 오버홀 시점 등을 적어주세요']] },
+    visit: { title:'센터 방문예약', key:'req_visit', idp:'V', status:'예약대기', intro:'방문 희망일을 남겨주시면 일정 확인 후 연락드립니다.', fields:[['visitDate','방문 희망일','date',''],['memo','방문 목적·메모','textarea','상담 희망 내용을 적어주세요']] },
+    education: { title:'교육 신청', key:'req_education', idp:'E', status:'접수', intro:'신청 과정을 선택하고 메모를 남겨주세요.', fields:[['course','신청 과정','select','',['테크 CCR 입문','eCCR 과정','mCCR 과정','강사·트레이너 과정']],['memo','메모','textarea','희망 일정·수준 등을 적어주세요']] },
+  };
+  openRequest = (type) => { this._pushNav({ view:'request', requestType: type, requestForm: {}, requestSent: false }); };
+  closeRequest = () => this.goBack();
+  setRequestField = (key) => (e) => { const v = e.target.value; this.setState(s => ({ requestForm: { ...s.requestForm, [key]: v } })); };
+  submitRequest = () => {
+    const cfg = this.reqForms[this.state.requestType]; if (!cfg) return;
+    const f = this.state.requestForm || {};
+    if (!(f.name||'').trim() || !(f.phone||'').trim()) return;
+    const rec = { id: cfg.idp + '-' + String(Date.now()).slice(-6), ...f, date: new Date().toISOString().slice(0,10), status: cfg.status };
+    try { var q = JSON.parse(localStorage.getItem('teamccr_cms_'+cfg.key)||'[]'); q.unshift(rec); localStorage.setItem('teamccr_cms_'+cfg.key, JSON.stringify(q)); } catch(e){}
+    this.setState({ requestSent: true, requestForm: {} });
+  };
   setInquiryEmail = (e) => this.setState({ inquiryEmail: e.target.value });
   setInquirySubject = (e) => this.setState({ inquirySubject: e.target.value });
   setInquiryMessage = (e) => this.setState({ inquiryMessage: e.target.value });
@@ -2041,6 +2178,7 @@ class Component extends DCLogic {
       inquirySent: true, inquiryEmail: '', inquirySubject: '', inquiryMessage: '',
       myInquiries: [{ id: Date.now(), subject: inquirySubject, message: inquiryMessage, status: '답변중', answer: '' }, ...s.myInquiries],
     }));
+    try { var _q = JSON.parse(localStorage.getItem('teamccr_cms_req_inquiry')||'[]'); _q.unshift({ id: Date.now(), email: inquiryEmail, subject: inquirySubject, message: inquiryMessage, status:'답변중', answer:'', date: new Date().toISOString().slice(0,10) }); localStorage.setItem('teamccr_cms_req_inquiry', JSON.stringify(_q)); } catch(e){}
   };
   toggleInquiryExpand = (id) => this.setState(s => ({ expandedInquiryId: s.expandedInquiryId === id ? null : id }));
   closeMyInquiries = () => this.goBack();
@@ -2156,6 +2294,12 @@ class Component extends DCLogic {
   openRegionPicker = () => { this._measureOverlay(); this._lock(true); this.setState({ settingsPicker: 'region' }); };
   openLanguagePicker = () => { this._measureOverlay(); this._lock(true); this.setState({ settingsPicker: 'language' }); };
   openScreenModePicker = () => { this._measureOverlay(); this._lock(true); this.setState({ settingsPicker: 'screenMode' }); };
+  openLayoutPicker = () => { this._measureOverlay(); this._lock(true); this.setState({ settingsPicker: 'layout' }); };
+  selectLayout = (v) => {
+    try { localStorage.setItem('teamccr_browser_mode', v); } catch(e) {}
+    this._lock(false); this.setState({ settingsPicker: null });
+    if (v === 'responsive') { try { window.location.href = './responsive.html'; } catch(e) {} }
+  };
   selectScreenMode = (v) => {
     try { localStorage.setItem('teamccr_screen_mode', v); } catch(e) {}
     this._lock(false);
@@ -2163,6 +2307,10 @@ class Component extends DCLogic {
   };
   closeSettingsPicker = () => { this._lock(false); this.setState({ settingsPicker: null }); };
   selectRegion = (v) => { this._lock(false); this.setState({ draftRegion: v, settingsPicker: null }); };
+  selectRegionNow = (v) => {
+    try { localStorage.setItem('teamccr_region', v); } catch(e) {}
+    this.setState({ draftRegion: v, settingsRegion: v, settingsInitialRegion: v });
+  };
   selectLanguage = (v) => {
     try { localStorage.setItem('teamccr_language', v); } catch(e) {}
     this._lock(false);
@@ -2233,8 +2381,9 @@ class Component extends DCLogic {
 
   _storeVals(s) {
     const currency = s.settingsRegion === '한국' ? 'KRW' : 'USD';
-    const lang = s.settingsLanguage === '한국어' ? 'ko' : 'en';
-    const tr = (k) => (TR[k] ? TR[k][lang] : k);
+    const lang = ({'한국어':'ko','English':'en','日本語':'ja','中文':'zh'})[s.settingsLanguage] || 'ko';
+    const tr = (k) => (TR[k] ? (TR[k][lang] || TR[k].ko) : k);
+    const STORE_PRODUCTS = CMS_GET('store', STORE_PRODUCTS_DEFAULT);
     const storeCategoryChips = STORE_CATEGORIES.map(c => ({
       label: T(c, lang),
       onClick: () => this.setStoreCategory(c),
@@ -2261,6 +2410,7 @@ class Component extends DCLogic {
     const cartSelectedTotalLabel = fmtPriceCur(cartSelectedTotal, currency);
     return {
       storeCategoryChips, storeProducts, storeHasMore, showMoreStore: this.showMoreStore, activeStoreProduct, favoriteStoreProducts,
+      tYearSuffix: T('년식', lang), tAll: T('전체', lang),
       closeStoreProduct: this.closeStoreProduct,
       addToCartActive: activeStoreProduct ? () => this.addToCart(activeStoreProduct.id) : () => {},
       cartItems, cartCount, cartTotalLabel: fmtPriceCur(cartTotal, currency), cartSelectedTotalLabel, hasCartItems: cartItems.length > 0, noCartItems: cartItems.length === 0,
@@ -2274,8 +2424,24 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const currency = s.settingsRegion === '한국' ? 'KRW' : 'USD';
-    const lang = s.settingsLanguage === '한국어' ? 'ko' : 'en';
-    const tr = (k) => (TR[k] ? TR[k][lang] : k);
+    const lang = ({'한국어':'ko','English':'en','日本語':'ja','中文':'zh'})[s.settingsLanguage] || 'ko';
+    const tr = (k) => (TR[k] ? (TR[k][lang] || TR[k].ko) : k);
+    const PRODUCTS = CMS_GET('listings', PRODUCTS_DEFAULT);
+    const MAGAZINE_ARTICLES = CMS_GET('magazine', MAGAZINE_ARTICLES_DEFAULT);
+    const POLICY_EVENTS = CMS_GET('events', POLICY_EVENTS_DEFAULT);
+    const POLICY_NOTICES = CMS_GET('notices', POLICY_NOTICES_DEFAULT);
+    const INSTRUCTORS = CMS_GET('instructors', INSTRUCTORS_DEFAULT);
+    const _SITE = CMS_GET('site', null);
+    const _TEAM = CMS_GET('team', null);
+    const _footerLegal = _SITE ? (_SITE.name + ' · ' + _SITE.ceo + ' · 사업자등록번호 ' + _SITE.bizNo + ' · 통신판매업 ' + _SITE.mailOrder) : tr('footerLegal');
+    const _footerAddr = (_SITE && _SITE.addr) ? _SITE.addr : tr('footerAddr');
+    const _mapUrl = (_TEAM && _TEAM.mapUrl) ? _TEAM.mapUrl : MAP_EMBED_URL;
+    const _teamAddress = (_TEAM && _TEAM.address) ? _TEAM.address : '경기도 오산시 수청동 청학로 607-1 286';
+    const _teamCalendarUrl = (_TEAM && _TEAM.calendarUrl) ? _TEAM.calendarUrl : '';
+    const _HERO = CMS_GET('hero', HERO_DEFAULT);
+    const heroList = (_HERO && _HERO.length) ? _HERO : HERO_DEFAULT;
+    const heroN = heroList.length;
+    const heroW = 100 / (heroN + 2);
     const moodHue = { Teal:200, Violet:290, Coral:25, Forest:150 }[this.props.accentMood ?? 'Teal'];
     const sharp = (this.props.cornerStyle ?? 'Rounded') === 'Sharp';
     const compact = (this.props.density ?? 'Editorial') === 'Compact';
@@ -2294,17 +2460,17 @@ class Component extends DCLogic {
     }));
 
     const quickDefs = [
-      { icon:'✦', label: tr('qNewRequest'), view:'team' },
-      { icon:'⚙', label: tr('qOverhaul'), view:'team' },
-      { icon:'⚑', label: tr('qVisit'), view:'team' },
-      { icon:'🎓', label: tr('qEducation'), view:'team' },
+      { icon:'✦', label: tr('qNewRequest'), req:'newunit' },
+      { icon:'⚙', label: tr('qOverhaul'), req:'overhaul' },
+      { icon:'⚑', label: tr('qVisit'), req:'visit' },
+      { icon:'🎓', label: tr('qEducation'), req:'education' },
       { icon:'✉', label: tr('qInquiry'), view:'inquiry' },
     ];
-    const quickIcons = quickDefs.map(q => ({ ...q, onClick: () => (q.view === 'inquiry' && !s.loggedIn) ? this.openLoginScreen() : this.nav(q.view) }));
+    const quickIcons = quickDefs.map(q => ({ ...q, onClick: () => q.req ? this.openRequest(q.req) : ((q.view === 'inquiry' && !s.loggedIn) ? this.openLoginScreen() : this.nav(q.view)) }));
 
     const brandLogos = BRAND_SLOTS.map(b => ({ ...b, onClick: () => { this.setBrandFilter(b.label); this.nav('search'); }, tileBg: 'oklch(99% 0.002 240)', tilePad: '4px' }));
 
-        const productWithLabels = PRODUCTS.map(p => ({ ...p, priceLabel: fmtPriceCur(p.price, currency), specLine: p.condition==='신품' ? `${p.mount} · ${p.control} · 신품` : `${p.mount} · ${p.control} · ${p.hours}시간`, gradeLabel: p.condition==='신품' ? '신품' : `${p.grade}등급`, onOpen: () => this.openProduct(p.id), gradeStyleMd: gradeStyle(p.condition==='신품' ? '신품' : p.grade, '10.5px'), gradeStyleSm: gradeStyle(p.condition==='신품' ? '신품' : p.grade, '10px'), tags: productTags(p, 10), tagsSm: productTags(p, 9), isFavorite: !!s.favorites[p.id], favoriteIcon: s.favorites[p.id] ? '♥' : '♡', favoriteIconStyle: `width:26px; height:26px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-sizing:border-box; cursor:pointer; font-size:calc(16px * var(--font-scale)); color:${s.favorites[p.id] ? 'oklch(55% 0.20 20)' : 'oklch(55% 0.02 240)'};`, onToggleFavorite: (e) => { e.stopPropagation(); this.toggleFavorite(p.id); } }));
+        const productWithLabels = PRODUCTS.map(p => ({ ...p, saleTypeTr: T(p.saleType, lang), viewsLabel: `${T('조회', lang)} ${p.views}`, priceLabel: fmtPriceCur(p.price, currency), specLine: p.condition==='신품' ? `${p.mount} · ${p.control} · ${T('신품',lang)}` : `${p.mount} · ${p.control} · ${p.hours}${T('시간',lang)}`, gradeLabel: p.condition==='신품' ? T('신품',lang) : (lang==='en' ? `Grade ${p.grade}` : `${p.grade}등급`), onOpen: () => this.openProduct(p.id), gradeStyleMd: gradeStyle(p.condition==='신품' ? '신품' : p.grade, '10.5px'), gradeStyleSm: gradeStyle(p.condition==='신품' ? '신품' : p.grade, '10px'), tags: productTags(p, 10, lang), tagsSm: productTags(p, 9, lang), isFavorite: !!s.favorites[p.id], favoriteIcon: s.favorites[p.id] ? '♥' : '♡', favoriteIconStyle: `width:26px; height:26px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-sizing:border-box; cursor:pointer; font-size:calc(16px * var(--font-scale)); color:${s.favorites[p.id] ? 'oklch(55% 0.20 20)' : 'oklch(55% 0.02 240)'};`, onToggleFavorite: (e) => { e.stopPropagation(); this.toggleFavorite(p.id); } }));
 
     const homeProducts = productWithLabels.filter(p=>productTagLabels(p).includes('신규')).slice(0,4).map(p => ({ ...p, hasOldPrice:false, oldPriceLabel:'' }));
 
@@ -2324,7 +2490,7 @@ class Component extends DCLogic {
     const searchHasMore = filteredProducts.length > s.searchVisibleCount;
 
     const searchBrandChips = BRANDS.map(b => ({
-      label: b,
+      label: T(b, lang),
       onClick: () => this.setBrandFilter(b),
       style: `flex-shrink:0; font-size:calc(13px * var(--font-scale)); padding:7px 14px; border-radius:var(--chip-r); cursor:pointer; font-weight:600; background:${s.brandFilter===b?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.brandFilter===b?'oklch(97% 0.01 235)':'oklch(35% 0.02 240)'};`
     }));
@@ -2381,7 +2547,7 @@ class Component extends DCLogic {
     const modelList = Object.values(modelMap).map(m => ({ ...m, avgPrice: fmtPriceCur(m.sum/m.count, currency) }));
 
     const productRaw = productWithLabels.find(p => p.id === s.activeProductId) || productWithLabels[0];
-    const product = productRaw ? { ...productRaw, gradeStyleLg: gradeStyle(productRaw.grade, '11px'), badgeTr: T(productRaw.badge, lang), isFavorite: !!s.favorites[productRaw.id], toggleFavorite: () => this.toggleFavorite(productRaw.id), favoriteIcon: s.favorites[productRaw.id] ? '♥' : '♡', favoriteIconStyle: `width:26px; height:26px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-sizing:border-box; cursor:pointer; font-size:calc(16px * var(--font-scale)); color:${s.favorites[productRaw.id] ? 'oklch(55% 0.20 20)' : 'oklch(55% 0.02 240)'};` } : productRaw;
+    const product = productRaw ? { ...productRaw, gradeStyleLg: gradeStyle(productRaw.grade, '11px'), gradeLabelLg: productRaw.condition==='신품' ? T('신품', lang) : (lang==='en' ? `Grade ${productRaw.grade}` : `${productRaw.grade}등급`), badgeTr: T(productRaw.badge, lang), isFavorite: !!s.favorites[productRaw.id], toggleFavorite: () => this.toggleFavorite(productRaw.id), favoriteIcon: s.favorites[productRaw.id] ? '♥' : '♡', favoriteIconStyle: `width:26px; height:26px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-sizing:border-box; cursor:pointer; font-size:calc(16px * var(--font-scale)); color:${s.favorites[productRaw.id] ? 'oklch(55% 0.20 20)' : 'oklch(55% 0.02 240)'};` } : productRaw;
     const favoriteProducts = s.favoritesViewIds.map(id => productWithLabels.find(p => p.id === id)).filter(Boolean).map(p => ({ ...p, isFavorite: !!s.favorites[p.id], favoriteIcon: s.favorites[p.id] ? '♥' : '♡', favoriteIconStyle: `width:26px; height:26px; border-radius:var(--r-sm); border:1px solid oklch(85% 0.01 240); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-sizing:border-box; cursor:pointer; font-size:calc(16px * var(--font-scale)); color:${s.favorites[p.id] ? 'oklch(55% 0.20 20)' : 'oklch(55% 0.02 240)'};`, onToggleFavorite: (e) => { e.stopPropagation(); this.toggleFavorite(p.id); } }));
 
     const detailTabDefs = [ {key:'report',label:'인증 리포트'}, {key:'images',label:'상품 이미지'}, {key:'spec',label:'상세 스펙'} ];
@@ -2410,7 +2576,7 @@ class Component extends DCLogic {
     const selectedDay = s.selectedDayNum && eventDays[s.selectedDayNum] ? { date: `8월 ${s.selectedDayNum}일`, event: eventDays[s.selectedDayNum] } : null;
 
     const magazineCategoryChips = MAGAZINE_CATEGORIES.map(c => ({
-      label: c,
+      label: magCat(c, lang),
       onClick: () => this.setMagazineCategory(c),
       style: `flex-shrink:0; font-size:calc(13px * var(--font-scale)); padding:7px 14px; border-radius:var(--r-lg); cursor:pointer; font-weight:600; background:${s.magazineCategory===c?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.magazineCategory===c?'oklch(97% 0.01 235)':'oklch(35% 0.02 240)'};`
     }));
@@ -2419,29 +2585,44 @@ class Component extends DCLogic {
       'Guide': { grad:'linear-gradient(135deg, oklch(48% 0.09 210), oklch(26% 0.06 220))', icon:'M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z M9 12l2 2 4-4' },
       'Brand Focus': { grad:'linear-gradient(135deg, oklch(48% 0.13 300), oklch(26% 0.08 300))', icon:'M4 4h7l9 9-7 7-9-9V4Z M8 8h.01' },
       'Beginner': { grad:'linear-gradient(135deg, oklch(50% 0.1 150), oklch(28% 0.07 150))', icon:'M12 21s-7-4.5-7-10a5 5 0 0 1 9.5-2A5 5 0 0 1 19 11c0 5.5-7 10-7 10Z' },
-      'New Release News': { grad:'linear-gradient(135deg, oklch(52% 0.14 40), oklch(30% 0.09 35))', icon:'M5 3v4M3 5h4M13 4l1.5 3.5L18 9l-3.5 1.5L13 14l-1.5-3.5L8 9l3.5-1.5L13 4Z' },
+      'Product News': { grad:'linear-gradient(135deg, oklch(52% 0.14 40), oklch(30% 0.09 35))', icon:'M5 3v4M3 5h4M13 4l1.5 3.5L18 9l-3.5 1.5L13 14l-1.5-3.5L8 9l3.5-1.5L13 4Z' },
       'People': { grad:'linear-gradient(135deg, oklch(52% 0.1 80), oklch(30% 0.07 80))', icon:'M9 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM16.5 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM4 19c0-3 2.5-5 5-5s5 2 5 5M14.5 19c0-2.3 1.7-4 4-4s4 1.7 4 4' },
       'Research': { grad:'linear-gradient(135deg, oklch(46% 0.06 235), oklch(24% 0.04 235))', icon:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM21 21l-4.3-4.3' },
     };
-    const magazineNumbered = MAGAZINE_ARTICLES.map((a, i) => ({ ...a, postNumber: MAGAZINE_POST_NUMBERS[i] }));
+    const magazineNumbered = MAGAZINE_ARTICLES.map((a, i) => ({ ...a, postNumber: (a.postNumber != null ? a.postNumber : (MAGAZINE_POST_NUMBERS[i] != null ? MAGAZINE_POST_NUMBERS[i] : i + 1)) }));
     let magazineArticlesAll = magazineNumbered.filter(a => s.magazineCategory==='NEW' || a.category===s.magazineCategory);
     magazineArticlesAll = [...magazineArticlesAll].sort((a, b) => b.postNumber - a.postNumber);
-    magazineArticlesAll = magazineArticlesAll.map(a => ({ ...a, title: `${a.postNumber}. ${a.title}`, onOpen: () => this.openArticle(a.id), cardImgSlotId: a.cardSlotId || `${a.slotId}-1`,
+    magazineArticlesAll = magazineArticlesAll.map(a => ({ ...a, title: `${a.postNumber}. ${a.title}`, categoryLabel: magCat(a.category, lang), onOpen: () => this.openArticle(a.id), cardImgSlotId: a.cardSlotId || `${a.slotId}-1`,
       hasImage: FILLED_MAG_SLOTS.includes(a.slotId), cover: CATEGORY_COVER[a.category] || CATEGORY_COVER['Guide'] }));
     const magazineArticles = magazineArticlesAll.slice(0, s.magazineVisibleCount);
     const magazineHasMore = magazineArticlesAll.length > s.magazineVisibleCount;
 
     const activeArticleIdx = MAGAZINE_ARTICLES.findIndex(a => a.id === s.activeArticleId);
     const activeArticleRaw = activeArticleIdx >= 0 ? MAGAZINE_ARTICLES[activeArticleIdx] : MAGAZINE_ARTICLES[0];
-    const activeArticle = { ...activeArticleRaw, title: `${MAGAZINE_POST_NUMBERS[activeArticleIdx >= 0 ? activeArticleIdx : 0]}. ${activeArticleRaw.title}` };
+    const activeArticle = { ...activeArticleRaw, title: `${activeArticleRaw.postNumber != null ? activeArticleRaw.postNumber : MAGAZINE_POST_NUMBERS[activeArticleIdx >= 0 ? activeArticleIdx : 0]}. ${activeArticleRaw.title}`, categoryLabel: magCat(activeArticleRaw.category, lang) };
     const articleImages = Array.from({ length: activeArticle.imageCount || 1 }, (_, i) => ({ slotId: `${activeArticle.slotId}-${i + 1}` }));
-    const activeArticleBody = ARTICLE_BODY_BY_CATEGORY[activeArticle.category] || [];
+    const activeArticleBody = (activeArticleRaw.body && activeArticleRaw.body.length) ? activeArticleRaw.body : (ARTICLE_BODY_BY_CATEGORY[activeArticle.category] || []);
 
     return {
       rootStyle,
       isHome: s.view==='home', isSearch: s.view==='search', isDetail: s.view==='detail', isSell: s.view==='sell', isMypage: s.view==='mypage', isTeam: s.view==='team', isMagazine: s.view==='magazine', isInquiry: s.view==='inquiry', isMyInquiries: s.view==='myInquiries', isFavorites: s.view==='favorites', isCartPage: s.view==='cartPage', isMagazineDetail: s.view==='magazineDetail', isLogin: s.view==='login', goBack: this.goBack,
       isStore: s.view==='store', isStoreDetail: s.view==='storeDetail', isSettings: s.view==='settings', isSearchEntry: s.view==='searchEntry',
       isAppSettings: s.view==='appSettings', isPolicyEvent: s.view==='policyEvent', isPolicyNotice: s.view==='policyNotice', isPolicyDoc: s.view==='policyDoc',
+      isRequest: s.view==='request',
+      requestTitle: (this.reqForms[s.requestType]||{}).title || '',
+      requestIntro: (this.reqForms[s.requestType]||{}).intro || '',
+      requestSent: s.requestSent,
+      closeRequest: this.closeRequest, submitRequest: this.submitRequest,
+      requestFields: (() => {
+        const cfg = this.reqForms[s.requestType]; if (!cfg) return [];
+        const base = [['name','이름','text','성함'],['phone','연락처','text','010-0000-0000']];
+        return base.concat(cfg.fields).map(fd => {
+          const [key,label,type,ph,opts] = fd;
+          return { label, isText:type==='text', isTextarea:type==='textarea', isDate:type==='date', isSelect:type==='select',
+            placeholder: ph||'', value: (s.requestForm||{})[key] ?? (type==='select' ? (opts&&opts[0]) : ''),
+            options: (opts||[]).map(o => ({ v:o, label:o })), onInput: this.setRequestField(key) };
+        });
+      })(),
       magazineCategoryChips, magazineArticles, magazineHasMore, showMoreMagazine: this.showMoreMagazine, activeArticle, articleImages, activeArticleBody, closeArticle: this.closeArticle,
       nav: this.nav, navItems, toggleSearchBox: this.toggleSearchBox, searchBoxOpen: s.searchBoxOpen,
       goHome: () => this.nav('home'), goSearch: () => this.nav('search'), goTeam: () => this.nav('team'), goSell: () => this.nav('sell'),
@@ -2475,11 +2656,16 @@ class Component extends DCLogic {
       languageCode: ({'한국어':'KO','English':'EN','日本語':'JA','中文':'ZH'})[s.settingsLanguage] || 'KO',
       settingsPickerIsRegion: s.settingsPicker === 'region', settingsPickerIsLanguage: s.settingsPicker === 'language',
       settingsPickerIsScreenMode: s.settingsPicker === 'screenMode',
+      settingsPickerIsLayout: s.settingsPicker === 'layout',
+      openLayoutPicker: this.openLayoutPicker,
+      tBrowserMode: T('브라우저 모드', lang), tBrowserModeDesc: T('화면 크기에 맞는 레이아웃을 선택하세요', lang),
+      layoutOptionItems: [['fixed','고정형','(기본)'],['responsive','반응형','(PC · PAD)']].map(([v,label,sub]) => ({ label: T(label, lang), sub, active: v===((()=>{try{return localStorage.getItem('teamccr_browser_mode')||'fixed';}catch(e){return 'fixed';}})()), onClick: () => this.selectLayout(v) })),
       screenModeOptionItems: [['light','라이트'],['dark','다크'],['system','시스템 설정']].map(([v,label]) => ({ label, active: s.screenMode===v, onClick: () => this.selectScreenMode(v) })),
       isScreenModeLight: s.screenMode==='light', isScreenModeDark: s.screenMode==='dark', isScreenModeSystem: s.screenMode==='system', openScreenModePicker: this.openScreenModePicker,
       effectiveScreenMode: s.screenMode === 'system' ? (s.systemPrefersDark ? 'dark' : 'light') : (s.screenMode === 'dark' ? 'dark' : 'light'),
       settingsOverlayStyle: this._fixedOverlayStyle(s, 'z-index:120; background:oklch(20% 0.02 240 / 0.6); display:flex; align-items:center; justify-content:center; padding:24px;'),
-      regionOptionItems: ['한국','해외'].map(v => ({ label: v, onClick: () => this.selectRegion(v) })),
+      regionOptionItems: ['한국','해외'].map(v => ({ label: T(v, lang), onClick: () => this.selectRegion(v) })),
+      regionOptionNowItems: ['한국','해외'].map(v => ({ label: T(v, lang), currency: v==='한국' ? 'KRW' : 'USD', onClick: () => this.selectRegionNow(v), style: `padding:13px 2px; font-size:calc(14px * var(--font-scale)); cursor:pointer; display:flex; align-items:center; gap:8px; color:${s.settingsRegion===v ? 'oklch(45% 0.14 var(--accent-h))' : 'oklch(28% 0.02 240)'}; font-weight:${s.settingsRegion===v ? '700' : '400'};` })),
       languageOptionItems: [{label:'한국어',code:'KO'},{label:'English',code:'EN'},{label:'日本語',code:'JA'},{label:'中文',code:'ZH'}].map(o => ({ ...o, onClick: () => this.selectLanguage(o.label) })),
       applySettings: this.applySettings,
       settingsApplyBtnStyle: (() => {
@@ -2509,7 +2695,14 @@ class Component extends DCLogic {
       product, closeDetail: this.closeDetail, detailSpecIcons: [ {icon:'✓',label:'검수인증서'}, {icon:'⚙',label: product ? `오버홀 ${product.overhaul}` : '오버홀이력'}, {icon:'▤',label:'구성품 포함'}, {icon:'!',label:'특이사항 없음'} ],
       showBuyToast: this.showBuyToast, buyToastOpen: s.buyToastOpen,
       detailTabs, detailTabIsReport: s.detailTab==='report', detailTabIsImages: s.detailTab==='images', detailTabIsSpec: s.detailTab==='spec', inspectionParts,
-      recentDeals: DEALS, policyAccordion,
+      recentDeals: DEALS.map(d => ({ ...d, overhaul: T(d.overhaul, lang) })), policyAccordion,
+      tDetailSpec: T('상세 스펙', lang), tDetailImages: T('상품 이미지', lang), tDetailReport: T('인증 리포트', lang),
+      tReleaseYear: T('출시년도', lang), tMountType: T('마운트타입', lang), tControlType: T('제어방식', lang), tUsageHours: T('사용시간', lang), tHoursSuffix: T('시간', lang),
+      tReportBody: T('전 항목 검수 통과 · 호흡회로/전자계통 정상 작동 확인 · 판정기준 문서', lang), tView: T('보기', lang),
+      tRecentPrices: T('TEAMCCR 실거래가', lang), tDealDate: T('거래일', lang), tOverhaulHistory: T('오버홀이력', lang), tDealPrice: T('거래가', lang),
+      tProductDetailTitle: T('상품 상세', lang), tProductImage: T('제품 이미지', lang), tBuyNow: T('구매하기', lang), tCheckoutDemo: T('데모 프로토타입에서는 결제가 비활성화되어 있습니다.', lang),
+      tCareSubtitle: T('구매와 함께 가입 시 무상 정기점검 제공', lang), tShippingInfo: T('배송정보', lang), tSaleInfo: T('판매정보', lang), tProductNo: T('상품번호', lang),
+      tFastShipping: T('빠른 배송(1~2일) · 센터 픽업 가능', lang), tVisitCenter: T('센터에서 실물 확인 가능한 상품입니다.', lang), tCertResults: T('TEAMCCR 인증 결과', lang), tSaleTypeVal: product ? T(product.saleType, lang) : '',
       consignCardStyle: `padding:16px; border-radius:12px; cursor:pointer; background:${s.sellType==='consign'?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.sellType==='consign'?'oklch(97% 0.01 235)':'oklch(20% 0.02 240)'};`,
       buyoutCardStyle: `padding:16px; border-radius:12px; cursor:pointer; background:${s.sellType==='buyout'?'oklch(24% 0.03 235)':'oklch(94% 0.01 240)'}; color:${s.sellType==='buyout'?'oklch(97% 0.01 235)':'oklch(20% 0.02 240)'};`,
       selectSellType: this.selectSellType, sellTypeIsConsign: s.sellType==='consign', sellTypeIsBuyout: s.sellType==='buyout',
@@ -2520,7 +2713,7 @@ class Component extends DCLogic {
       exchangeRateLabel: EXCHANGE_RATE.toLocaleString('ko-KR'),
       tSectionBrand: tr('sectionBrand'), tSectionNew: tr('sectionNew'), tSectionDrop: tr('sectionDrop'), tSectionTrend: tr('sectionTrend'), tSectionBudget: tr('sectionBudget'),
       tSeeAll: tr('seeAll'), tMore: tr('more'), tCartTitle: tr('cartTitle'), tCartEmpty: tr('cartEmpty'), tAddToCart: tr('addToCart'), tBuyNow: tr('buyNow'),
-      tLoginSignup: tr('loginSignup'), tFooterLegal: tr('footerLegal'), tFooterAddr: tr('footerAddr'), tFooterTerms: tr('footerTerms'), tFooterPolicy: tr('footerPolicy'), tFooterPrivacy: tr('footerPrivacy'),
+      tLoginSignup: tr('loginSignup'), tFooterLegal: _footerLegal, tFooterAddr: _footerAddr, tFooterTerms: tr('footerTerms'), tFooterPolicy: tr('footerPolicy'), tFooterPrivacy: tr('footerPrivacy'),
       goPolicyDoc: () => this.nav('policyDoc'),
       tLangSettingsTitle: tr('langSettingsTitle'), tRegion: tr('region'), tLanguage: tr('language'), tCurrency: tr('currency'), tChangeBtn: tr('changeBtn'),
       tEventsTitle: tr('eventsTitle'), tNoticeTitle: tr('noticeTitle'), tPolicyTitle: tr('policyTitle'),
@@ -2536,13 +2729,13 @@ class Component extends DCLogic {
       myMenu: MY_MENU.map(m => ({ ...m, label: T(m.label, lang), count: m.action==='myInquiries' ? `총 ${s.myInquiries.length}건 · 답변대기 ${s.myInquiries.filter(i=>i.status==='답변중').length}건` : (m.action==='favorites' ? `${Object.values(s.favorites).filter(Boolean).length}건` : (m.action==='cartPage' ? `${Object.values(s.cart).reduce((a,b)=>a+b,0)}건` : m.count)), onClick: m.action==='favorites' ? this.goFavorites : (m.action==='cartPage' ? this.goCartPage : (m.action ? () => this.nav(m.action) : undefined)) })),
       goAppSettings: this.goAppSettings,
       appSettingsMenu: [
-        { label:'언어 변경', value:'한국어 ›', onClick: () => this.nav('settings'), cursor:'pointer' },
-        { label:'화면 모드', value: ({light:'라이트',dark:'다크',system:'시스템 설정'}[s.screenMode] || '시스템 설정') + ' ›', onClick: this.openScreenModePicker, cursor:'pointer' },
-        { label:'이용 약관', value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
-        { label:'이용 정책', value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
-        { label:'오픈소스 라이선스', value:'›', onClick: undefined, cursor:'default' },
-        { label:'개인정보 처리방침', value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
-        { label:'버전정보', value:'1.0.0', onClick: undefined, cursor:'default' },
+        { label:T('언어 변경', lang), value:s.settingsLanguage + ' ›', onClick: () => this.nav('settings'), cursor:'pointer' },
+        { label:T('화면 모드', lang), value: T(({light:'라이트',dark:'다크',system:'시스템 설정'}[s.screenMode] || '시스템 설정'), lang) + ' ›', onClick: this.openScreenModePicker, cursor:'pointer' },
+        { label:T('이용 약관', lang), value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
+        { label:T('이용 정책', lang), value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
+        { label:T('오픈소스 라이선스', lang), value:'›', onClick: undefined, cursor:'default' },
+        { label:T('개인정보 처리방침', lang), value:'›', onClick: () => this.nav('policyDoc'), cursor:'pointer' },
+        { label:T('버전정보', lang), value:'1.0.0', onClick: undefined, cursor:'default' },
       ],
       policyEvents: POLICY_EVENTS,
       noticeTabs: NOTICE_TABS.map(t => ({ label: T(t, lang), onClick: () => this.setNoticeTab(t), style: `flex-shrink:0; font-size:calc(12px * var(--font-scale)); padding:7px 14px; border-radius:var(--chip-r); cursor:pointer; ${s.noticeTab===t ? 'background:oklch(24% 0.03 235); color:oklch(97% 0.01 235);' : 'background:oklch(94% 0.01 240); color:oklch(40% 0.02 240);'}` })),
@@ -2554,7 +2747,7 @@ class Component extends DCLogic {
         onPhoneClick: (e) => { e.stopPropagation(); if (window.confirm(ins.contact.split(' · ')[1] + ' 로 전화를 거시겠습니까?')) window.location.href = 'tel:' + ins.contact.split(' · ')[1]; },
       })),
       weekdayLabels, calendarDays, selectedDay, startDrag: this.startDrag,
-      mapEmbedUrl: MAP_EMBED_URL, openMap: this.openMap, closeMap: this.closeMap, mapExpanded: s.mapExpanded, stopClick: this.stopClick,
+      mapEmbedUrl: _mapUrl, teamAddress: _teamAddress, teamCalendarUrl: _teamCalendarUrl, openMap: this.openMap, closeMap: this.closeMap, mapExpanded: s.mapExpanded, stopClick: this.stopClick,
       activeInstructor: INSTRUCTORS.find(i => i.slotId === s.activeInstructorSlot) || null,
       closeInstructor: this.closeInstructor,
       instructorOverlayStyle: this._fixedOverlayStyle(s, 'z-index:100; background:oklch(20% 0.02 240 / 0.85); display:flex; flex-direction:column; cursor:pointer; touch-action:none; overscroll-behavior:contain;'),
@@ -2563,10 +2756,10 @@ class Component extends DCLogic {
       hideTodayChecked: s.hideTodayChecked, toggleHideToday: this.toggleHideToday,
       hideTodayBoxStyle: `width:16px; height:16px; border-radius:4px; border:1px solid ${s.hideTodayChecked ? 'oklch(24% 0.03 235)' : 'oklch(40% 0.02 240)'}; background:${s.hideTodayChecked ? 'oklch(24% 0.03 235)' : 'transparent'}; color:oklch(97% 0.01 235); font-size:calc(11px * var(--font-scale)); display:flex; align-items:center; justify-content:center; flex-shrink:0;`,
       ...this._storeVals(s),
-      heroTrackStyle: `display:flex; width:500%; height:100%; cursor:grab; touch-action:pan-y; transform:translateX(calc(-${s.heroTrackIndex*20}% + ${s.heroDragOffset}px)); transition:${(s.heroDragging || s.heroNoTransition) ? 'none' : 'transform 0.35s cubic-bezier(.22,.61,.36,1)'};`,
-      heroIndicator: (() => { const r = ((s.heroTrackIndex - 1) % 3 + 3) % 3; return `${r+1} / 3`; })(),
-      heroDots: [0,1,2].map(i => { const r = ((s.heroTrackIndex - 1) % 3 + 3) % 3; return { style: `width:5px; height:5px; border-radius:50%; background:${i===r ? 'oklch(96% 0.01 235)' : 'oklch(96% 0.01 235 / 0.35)'};` }; }),
-      heroSlides: [2,0,1,2,0].map(n => ({ slotId: 'hero-banner-' + n })),
+      heroTrackStyle: `display:flex; width:${(heroN+2)*100}%; height:100%; cursor:grab; touch-action:pan-y; transform:translateX(calc(-${s.heroTrackIndex*heroW}% + ${s.heroDragOffset}px)); transition:${(s.heroDragging || s.heroNoTransition) ? 'none' : 'transform 0.35s cubic-bezier(.22,.61,.36,1)'};`,
+      heroIndicator: (() => { const r = ((s.heroTrackIndex - 1) % heroN + heroN) % heroN; return `${r+1} / ${heroN}`; })(),
+      heroDots: Array.from({length: heroN}, (_, i) => i).map(i => { const r = ((s.heroTrackIndex - 1) % heroN + heroN) % heroN; return { style: `width:5px; height:5px; border-radius:50%; background:${i===r ? 'oklch(96% 0.01 235)' : 'oklch(96% 0.01 235 / 0.35)'};` }; }),
+      heroSlides: [heroList[heroN-1]].concat(heroList).concat([heroList[0]]).map(o => ({ slotId: o.slotId, width: heroW + '%' })),
       pauseHero: this.pauseHero, resumeHero: this.resumeHero, heroPointerDown: this.heroPointerDown, heroContainerClick: this.heroContainerClick, heroTransitionEnd: this.heroTransitionEnd,
     };
   }

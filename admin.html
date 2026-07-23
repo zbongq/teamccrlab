@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; }
+    ::-webkit-scrollbar { width:10px; height:10px; }
+    ::-webkit-scrollbar-thumb { background:oklch(85% 0.01 240); border-radius:6px; }
+    a { color: oklch(52% 0.13 255); }
+    a:hover { color: oklch(44% 0.14 255); }
+    input, textarea, select { font-family:'IBM Plex Sans KR', sans-serif; }
+  </style>
+  <script src="./cms-data.js"></script>
+  <script src="./image-slot.js"></script>
+</helmet>
+<div style="display:flex; min-height:100vh; font-family:'IBM Plex Sans KR', sans-serif; background:oklch(97% 0.004 240); color:oklch(22% 0.02 240);">
+
+  <aside style="width:248px; flex-shrink:0; background:oklch(22% 0.02 245); color:oklch(90% 0.01 240); position:sticky; top:0; height:100vh; overflow-y:auto; padding:22px 0;">
+    <div style="padding:0 22px 20px;">
+      <div style="font-size:17px; font-weight:700; color:oklch(97% 0.01 240); letter-spacing:-0.01em;">TEAMCCR</div>
+      <div style="font-size:12px; color:oklch(70% 0.03 250); margin-top:2px;">관리자 콘솔</div>
+    </div>
+    <sc-for list="{{ navGroups }}" as="g" hint-placeholder-count="5">
+      <div style="padding:6px 12px;">
+        <sc-if value="{{ g.title }}"><div style="font-size:10.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:oklch(62% 0.03 250); padding:12px 10px 6px;">{{ g.title }}</div></sc-if>
+        <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+          <div onClick="{{ it.onClick }}" style="{{ it.style }}"><span>{{ it.label }}</span><sc-if value="{{ it.badge }}"><span style="background:oklch(62% 0.19 25); color:#fff; font-size:10px; font-weight:700; border-radius:9px; padding:1px 7px;">{{ it.badge }}</span></sc-if></div>
+        </sc-for>
+      </div>
+    </sc-for>
+    <div style="padding:18px 22px 0;">
+      <div onClick="{{ onResetAll }}" style="font-size:11px; color:oklch(60% 0.03 250); cursor:pointer; text-decoration:underline;">모든 편집 내용 초기화</div>
+      <a href="./index.html" style="display:block; margin-top:10px; font-size:11px; color:oklch(70% 0.03 250);">← 사이트로 돌아가기</a>
+    </div>
+  </aside>
+
+  <main style="flex:1; min-width:0; display:flex; flex-direction:column;">
+    <header style="background:#fff; border-bottom:1px solid oklch(91% 0.008 240); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:5;">
+      <div>
+        <sc-if value="{{ isEdit }}"><div onClick="{{ onBack }}" style="font-size:12px; color:oklch(50% 0.02 240); cursor:pointer; margin-bottom:4px;">← 목록으로</div></sc-if>
+        <div style="font-size:20px; font-weight:700; letter-spacing:-0.01em;">{{ headerTitle }}</div>
+        <sc-if value="{{ headerSub }}"><div style="font-size:12.5px; color:oklch(52% 0.02 240); margin-top:3px;">{{ headerSub }}</div></sc-if>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <sc-if value="{{ showAdd }}"><div onClick="{{ onAdd }}" style="background:oklch(52% 0.14 255); color:#fff; font-size:13px; font-weight:600; padding:10px 18px; border-radius:9px; cursor:pointer;">+ 새로 등록</div></sc-if>
+        <sc-if value="{{ isEdit }}">
+          <sc-if value="{{ canDelete }}"><div onClick="{{ onDelete }}" style="background:oklch(95% 0.02 25); color:oklch(50% 0.18 25); font-size:13px; font-weight:600; padding:10px 18px; border-radius:9px; cursor:pointer;">삭제</div></sc-if>
+          <div onClick="{{ onSave }}" style="background:oklch(52% 0.14 255); color:#fff; font-size:13px; font-weight:600; padding:10px 22px; border-radius:9px; cursor:pointer;">{{ saveLabel }}</div>
+        </sc-if>
+      </div>
+    </header>
+
+    <div style="flex:1; padding:28px 32px 60px;">
+
+      <sc-if value="{{ isDashboard }}">
+        <div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:16px;">
+            <sc-for list="{{ stats }}" as="st" hint-placeholder-count="6">
+              <div onClick="{{ st.onClick }}" style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:14px; padding:20px; cursor:pointer;">
+                <div style="font-size:12.5px; color:oklch(52% 0.02 240);">{{ st.label }}</div>
+                <div style="font-size:30px; font-weight:700; margin-top:8px; letter-spacing:-0.02em;">{{ st.value }}</div>
+                <sc-if value="{{ st.hint }}"><div style="font-size:11.5px; color:oklch(60% 0.04 255); margin-top:4px;">{{ st.hint }}</div></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:14px; padding:22px; margin-top:22px;">
+            <div style="font-size:14px; font-weight:700;">데이터 저장 방식 안내</div>
+            <div style="font-size:12.5px; color:oklch(45% 0.02 240); line-height:1.7; margin-top:8px;">이 프로토타입은 별도 서버 없이 브라우저 저장소(localStorage)에 편집 내용을 저장합니다. 관리자 페이지에서 게시하면 <b>같은 브라우저</b>의 사이트(index.html)에 즉시 반영됩니다. 실제 운영에서는 서버·데이터베이스·관리자 로그인이 필요합니다.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isList }}">
+        <div style="background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:14px; overflow:hidden;">
+          <div style="{{ headRowStyle }}">
+            <sc-for list="{{ listColumns }}" as="c" hint-placeholder-count="4"><div style="{{ c.style }}">{{ c.label }}</div></sc-for>
+          </div>
+          <sc-for list="{{ listRows }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.onOpen }}" style="{{ r.style }}">
+              <sc-for list="{{ r.cells }}" as="cell" hint-placeholder-count="4"><div style="{{ cell.style }}">{{ cell.v }}</div></sc-for>
+            </div>
+          </sc-for>
+          <sc-if value="{{ listEmpty }}"><div style="padding:40px; text-align:center; color:oklch(60% 0.02 240); font-size:13px;">항목이 없습니다.</div></sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isEdit }}">
+        <div style="max-width:720px; background:#fff; border:1px solid oklch(92% 0.008 240); border-radius:14px; padding:26px; display:flex; flex-direction:column; gap:20px;">
+          <sc-for list="{{ editFields }}" as="f" hint-placeholder-count="6">
+            <div>
+              <div style="font-size:12.5px; font-weight:600; color:oklch(35% 0.02 240); margin-bottom:7px;">{{ f.label }}<sc-if value="{{ f.hint }}"><span style="font-weight:400; color:oklch(60% 0.02 240); margin-left:6px;">{{ f.hint }}</span></sc-if></div>
+              <sc-if value="{{ f.isText }}"><input value="{{ f.value }}" onInput="{{ f.onInput }}" style="{{ inputStyle }}" /></sc-if>
+              <sc-if value="{{ f.isNumber }}"><input value="{{ f.value }}" onInput="{{ f.onInput }}" inputmode="numeric" style="{{ inputStyle }}" /></sc-if>
+              <sc-if value="{{ f.isDate }}"><input value="{{ f.value }}" onInput="{{ f.onInput }}" placeholder="2026.07.20" style="{{ inputStyle }}" /></sc-if>
+              <sc-if value="{{ f.isTextarea }}"><textarea value="{{ f.value }}" onInput="{{ f.onInput }}" rows="6" style="{{ areaStyle }}"></textarea></sc-if>
+              <sc-if value="{{ f.isSelect }}"><select value="{{ f.value }}" onChange="{{ f.onInput }}" style="{{ inputStyle }}"><sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></sc-if>
+              <sc-if value="{{ f.isReadonly }}"><div style="font-size:13.5px; color:oklch(28% 0.02 240); line-height:1.6; white-space:pre-line; background:oklch(97% 0.004 240); border-radius:9px; padding:12px 14px;">{{ f.value }}</div></sc-if>
+              <sc-if value="{{ f.isImage }}">
+                <div style="width:{{ f.imgW }}; height:{{ f.imgH }}; border:1px dashed oklch(82% 0.01 240); border-radius:10px; overflow:hidden;">
+                  <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ f.slotId }}" shape="rect" fit="cover" placeholder="{{ f.label }} 드래그하여 업로드" hint-size="100%,100%" style="width:100%; height:100%;"></x-import>
+                </div>
+                <div style="font-size:11px; color:oklch(60% 0.02 240); margin-top:5px;">슬롯 ID: {{ f.slotId }} — 사이트와 자동 연동</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <sc-if value="{{ toast }}"><div style="position:fixed; bottom:26px; left:50%; transform:translateX(-50%); background:oklch(24% 0.02 245); color:#fff; font-size:13px; padding:12px 22px; border-radius:10px; z-index:50;">{{ toast }}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { section: 'dashboard', view: 'list', draft: null, editIndex: null, toast: '' };
+
+  navGroups = [
+    { title: '', items: ['dashboard'] },
+    { title: '매물 · 상품', items: ['listings', 'store'] },
+    { title: '콘텐츠', items: ['hero', 'magazine', 'events', 'notices'] },
+    { title: '요청 · 문의', items: ['req_consign', 'req_buyout', 'req_newunit', 'req_overhaul', 'req_visit', 'req_education', 'req_inquiry'] },
+    { title: '운영', items: ['members', 'team', 'site', 'policies'] },
+  ];
+
+  defs = {
+    dashboard: { title: '대시보드' },
+    listings: {
+      title: '리브리더 매물', cmsKey: 'listings', defaultsKey: 'PRODUCTS',
+      columns: [ {k:'id',label:'번호',w:'0.7'}, {k:'brand',label:'브랜드',w:'1'}, {k:'model',label:'모델',w:'1.3'}, {k:'price',label:'가격',w:'1',money:true}, {k:'saleType',label:'판매형태',w:'1'}, {k:'condition',label:'상태',w:'0.7'} ],
+      fields: [
+        {key:'id',label:'매물 번호',type:'text'},
+        {key:'brand',label:'브랜드',type:'select',opts:['Divesoft','JJ-CCR','KISS','AP Diving','rEvo','Halcyon','Dive Rite','iQsub','SF2']},
+        {key:'model',label:'모델명',type:'text'},
+        {key:'mount',label:'마운트',type:'select',opts:['BM','SM']},
+        {key:'control',label:'제어방식',type:'select',opts:['eCCR','mCCR','Hybrid','SCR']},
+        {key:'year',label:'출시년도',type:'number'},
+        {key:'hours',label:'사용시간',type:'number'},
+        {key:'grade',label:'검수등급',type:'select',opts:['S','A','B','C','']},
+        {key:'price',label:'가격(원)',type:'number'},
+        {key:'saleType',label:'판매형태',type:'select',opts:['위탁형','매입형','TEAMCCR 정품']},
+        {key:'condition',label:'상태',type:'select',opts:['중고','신품']},
+        {key:'overhaul',label:'오버홀',type:'select',opts:['완료','필요','없음']},
+        {key:'views',label:'조회수',type:'number'},
+      ],
+    },
+    store: {
+      title: '스토어 상품', cmsKey: 'store', defaultsKey: 'STORE_PRODUCTS',
+      columns: [ {k:'id',label:'ID',w:'0.7'}, {k:'category',label:'분류',w:'1'}, {k:'name',label:'상품명',w:'1.6'}, {k:'price',label:'가격',w:'1',money:true} ],
+      fields: [
+        {key:'id',label:'상품 ID',type:'text'},
+        {key:'category',label:'분류',type:'select',opts:['드라이수트','마스크/스노클','다이브 컴퓨터','산소센서','소다라임/스크러버','호스/피팅','툴/액세서리']},
+        {key:'name',label:'상품명',type:'text'},
+        {key:'price',label:'가격(원)',type:'number'},
+        {key:'desc',label:'설명',type:'textarea'},
+        {key:'slotId',label:'이미지 슬롯 ID',type:'text',hint:'예: store-st1'},
+        {key:'_img',label:'상품 이미지',type:'image',imgW:'220px',imgH:'160px',slot:(d)=>d.slotId||('store-'+(d.id||'new'))},
+      ],
+    },
+    hero: {
+      title: '홈 히어로 이미지', cmsKey: 'hero', defaultsKey: 'HERO',
+      columns: [ {k:'slotId',label:'슬롯 ID (배너 순서대로)',w:'1'} ],
+      fields: [
+        {key:'slotId',label:'슬롯 ID',type:'text',hint:'사이트 배너와 연동되는 고유 ID'},
+        {key:'_img',label:'배너 이미지 (16:9 권장)',type:'image',imgW:'340px',imgH:'191px',slot:(d)=>d.slotId||('hero-new')},
+      ],
+    },
+    magazine: {
+      title: '매거진', cmsKey: 'magazine', defaultsKey: 'MAGAZINE_ARTICLES',
+      columns: [ {k:'category',label:'분류',w:'1'}, {k:'postNumber',label:'번호',w:'0.6'}, {k:'title',label:'제목',w:'2.4'}, {k:'date',label:'날짜',w:'0.9'} ],
+      fields: [
+        {key:'id',label:'글 ID',type:'text',hint:'예: m4'},
+        {key:'category',label:'분류',type:'select',opts:['Beginner','Brand Focus','Guide','Product News','People','Research']},
+        {key:'postNumber',label:'게시 번호',type:'number'},
+        {key:'title',label:'제목',type:'text'},
+        {key:'excerpt',label:'요약',type:'text'},
+        {key:'date',label:'날짜',type:'date'},
+        {key:'slotId',label:'이미지 슬롯 베이스',type:'text',hint:'예: mag-4'},
+        {key:'imageCount',label:'본문 이미지 수',type:'number'},
+        {key:'body',label:'본문 (문단은 빈 줄로 구분)',type:'textarea'},
+        {key:'_cover',label:'커버 이미지',type:'image',imgW:'260px',imgH:'146px',slot:(d)=>d.cardSlotId||((d.slotId||'mag')+'-cover')},
+        {key:'_b1',label:'본문 이미지 1',type:'image',imgW:'260px',imgH:'146px',slot:(d)=>(d.slotId||'mag')+'-1'},
+        {key:'_b2',label:'본문 이미지 2',type:'image',imgW:'260px',imgH:'146px',slot:(d)=>(d.slotId||'mag')+'-2'},
+      ],
+    },
+    events: {
+      title: '이벤트', cmsKey: 'events', defaultsKey: 'POLICY_EVENTS',
+      columns: [ {k:'title',label:'제목',w:'1.4'}, {k:'desc',label:'설명',w:'2'} ],
+      fields: [
+        {key:'title',label:'제목',type:'text'},
+        {key:'desc',label:'설명',type:'text'},
+        {key:'bg',label:'배경 그라디언트 (CSS)',type:'text',hint:'linear-gradient(...)'},
+      ],
+    },
+    notices: {
+      title: '공지사항', cmsKey: 'notices', defaultsKey: 'POLICY_NOTICES',
+      columns: [ {k:'tag',label:'분류',w:'1.2'}, {k:'title',label:'제목',w:'2.6'}, {k:'date',label:'날짜',w:'0.9'} ],
+      fields: [
+        {key:'tag',label:'분류',type:'select',opts:['주요 서비스 공지','당첨 안내','이벤트/프로모션 안내']},
+        {key:'title',label:'제목',type:'text'},
+        {key:'date',label:'날짜',type:'date'},
+      ],
+    },
+    req_consign: { title: '판매요청 · 위탁형', cmsKey:'req_consign', defaultsKey:'REQ_CONSIGN', intake:true,
+      columns:[{k:'id',label:'접수번호',w:'0.9'},{k:'name',label:'이름',w:'0.9'},{k:'model',label:'모델',w:'1.4'},{k:'desiredPrice',label:'희망가',w:'1',money:true},{k:'date',label:'접수일',w:'0.9'},{k:'status',label:'상태',w:'0.8'}],
+      fields:[{key:'name',label:'이름',type:'readonly'},{key:'phone',label:'연락처',type:'readonly'},{key:'model',label:'모델',type:'readonly'},{key:'desiredPrice',label:'희망 판매가',type:'readonly'},{key:'memo',label:'메모',type:'readonly'},{key:'date',label:'접수일',type:'readonly'},{key:'status',label:'처리 상태',type:'select',opts:['접수','검토중','완료','반려']}] },
+    req_buyout: { title: '판매요청 · 매입형', cmsKey:'req_buyout', defaultsKey:'REQ_BUYOUT', intake:true,
+      columns:[{k:'id',label:'접수번호',w:'0.9'},{k:'name',label:'이름',w:'0.9'},{k:'model',label:'모델',w:'1.4'},{k:'desiredPrice',label:'희망가',w:'1',money:true},{k:'date',label:'접수일',w:'0.9'},{k:'status',label:'상태',w:'0.8'}],
+      fields:[{key:'name',label:'이름',type:'readonly'},{key:'phone',label:'연락처',type:'readonly'},{key:'model',label:'모델',type:'readonly'},{key:'desiredPrice',label:'희망 매입가',type:'readonly'},{key:'memo',label:'메모',type:'readonly'},{key:'date',label:'접수일',type:'readonly'},{key:'status',label:'처리 상태',type:'select',opts:['접수','검토중','완료','반려']}] },
+    req_newunit: { title: '신품 구매 요청', cmsKey:'req_newunit', defaultsKey:'REQ_NEWUNIT', intake:true,
+      columns:[{k:'id',label:'접수번호',w:'0.9'},{k:'name',label:'이름',w:'0.9'},{k:'model',label:'희망 모델',w:'1.6'},{k:'date',label:'접수일',w:'0.9'},{k:'status',label:'상태',w:'0.8'}],
+      fields:[{key:'name',label:'이름',type:'readonly'},{key:'phone',label:'연락처',type:'readonly'},{key:'model',label:'희망 모델',type:'readonly'},{key:'memo',label:'메모',type:'readonly'},{key:'date',label:'접수일',type:'readonly'},{key:'status',label:'처리 상태',type:'select',opts:['접수','견적발송','완료','반려']}] },
+    req_overhaul: { title: '오버홀 신청', cmsKey:'req_overhaul', defaultsKey:'REQ_OVERHAUL', intake:true,
+      columns:[{k:'id',label:'접수번호',w:'0.9'},{k:'name',label:'이름',w:'0.9'},{k:'model',label:'모델',w:'1.6'},{k:'date',label:'접수일',w:'0.9'},{k:'status',label:'상태',w:'0.8'}],
+      fields:[{key:'name',label:'이름',type:'readonly'},{key:'phone',label:'연락처',type:'readonly'},{key:'model',label:'모델',type:'readonly'},{key:'memo',label:'요청 내용',type:'readonly'},{key:'date',label:'접수일',type:'readonly'},{key:'status',label:'처리 상태',type:'select',opts:['접수','점검중','완료','반려']}] },
+    req_visit: { title: '센터 방문예약', cmsKey:'req_visit', defaultsKey:'REQ_VISIT', intake:true,
+      columns:[{k:'id',label:'접수번호',w:'0.9'},{k:'name',label:'이름',w:'0.9'},{k:'visitDate',label:'방문희망일',w:'1.2'},{k:'date',label:'접수일',w:'0.9'},{k:'status',label:'상태',w:'0.9'}],
+      fields:[{key:'name',label:'이름',type:'readonly'},{key:'phone',label:'연락처',type:'readonly'},{key:'visitDate',label:'방문 희망일',type:'readonly'},{key:'memo',label:'메모',type:'readonly'},{key:'date',label:'접수일',type:'readonly'},{key:'status',label:'처리 상태',type:'select',opts:['예약대기','예약확정','완료','취소']}] },
+    req_education: { title: '교육 신청', cmsKey:'req_education', defaultsKey:'REQ_EDUCATION', intake:true,
+      columns:[{k:'id',label:'접수번호',w:'0.9'},{k:'name',label:'이름',w:'0.9'},{k:'course',label:'과정',w:'1.6'},{k:'date',label:'접수일',w:'0.9'},{k:'status',label:'상태',w:'0.8'}],
+      fields:[{key:'name',label:'이름',type:'readonly'},{key:'phone',label:'연락처',type:'readonly'},{key:'course',label:'신청 과정',type:'readonly'},{key:'memo',label:'메모',type:'readonly'},{key:'date',label:'접수일',type:'readonly'},{key:'status',label:'처리 상태',type:'select',opts:['접수','확정','완료','반려']}] },
+    req_inquiry: { title: '온라인 문의', cmsKey:'req_inquiry', defaultsKey:'REQ_INQUIRY', intake:true,
+      columns:[{k:'id',label:'번호',w:'0.5'},{k:'email',label:'이메일',w:'1.6'},{k:'subject',label:'제목',w:'2'},{k:'status',label:'상태',w:'0.8'}],
+      fields:[{key:'email',label:'문의자 이메일',type:'readonly'},{key:'subject',label:'제목',type:'readonly'},{key:'message',label:'문의 내용',type:'readonly'},{key:'date',label:'접수일',type:'readonly'},{key:'answer',label:'답변 작성',type:'textarea'},{key:'status',label:'상태',type:'select',opts:['답변중','답변완료']}] },
+    members: {
+      title: '회원 관리', cmsKey: 'members', defaultsKey: 'MEMBERS',
+      columns: [ {k:'id',label:'회원 ID',w:'1'}, {k:'name',label:'이름',w:'1'}, {k:'email',label:'이메일',w:'1.8'}, {k:'region',label:'지역',w:'0.7'}, {k:'status',label:'상태',w:'0.7'} ],
+      fields: [
+        {key:'id',label:'회원 ID',type:'text'},
+        {key:'name',label:'이름',type:'text'},
+        {key:'email',label:'이메일',type:'text'},
+        {key:'phone',label:'연락처',type:'text'},
+        {key:'region',label:'지역',type:'select',opts:['한국','해외']},
+        {key:'joined',label:'가입일',type:'date'},
+        {key:'status',label:'상태',type:'select',opts:['정상','휴면','정지']},
+        {key:'orders',label:'거래 건수',type:'number'},
+      ],
+    },
+    team: {
+      title: '팀씨씨알 페이지', cmsKey: 'team', defaultsKey: 'TEAM', singleton: true,
+      fields: [
+        {key:'_hero',label:'상단 이미지',type:'image',imgW:'380px',imgH:'220px',slot:()=>'team-hero'},
+        {key:'address',label:'찾아오시는 길 · 주소',type:'text'},
+        {key:'mapUrl',label:'지도 임베드 URL (Google Maps embed src)',type:'textarea'},
+        {key:'calendarUrl',label:'팀 공식 스케줄 · Google 달력 링크',type:'text',hint:'비워두면 사이트에 표시되지 않음'},
+      ],
+    },
+    site: {
+      title: '사이트 정보 (하단 문구)', cmsKey: 'site', defaultsKey: 'SITE', singleton: true,
+      fields: [
+        {key:'name',label:'상호(TEAMCCR)',type:'text'},
+        {key:'ceo',label:'대표자 성명',type:'text'},
+        {key:'bizNo',label:'사업자등록번호',type:'text'},
+        {key:'mailOrder',label:'통신판매업 번호',type:'text'},
+        {key:'addr',label:'주소',type:'text'},
+        {key:'phone',label:'대표 전화',type:'text'},
+      ],
+    },
+    policies: {
+      title: '약관 · 정책', cmsKey: 'policies', defaultsKey: 'POLICIES', singleton: true,
+      fields: [
+        {key:'terms',label:'이용약관',type:'textarea'},
+        {key:'policy',label:'이용정책',type:'textarea'},
+        {key:'privacy',label:'개인정보 처리방침',type:'textarea'},
+      ],
+    },
+  };
+
+  cms() { return window.TEAMCCR_CMS; }
+  fmtMoney(v) { const n = Number(v); if (!n) return '-'; return (n/10000).toLocaleString('ko-KR') + '만원'; }
+
+  go = (id) => {
+    const def = this.defs[id];
+    if (def && def.singleton) {
+      const obj = this.cms().get(def.cmsKey, this.cms().DEFAULTS[def.defaultsKey]) || {};
+      this.setState({ section: id, view: 'edit', draft: { ...obj }, editIndex: null, toast: '' });
+    } else {
+      this.setState({ section: id, view: 'list', draft: null, editIndex: null, toast: '' });
+    }
+  };
+  openEdit = (item, idx) => {
+    const def = this.defs[this.state.section];
+    let draft = { ...item };
+    if (def.cmsKey === 'magazine' && Array.isArray(item.body)) draft.body = item.body.join('\n\n');
+    this.setState({ view: 'edit', draft, editIndex: idx });
+  };
+  openAdd = () => {
+    const def = this.defs[this.state.section];
+    const draft = {};
+    def.fields.forEach(f => { if (f.type === 'image' || f.type === 'readonly') return; draft[f.key] = (f.type === 'select' && f.opts) ? f.opts[0] : (f.type === 'number' ? 0 : ''); });
+    if (this.state.section === 'hero') draft.slotId = 'hero-' + String(Date.now()).slice(-6);
+    this.setState({ view: 'edit', draft, editIndex: null });
+  };
+  setField = (key, val) => this.setState(s => ({ draft: { ...s.draft, [key]: val } }));
+  back = () => this.setState({ view: 'list', draft: null, editIndex: null });
+
+  save = () => {
+    const def = this.defs[this.state.section];
+    const d = { ...this.state.draft };
+    def.fields.forEach(f => { if (f.type === 'number') d[f.key] = Number(d[f.key]) || 0; });
+    if (def.cmsKey === 'magazine' && typeof d.body === 'string') d.body = d.body.split(/\n{2,}/).map(x => x.trim()).filter(Boolean);
+    if (def.singleton) {
+      this.cms().set(def.cmsKey, d);
+      this.setState({ draft: d, toast: '저장되었습니다. 사이트에 반영됩니다.' });
+      this.flashToast();
+      return;
+    }
+    const list = (this.cms().get(def.cmsKey, this.cms().DEFAULTS[def.defaultsKey]) || []).slice();
+    if (this.state.editIndex == null) list.unshift(d); else list[this.state.editIndex] = d;
+    this.cms().set(def.cmsKey, list);
+    this.setState({ view: 'list', draft: null, editIndex: null, toast: '저장되었습니다.' });
+    this.flashToast();
+  };
+  del = () => {
+    const def = this.defs[this.state.section];
+    const list = (this.cms().get(def.cmsKey, this.cms().DEFAULTS[def.defaultsKey]) || []).slice();
+    if (this.state.editIndex != null) list.splice(this.state.editIndex, 1);
+    this.cms().set(def.cmsKey, list);
+    this.setState({ view: 'list', draft: null, editIndex: null, toast: '삭제되었습니다.' });
+    this.flashToast();
+  };
+  resetAll = () => {
+    if (!window.confirm('모든 관리자 편집 내용을 지우고 기본값으로 되돌립니다. 계속할까요?')) return;
+    Object.values(this.defs).forEach(def => { if (def.cmsKey) this.cms().del(def.cmsKey); });
+    this.setState({ toast: '초기화되었습니다.' });
+    this.flashToast();
+  };
+  flashToast() { clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2200); }
+
+  pendingCount(key, defKey, statuses) {
+    const list = this.cms().get(key, this.cms().DEFAULTS[defKey]) || [];
+    return list.filter(x => statuses.includes(x.status)).length;
+  }
+
+  renderVals() {
+    const CMS = this.cms();
+    if (!CMS) return {};
+    const s = this.state;
+    const def = this.defs[s.section];
+    const OPEN = ['접수','답변중','예약대기','예약확정','검토중','점검중','확정','견적발송'];
+
+    const navGroups = this.navGroups.map(g => ({
+      title: g.title,
+      items: g.items.map(id => {
+        const active = id === s.section;
+        let badge = '';
+        if (this.defs[id].intake) { const c = this.pendingCount(this.defs[id].cmsKey, this.defs[id].defaultsKey, OPEN); if (c) badge = String(c); }
+        return { id, label: this.defs[id].title, active, badge,
+          onClick: () => this.go(id),
+          style: `display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 12px; border-radius:8px; font-size:13px; cursor:pointer; margin-bottom:2px; ${active ? 'background:oklch(52% 0.14 255); color:#fff; font-weight:600;' : 'color:oklch(82% 0.02 245);'}` };
+      }),
+    }));
+
+    const common = {
+      navGroups,
+      onResetAll: this.resetAll,
+      toast: s.toast,
+      inputStyle: 'width:100%; padding:11px 13px; border:1px solid oklch(86% 0.01 240); border-radius:9px; font-size:13.5px; color:oklch(22% 0.02 240); background:#fff; outline:none;',
+      areaStyle: 'width:100%; padding:11px 13px; border:1px solid oklch(86% 0.01 240); border-radius:9px; font-size:13.5px; color:oklch(22% 0.02 240); line-height:1.6; resize:vertical; outline:none;',
+    };
+
+    if (s.section === 'dashboard') {
+      const reqPending = this.navGroups[3].items.reduce((sum, id) => sum + this.pendingCount(this.defs[id].cmsKey, this.defs[id].defaultsKey, OPEN), 0);
+      const count = (id) => (CMS.get(this.defs[id].cmsKey, CMS.DEFAULTS[this.defs[id].defaultsKey]) || []).length;
+      const stats = [
+        { label: '리브리더 매물', value: count('listings'), onClick: () => this.go('listings') },
+        { label: '스토어 상품', value: count('store'), onClick: () => this.go('store') },
+        { label: '매거진 게시물', value: count('magazine'), onClick: () => this.go('magazine') },
+        { label: '회원', value: count('members'), onClick: () => this.go('members') },
+        { label: '처리 대기 요청', value: reqPending, hint: '판매·오버홀·방문·교육·문의', onClick: () => this.go('req_inquiry') },
+        { label: '이벤트 · 공지', value: count('events') + count('notices'), onClick: () => this.go('events') },
+      ];
+      return { ...common, isDashboard: true, isList: false, isEdit: false, headerTitle: '대시보드', headerSub: 'TEAMCCR 운영 현황', showAdd: false, stats };
+    }
+
+    const headBase = 'display:grid; grid-template-columns:' + (def.columns || []).map(c => c.w + 'fr').join(' ') + '; gap:14px; padding:12px 20px;';
+    const common2 = { ...common, headRowStyle: headBase + ' background:oklch(97% 0.006 240); border-bottom:1px solid oklch(92% 0.008 240); font-size:11.5px; font-weight:600; color:oklch(50% 0.02 240);' };
+
+    if (s.view === 'edit') {
+      const draft = s.draft || {};
+      const editFields = def.fields.map(f => {
+        const isImg = f.type === 'image';
+        return {
+          label: f.label, hint: f.hint || '',
+          isText: f.type === 'text', isNumber: f.type === 'number', isDate: f.type === 'date',
+          isTextarea: f.type === 'textarea', isSelect: f.type === 'select', isImage: isImg, isReadonly: f.type === 'readonly',
+          value: f.key === 'desiredPrice' ? (Number(draft[f.key]) ? this.fmtMoney(draft[f.key]) : (draft[f.key] ?? '')) : (draft[f.key] ?? ''),
+          options: (f.opts || []).map(o => ({ v: o, label: o === '' ? '(없음)' : o })),
+          slotId: isImg && f.slot ? f.slot(draft) : '',
+          imgW: f.imgW || '240px', imgH: f.imgH || '160px',
+          onInput: (e) => this.setField(f.key, e.target.value),
+        };
+      });
+      return { ...common2, isEdit: true, isList: false, isDashboard: false,
+        headerTitle: def.singleton ? def.title : (s.editIndex == null ? def.title + ' · 새로 등록' : def.title + ' · 수정'),
+        headerSub: def.intake ? '요청 상세 · 처리 상태를 변경할 수 있습니다' : '',
+        showAdd: false, editFields, canDelete: !def.intake && !def.singleton && s.editIndex != null,
+        onBack: this.back, onSave: this.save, onDelete: this.del, saveLabel: def.singleton ? '저장' : (def.intake ? '상태 저장' : '게시'),
+      };
+    }
+
+    const data = CMS.get(def.cmsKey, CMS.DEFAULTS[def.defaultsKey]) || [];
+    const listRows = data.map((item, idx) => ({
+      onOpen: () => this.openEdit(item, idx),
+      style: headBase + ' border-bottom:1px solid oklch(94% 0.006 240); font-size:13px; color:oklch(28% 0.02 240); cursor:pointer; align-items:center;',
+      cells: def.columns.map(c => ({
+        v: c.money ? this.fmtMoney(item[c.k]) : (item[c.k] == null ? '-' : String(item[c.k])),
+        style: 'white-space:nowrap; overflow:hidden; text-overflow:ellipsis;' + (c.k === 'status' ? ' font-weight:600; color:oklch(45% 0.13 255);' : ''),
+      })),
+    }));
+    return { ...common2, isList: true, isEdit: false, isDashboard: false,
+      headerTitle: def.title, headerSub: data.length + '건',
+      showAdd: !def.intake && !def.singleton, onAdd: this.openAdd,
+      listColumns: def.columns.map(c => ({ label: c.label, style: '' })),
+      listRows, listEmpty: data.length === 0 };
+  }
+}
+</script>
+</body>
+</html>
